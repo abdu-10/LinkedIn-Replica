@@ -21,6 +21,7 @@ import UsersTable from "./components/admin/tables/UsersTable";
 import EmployerSpecific from "./components/employer/EmployerSpecific";
 import Navbar from "./components/seeker/Navbar";
 import MySeekers from "./components/employer/MySeekers";
+import SignUp from "./components/common/forms/SignUp";
 
 function App() {
   return (
@@ -30,8 +31,7 @@ function App() {
         <Route path="/" element={<Landing />}></Route>
         {/* SIGNUP?? BELOW */}
         <Route path="/login" element={<Login />}></Route>
-        {/* REMOVE?? BELOW */}
-        <Route path="/home" element={<Maincontent />}></Route>
+        <Route path="/signup" element={<SignUp />}></Route>
         {/* HAVE THIS VIEW PAGE BELO */}
         <Route path="/profile" element={<Profile />}></Route>
         {/* <Route path='messages'element={<Messages />}/> */}
