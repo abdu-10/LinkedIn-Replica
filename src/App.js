@@ -3,7 +3,7 @@ import "./App.css";
 import { Route, Routes } from "react-router-dom";
 import Maincontent from "./components/common/Main Page/Maincontent";
 import Login from "../src/components/common/forms/Login";
-import Profile from "../src/components/common/Main Page/Profile";
+import Profile from "./components/seeker/Profile";
 import Landing from "../src/components/common/Main Page/Landing";
 import JobsPage from "./components/seeker/JobsPage";
 import AdminDashboard from "./components/admin/AdminDashboard";
@@ -32,8 +32,8 @@ function App() {
         {/* SIGNUP?? BELOW */}
         <Route path="/login" element={<Login />}></Route>
         <Route path="/signup" element={<SignUp />}></Route>
-        {/* HAVE THIS VIEW PAGE BELO */}
-        <Route path="/profile" element={<Profile />}></Route>
+        
+        
         {/* <Route path='messages'element={<Messages />}/> */}
         {/* <Route path='notification'element={<Notification />}/> */}
         {/* ADMIN SPECIFIC ROUTES */}
@@ -66,6 +66,7 @@ function App() {
             <Route path="apply" exact element={<JobApplication />} />
           </Route>
           <Route path="network" element={<MyNetwork />} />
+          <Route path="profile" element={<Profile />}/>
         </Route>
       </Routes>
     </div>

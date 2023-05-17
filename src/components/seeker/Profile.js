@@ -1,11 +1,11 @@
 import React from "react";
-// import Navbar from "../../seeker/Navbar";
+import Navbar from "./Navbar";
 
 function Profile() {
   return (
     <>
-    {/* <Navbar/> */}
-       <div class="container mx-auto my-5 p-5 ">
+    <Navbar />
+       <div class="container mx-auto mt-50 my-5 p-5 ">
         <div class="md:flex no-wrap md:-mx-2 mt-9 ">
             {/* <!-- Left Side --> */}
             <div class="w-full md:w-3/12 md:mx-2">
@@ -95,28 +95,28 @@ function Profile() {
                     <div class="text-gray-700">
                         <div class="grid md:grid-cols-2 text-sm">
                             <div class="grid grid-cols-2">
-                                <div class="px-4 py-2 font-semibold">First Name</div>
-                                <div class="px-4 py-2">Jane</div>
-                            </div>
-                            <div class="grid grid-cols-2">
-                                <div class="px-4 py-2 font-semibold">Last Name</div>
-                                <div class="px-4 py-2">Doe</div>
+                                <div class="px-4 py-2 font-semibold">Full Name</div>
+                                <div class="px-4 py-2">Jane Doe</div>
                             </div>
                             <div class="grid grid-cols-2">
                                 <div class="px-4 py-2 font-semibold">Gender</div>
                                 <div class="px-4 py-2">Female</div>
                             </div>
                             <div class="grid grid-cols-2">
-                                <div class="px-4 py-2 font-semibold">Contact No.</div>
+                                <div class="px-4 py-2 font-semibold">Phone Number</div>
                                 <div class="px-4 py-2">+11 998001001</div>
                             </div>
                             <div class="grid grid-cols-2">
-                                <div class="px-4 py-2 font-semibold">Current Address</div>
+                                <div class="px-4 py-2 font-semibold">Location</div>
                                 <div class="px-4 py-2">Beech Creek, PA, Pennsylvania</div>
                             </div>
                             <div class="grid grid-cols-2">
-                                <div class="px-4 py-2 font-semibold">Permanant Address</div>
-                                <div class="px-4 py-2">Arlington Heights, IL, Illinois</div>
+                                <div class="px-4 py-2 font-semibold">Preffered Job</div>
+                                <div class="px-4 py-2">Software Engineering</div>
+                            </div>
+                            <div class="grid grid-cols-2">
+                                <div class="px-4 py-2 font-semibold">Availablility</div>
+                                <div class="px-4 py-2">Full-time</div>
                             </div>
                             <div class="grid grid-cols-2">
                                 <div class="px-4 py-2 font-semibold">Email.</div>
@@ -131,8 +131,8 @@ function Profile() {
                         </div>
                     </div>
                     <button
-                        class="block w-full text-blue-800 text-sm font-semibold rounded-lg hover:bg-gray-100 focus:outline-none focus:shadow-outline focus:bg-gray-100 hover:shadow-xs p-3 my-4">Show
-                        Full Information</button>
+                        class="block w-full text-blue-800 text-sm font-semibold rounded-lg hover:bg-gray-100 focus:outline-none focus:shadow-outline focus:bg-gray-100 hover:shadow-xs p-3 my-4">
+                        Edit Profile</button>
                 </div>
                 {/* <!-- End of about section --> */}
 
