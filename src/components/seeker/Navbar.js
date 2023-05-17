@@ -132,7 +132,7 @@ function Navbar() {
             <GroupIcon />
             <span className="nav_text">My Network</span>
           </li>
-          <li>
+          <li onClick={()=> navigate("/seeker/jobs")}>
             <WorkIcon />
             <span className="nav_text">Jobs</span>
           </li>

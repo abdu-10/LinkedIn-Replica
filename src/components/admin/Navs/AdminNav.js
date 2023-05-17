@@ -119,7 +119,7 @@ function AdminNav() {
       <div className="nav_section">
         <ul>
         
-          <li className="active">
+          <li className="active" onClick={()=> navigate("/admin")}>
             {/* <NavLink to="/seeker"> */}
             <HomeIcon />
             <span className="nav_text">
@@ -129,15 +129,15 @@ function AdminNav() {
           
           
          
-          <li>
+          <li onClick={()=> navigate("/admin/")}>
             <GroupIcon />
             <span className="nav_text">All Users</span>
           </li>
-          <li>
+          <li onClick={()=> navigate("/admin/")}>
             <WorkIcon />
             <span className="nav_text"> All Jobs</span>
           </li>
-          <li>
+          <li onClick={()=> navigate("/admin/")}>
             <TextsmsIcon />
             <span className=" text-white pl-1 pr-1 rounded-full -mt-[20px] ml-[16px]">
               4

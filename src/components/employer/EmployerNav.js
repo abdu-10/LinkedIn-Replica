@@ -13,6 +13,7 @@ import { Avatar, Box, Menu, MenuItem,} from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 
+
 export default function EmployerNav() {
   const navigate = useNavigate()
   const [anchMenu, setAnchMenu] = useState(null)
@@ -118,15 +119,15 @@ export default function EmployerNav() {
       </div>
       <div className="nav_section">
         <ul>
-          <li className="active">
+          <li className="active" onClick={()=> navigate("/employer")}>
             <HomeIcon />
             <span className="nav_text">Home</span>{" "}
           </li>
-          <li>
+          <li onClick={()=> navigate("/employer/seekers")}>
             <GroupIcon />
             <span className="nav_text">Seekers</span>
           </li>
-          <li>
+          <li onClick={()=> navigate("/employer/job-post")}>
             <WorkIcon />
             <span className="nav_text"> Post Jobs</span>
           </li>

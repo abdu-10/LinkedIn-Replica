@@ -98,7 +98,7 @@ function JobsPage() {
                       <div class="mt-0 mr-0 mb-0 ml-4 flex-1 min-w-0">
                         <p class="text-lg font-bold text-gray-800 truncate">
                           <Link
-                            to="#"
+                            to="/seeker/jobs/apply"
                             class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
                           >
                             Senior Software Engineer
@@ -139,7 +139,7 @@ function JobsPage() {
                       <div class="mt-0 mr-0 mb-0 ml-4 flex-1 min-w-0">
                         <p class="text-lg font-bold text-gray-800 truncate">
                           <Link
-                            to="#"
+                            to="/seeker/jobs/apply"
                             class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
                           >
                             Frontend Developer
@@ -180,7 +180,7 @@ function JobsPage() {
                       <div class="mt-0 mr-0 mb-0 ml-4 flex-1 min-w-0">
                         <p class="text-lg font-bold text-gray-800 truncate">
                           <Link
-                            to="#"
+                            to="/seeker/jobs/apply"
                             class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
                           >
                             Lead Software Engineer
@@ -220,7 +220,7 @@ function JobsPage() {
                       <div class="mt-0 mr-0 mb-0 ml-4 flex-1 min-w-0">
                         <p class="text-lg font-bold text-gray-800 truncate">
                           <Link
-                            to="#"
+                            to="/seeker/jobs/apply"
                             class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
                           >
                             Software Engineer
