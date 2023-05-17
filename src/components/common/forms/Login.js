@@ -1,5 +1,5 @@
 import React from "react";
-import Footersection from "../LandingPage/Footersection";
+
 
 function Login() {
   return (
@@ -85,7 +85,6 @@ function Login() {
         </p>
       </div>
       {/* footer */}
-      <Footersection />
     </div>
   );
 }

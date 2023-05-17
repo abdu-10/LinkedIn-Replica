@@ -20,22 +20,7 @@ function Footer() {
               <a href="#">Sign Up</a>
             </li>
             <li>
-              <a href="#">Help Center</a>
-            </li>
-            <li>
               <a href="#">About</a>
-            </li>
-            <li>
-              <a href="#">Press</a>
-            </li>
-            <li>
-              <a href="#">Blog</a>
-            </li>
-            <li>
-              <a href="#">Careers</a>
-            </li>
-            <li>
-              <a href="#">Developers</a>
             </li>
           </ul>
         </div>
@@ -45,23 +30,16 @@ function Footer() {
               <p>Browse LinkedIn</p>
             </span>
             <li>
-              <a href="#">Learning</a>
-            </li>
-            <li>
               <a href="#">Jobs</a>
             </li>
             <li>
               <a href="#">Salary</a>{" "}
             </li>
-            <li>
-              <a href="#">Mobile</a>{" "}
-            </li>
+            
             <li>
               <a href="#">Services</a>
             </li>
-            <li>
-              <a href="#">Products</a>{" "}
-            </li>
+            
           </ul>
         </div>
         <div className="Business_solutions">
@@ -79,10 +57,7 @@ function Footer() {
               {" "}
               <a href="#">Sales</a>{" "}
             </li>
-            <li>
-              {" "}
-              <a href="#">Learning</a>{" "}
-            </li>
+            
           </ul>
         </div>
         <div className="Directories">
@@ -100,34 +75,7 @@ function Footer() {
               <a href="#">Companies</a>
             </li>
             <li>
-              <a href="#">Featured</a>{" "}
-            </li>
-            <li>
-              <a href="#">Learning</a>
-            </li>
-            <li>
               <a href="#">Posts </a>
-            </li>
-            <li>
-              <a href="#">Articles</a>{" "}
-            </li>
-            <li>
-              <a href="#">Schools</a>
-            </li>
-            <li>
-              <a href="#">News</a>
-            </li>
-            <li>
-              <a href="#">News Letters</a>
-            </li>
-            <li>
-              <a href="#">Services</a>
-            </li>
-            <li>
-              <a href="#">Products</a>
-            </li>
-            <li>
-              <a href="#">Content Topics</a>
             </li>
           </ul>
         </div>

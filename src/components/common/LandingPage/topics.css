@@ -107,7 +107,7 @@
 .cards{
     display: flex;
     overflow-y: hidden;
-    overflow-x: scroll !important;
+    overflow-x: hidden;
 }
 .cards::-webkit-scrollbar{
     display: none;

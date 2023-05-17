@@ -24,9 +24,6 @@ function NavPanel() {
             <PeopleIcon /> People
           </li>
           <li>
-            <OndemandVideoIcon /> Learning
-          </li>
-          <li>
             <WorkIcon /> Jobs
           </li>
           <li className="divider">|</li>
