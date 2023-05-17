@@ -2,15 +2,16 @@ import React from "react";
 import "./topics.css";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
-
+import { useNavigate } from "react-router-dom";
 
 function Topics() {
+  const navigate = useNavigate()
   return (
     <div className="Topics">
       <div className="topics_container">
         <p className="main">Explore topics you are interested in</p>
         <p className="second">CONTENT TOPICS</p>
-        <div className="buttons">
+        <div className="buttons" onClick={()=> navigate("/signup")}>
           <button className="var_topics">see All Topics</button>
           <button className="var_topics">Workplace</button>
           <button className="var_topics">Job Search</button>

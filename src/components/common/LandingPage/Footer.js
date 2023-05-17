@@ -1,5 +1,6 @@
 import React from "react";
 import "./footer.css";
+import { Link } from "react-router-dom";
 
 function Footer() {
   return (
@@ -17,10 +18,10 @@ function Footer() {
               <p>General</p>
             </span>
             <li>
-              <a href="#">Sign Up</a>
+              <Link to="/signup">Sign Up</Link>
             </li>
             <li>
-              <a href="#">About</a>
+              <Link to="/signup">About</Link>
             </li>
           </ul>
         </div>
@@ -30,14 +31,14 @@ function Footer() {
               <p>Browse LinkedIn</p>
             </span>
             <li>
-              <a href="#">Jobs</a>
+              <Link to="/signup">Jobs</Link>
             </li>
             <li>
-              <a href="#">Salary</a>{" "}
+              <Link to="/signup">Salary</Link>{" "}
             </li>
             
             <li>
-              <a href="#">Services</a>
+              <Link to="/signup">Services</Link>
             </li>
             
           </ul>
@@ -48,14 +49,14 @@ function Footer() {
               <p>Business Solutions</p>
             </span>
             <li>
-              <a href="#">Talent</a>
+              <Link to="/signup">Talent</Link>
             </li>
             <li>
-              <a href="#">Marketing</a>{" "}
+              <Link to="/signup">Marketing</Link>{" "}
             </li>
             <li>
               {" "}
-              <a href="#">Sales</a>{" "}
+              <Link to="/signup">Sales</Link>{" "}
             </li>
             
           </ul>
@@ -66,16 +67,16 @@ function Footer() {
               <p>Directories</p>
             </span>
             <li>
-              <a href="#">Members</a>{" "}
+              <Link to="/signup">Members</Link>{" "}
             </li>
             <li>
-              <a href="#">Jobs</a>{" "}
+              <Link to="/signup">Jobs</Link>{" "}
             </li>
             <li>
-              <a href="#">Companies</a>
+              <Link to="/signup">Companies</Link>
             </li>
             <li>
-              <a href="#">Posts </a>
+              <Link to="/signup">Posts </Link>
             </li>
           </ul>
         </div>

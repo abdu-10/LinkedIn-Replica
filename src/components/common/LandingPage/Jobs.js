@@ -1,14 +1,15 @@
 import React from "react";
 import "./jobs.css";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-
+import { useNavigate } from "react-router-dom";
 function Jobs() {
+  const navigate = useNavigate()
   return (
     <div className="Jobs">
       <div className="title">
         <h2>Find the right job or internship for you</h2>
       </div>
-      <div className="jobs_types">
+      <div className="jobs_types"onClick={()=> navigate("/signup")} >
         <p className="header">SUGGESTED SEARCHES</p>
         <button>Engineering</button>
         <button>Business Development</button>

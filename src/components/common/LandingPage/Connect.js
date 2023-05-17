@@ -1,7 +1,9 @@
 import React from "react";
 import "./connect.css";
+import { useNavigate } from "react-router-dom";
 
 function Connect() {
+  const navigate = useNavigate()
   return (
     <div className="Connect">
       <div className="Connect_p">
@@ -10,7 +12,7 @@ function Connect() {
           alt="connect"
         />
         <h2>Connect with people who can help</h2>
-        <button>Find people you know</button>
+        <button onClick={()=> navigate("/signup")} >Find people you know</button>
       </div>
       <div className="learn">
         <img
@@ -18,7 +20,7 @@ function Connect() {
           alt="connect"
         />
         <h2>Learn the skills you need to succeed</h2>
-        <button>Find people you know</button>
+        <button onClick={()=> navigate("/signup")}>Find people you know</button>
       </div>
     </div>
   );
