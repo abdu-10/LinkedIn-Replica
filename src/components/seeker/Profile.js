@@ -5,7 +5,7 @@ function Profile() {
   return (
     <>
     <Navbar />
-       <div class="container mx-auto mt-50 my-5 p-5 ">
+       <div class=" mx-auto mt-50 my-5 p-5 ">
         <div class="md:flex no-wrap md:-mx-2 mt-9 ">
             {/* <!-- Left Side --> */}
             <div class="w-full md:w-3/12 md:mx-2">
@@ -78,7 +78,7 @@ function Profile() {
                 {/* <!-- End of friends card --> */}
             </div>
             {/* <!-- Right Side --> */}
-            <div class="w-full md:w-9/12 mx-2 h-64">
+            <div class="w-full md:w-9/12 mx-2">
                 {/* <!-- Profile tab -->
                 <!-- About Section --> */}
                 <div class="bg-white p-3 shadow-sm rounded-sm">
