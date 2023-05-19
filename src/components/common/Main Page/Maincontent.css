@@ -5,7 +5,6 @@
     padding-right: 120px;
     padding-top: 80px;
     font-family:  -apple-system, system-ui, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', 'Fira Sans', Ubuntu, Oxygen, 'Oxygen Sans', Cantarell, 'Droid Sans', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Lucida Grande', Helvetica, Arial, sans-serif;
-
     /* height: 100vh;
     min-height: 100vh;
     background-color: rgb(240,239,235); */
@@ -91,7 +90,7 @@
 .center_content{
     border: 1px solid rgb(255,255,255);
     flex: 0.5;
-    height: 120px;
+    height: 220px;
     background-color: rgb(255,255,255);
     border-radius: 10px;
 }
@@ -168,7 +167,6 @@ margin-top: -8px;
 .head_content > form{
     border: 1px solid rgb(109, 109, 109);
     width: 100%;
-    height: 50px;
     border-radius: 20px;
     padding-left: 10px;
     padding-top: 5px;
@@ -211,12 +209,7 @@ margin-top: -8px;
     border-radius: 10px;
 }
 
-.right_second{
-    height: 200px;
-}
-
 .backgroundImage{
-    height: 80px;
     border-radius: 10px 10px 0px 0px;
     border:1px solid rgb(240,239,235);
 }
