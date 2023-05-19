@@ -29,9 +29,9 @@ export default function EmployerNav() {
   const handleMenuItemClick = (prop) => {
     handleCloseMenu();
     if (prop === "view") {
-      navigate("/profile");
+      navigate("/employer/profile");
     } else if (prop === "edit") {
-      navigate("/profile");
+      navigate("/employer/profile");
     }else if (prop === "logout"){
       navigate("/");
       handleCloseMenu();
@@ -103,7 +103,7 @@ export default function EmployerNav() {
    
   return (
     <div>
-      <div className="Navbar fixed top-0 left-0 right-0 z-30 h-[60px]">
+      <div className="Navbar fixed top-0 left-0 right-0 z-30">
       <div className="logo_section">
         <img
           className="cursor-pointer"
