@@ -1,125 +1,205 @@
-import React from 'react'
-
+import React, { useState } from "react";
+import {
+  Typography,
+  Stack,
+  IconButton,
+  Avatar,
+  Box,
+  Menu,
+  MenuItem,
+  LinearProgress,
+} from "@mui/material";
+import { Navigate, useNavigate } from "react-router-dom";
+import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import CustomTable from "../tables/CustomTable";
 function AllEmployers() {
+  const navigate = useNavigate();
+  const [anchorElNav, setAnchorElNav] = useState(null);
+  const [rowParams, setRowParams] = useState({});
+  const [loading, setLoading] = useState(false);
+
+  const handleCloseMenu = () => {
+    setAnchorElNav(null);
+  };
+
+  const handleMenuItemClick = (prop) => {
+    if (prop === "view") {
+      navigate("/employer/details");
+      handleCloseMenu();
+    } else if (prop === "verify") {
+      navigate("/employer/details");
+    } else if (prop === "delete") {
+      navigate();
+    } else handleCloseMenu();
+  };
+  const handleEmployerActionsClick = (params) => (event) => {
+    setRowParams(params.row);
+    setAnchorElNav(event.currentTarget);
+  };
+
+  const EmployerActions = () => {
+    return (
+      <>
+        {" "}
+        {/* <EmployerDetails
+        />{" "} */}
+        {/* <DeleteAccount
+          openDeleteAccount={openDeleteAccount}
+          closeDeleteModal={closeDeleteModal}
+          rider_code={rowParams.code}
+          // deactivationStatus={deactivationStatus}
+          // fetchStays={fetchRiders}
+        /> */}
+        <Menu
+          id="menu-appbar"
+          anchorEl={anchorElNav}
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "right",
+          }}
+          keepMounted
+          transformOrigin={{
+            vertical: "top",
+            horizontal: "left",
+          }}
+          open={Boolean(anchorElNav)}
+          onClose={handleCloseMenu}
+        >
+          <MenuItem onClick={() => handleMenuItemClick("view")}>
+            <Box display="flex" alignItems="center" textAlign="center">
+              <VisibilityOutlinedIcon
+                sx={{
+                  color: `primary.main`,
+                  mr: 1,
+                  fontSize: "medium",
+                }}
+              />
+              View
+            </Box>
+          </MenuItem>
+          <MenuItem onClick={() => handleMenuItemClick("verify")}>
+            <Box display="flex" alignItems="center" textAlign="center">
+              <VisibilityOutlinedIcon
+                sx={{
+                  color: `primary.main`,
+                  mr: 1,
+                  fontSize: "medium",
+                }}
+              />
+              Verify
+            </Box>
+          </MenuItem>
+        </Menu>{" "}
+      </>
+    );
+  };
+
+  const rows = [
+    {
+      code: "eueueuehfufeuf",
+      company_name: "Auger",
+      email: "auger@gmail.com",
+      phone_number: "+254712345678",
+      location: "Lusaka Road",
+      verified: "false",
+    },
+    {
+      code: "eueueueh",
+      company_name: "Motos Ltd",
+      email: "motos@gmail.com",
+      phone_number: "+254712345678",
+      location: "Pembe Road",
+      verified: "false",
+    },
+  ];
+
+  const columns = [
+    {
+      field: "company_name",
+      headerName: "Name of Company",
+      width: 250,
+    },
+    {
+      field: "email",
+      headerName: "Email",
+      width: 150,
+    },
+    {
+      field: "location",
+      headerName: "Location",
+      width: 150,
+    },
+    {
+      field: "verified",
+      headerName: "Verified",
+      width: 150,
+    },
+    {
+      field: "actions",
+      type: "actions",
+      headerName: "Actions",
+      width: 80,
+      renderCell: (params) => {
+        return (
+          <IconButton onClick={handleEmployerActionsClick(params)}>
+            <MoreVertIcon />
+          </IconButton>
+        );
+      },
+    },
+
+    // {
+    //   field: "actions",
+    //   type: "actions",
+    //   headerName: "Actions",
+    //   width: 80,
+    //   renderCell: (params) => {
+    //     return (
+    //       // on click on the viw, user is able to see the rider deatils in depth
+    //       <div onClick={handleRiderActionClick(params)}>
+    //       <Box display="flex" alignItems="center" textAlign="center" >
+    //           <VisibilityOutlinedIcon
+    //             sx={{
+    //               color: `primary.main`,
+    //               mr: 1,
+    //               fontSize: "medium",
+    //             }}
+    //           />
+    //         </Box>
+    //       </div>
+    //     );
+    //   },
+    // },
+  ];
   return (
-    <div>
-     
-<section class="antialiased bg-gray-100 text-gray-600 h-screen px-4">
-    <div class="flex flex-col justify-center h-full">
-        {/* <!-- Table --> */}
-        <div class="w-full max-w-2xl mx-auto bg-white shadow-lg rounded-sm border border-gray-200">
-            <header class="px-5 py-4 border-b border-gray-100">
-                <h2 class="font-semibold text-gray-800">Employers</h2>
-            </header>
-            <div class="p-3">
-                <div class="overflow-x-auto">
-                    <table class="table-auto w-full">
-                        <thead class="text-xs font-semibold uppercase text-gray-400 bg-gray-50">
-                            <tr>
-                                <th class="p-2 whitespace-nowrap">
-                                    <div class="font-semibold text-left">Company Name</div>
-                                </th>
-                                <th class="p-2 whitespace-nowrap">
-                                    <div class="font-semibold text-left">Email</div>
-                                </th>
-                                <th class="p-2 whitespace-nowrap">
-                                    <div class="font-semibold text-left">Phone Number</div>
-                                </th>
-                                <th class="p-2 whitespace-nowrap">
-                                    <div class="font-semibold text-center">Verified</div>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody class="text-sm divide-y divide-gray-100">
-                            <tr>
-                                <td class="p-2 whitespace-nowrap">
-                                    <div class="flex items-center">
-                                        <div class="font-medium text-gray-800">Auger Auto</div>
-                                    </div>
-                                </td>
-                                <td class="p-2 whitespace-nowrap">
-                                    <div class="text-left">auger@gmail.com</div>
-                                </td>
-                                <td class="p-2 whitespace-nowrap">
-                                    <div class="text-left font-medium">+254712345678</div>
-                                </td>
-                                <td class="p-2 whitespace-nowrap">
-                                    <div class="text-lg text-center text-green-500">True</div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="p-2 whitespace-nowrap">
-                                    <div class="flex items-center">
-                                        <div class="font-medium text-gray-800">European Star</div>
-                                    </div>
-                                </td>
-                                <td class="p-2 whitespace-nowrap">
-                                    <div class="text-left">euro.h@gmail.com</div>
-                                </td>
-                                <td class="p-2 whitespace-nowrap">
-                                    <div class="text-left font-medium">+254712345678</div>
-                                </td>
-                                <td class="p-2 whitespace-nowrap">
-                                    <div class="text-lg text-center text-green-500">True</div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="p-2 whitespace-nowrap">
-                                    <div class="flex items-center">
-                                        <div class="font-medium text-gray-800">Mirko Ltd</div>
-                                    </div>
-                                </td>
-                                <td class="p-2 whitespace-nowrap">
-                                    <div class="text-left">mirkofisuk@gmail.com</div>
-                                </td>
-                                <td class="p-2 whitespace-nowrap">
-                                    <div class="text-left font-medium">+254712345678</div>
-                                </td>
-                                <td class="p-2 whitespace-nowrap">
-                                    <div class="text-lg text-center  text-red-500">False</div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="p-2 whitespace-nowrap">
-                                    <div class="flex items-center">
-                                        <div class="font-medium text-gray-800">Olga Ltd</div>
-                                    </div>
-                                </td>
-                                <td class="p-2 whitespace-nowrap">
-                                    <div class="text-left">olga.s@cool.design</div>
-                                </td>
-                                <td class="p-2 whitespace-nowrap">
-                                    <div class="text-left font-medium">+254712345678</div>
-                                </td>
-                                <td class="p-2 whitespace-nowrap">
-                                    <div class="text-lg text-center text-red-500">False</div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="p-2 whitespace-nowrap">
-                                    <div class="flex items-center">
-                                        <div class="font-medium text-gray-800">Burak Long Ltd</div>
-                                    </div>
-                                </td>
-                                <td class="p-2 whitespace-nowrap">
-                                    <div class="text-left">longburak@gmail.com</div>
-                                </td>
-                                <td class="p-2 whitespace-nowrap">
-                                    <div class="text-left font-medium">+254712345678</div>
-                                </td>
-                                <td class="p-2 whitespace-nowrap">
-                                    <div class="text-lg text-center text-green-500">True</div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-    </div>
-  )
+    <>
+      <div class="flex-grow sm:text-left text-center mt-10 mb-10"></div>
+      <Stack
+        direction="row"
+        justifyContent="flex-start"
+        alignItems="flex-start"
+        sx={{ p: 7 }}
+      >
+        <Typography variant="h6" sx={{ fontWeight: "800" }}>
+          These are All the Employers on the platform
+        </Typography>
+      </Stack>
+      <Box
+        sx={{
+          mt: 5,
+          "& .MuiDataGrid-columnHeaders": {
+            backgroundColor: "primary.lightest_gray",
+            fontSize: 16,
+          },
+        }}
+      >
+        <EmployerActions />
+        {loading && <LinearProgress />}
+        {!loading && <CustomTable columns={columns} rows={rows} />}
+      </Box>
+    </>
+  );
 }
 
-export default AllEmployers
+export default AllEmployers;
