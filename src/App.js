@@ -22,6 +22,10 @@ import EmployerSpecific from "./components/employer/EmployerSpecific";
 import Navbar from "./components/seeker/Navbar";
 import MySeekers from "./components/employer/MySeekers";
 import SignUp from "./components/common/forms/SignUp";
+import EmployerProfile from "./components/employer/EmployerProfile";
+import SeekerDetails from "./components/seeker/SeekerDetails"
+import EmployerDetails from "./components/employer/EmployerDetails";
+import CreateAdmin from "./components/admin/CreateAdmin";
 
 function App() {
   return (
@@ -41,12 +45,13 @@ function App() {
         <Route index element={<AdminDashboard />} />
           <Route path="employers" element={<AllEmployers />} />
           <Route path="seekers" element={<AllSeekers />} />
+          <Route path="createadmin" element={<CreateAdmin />} />
           {/* TO VERIFY USER: Open pop up */}
           {/* <Route path="verify" element={<Verify />} /> */}
           {/* element={<UsersNav />} */}
-          <Route path="users" element={<AdminNav />} >
+          <Route path="users" element={<UsersTable />} >
             {/* <Route index={<UserPage />} /> */}
-            <Route index={<UsersTable />} />
+            {/* <Route index element={<UsersTable />} /> */}
             {/* <Route path="add-user" element={<AddAdminForm />} /> */}
           </Route>
         </Route>
@@ -58,6 +63,8 @@ function App() {
         {/* PENDING: FIND LOGIC TO FIND SEEKERS WHILE DISPLAYING AN INITIAL CURATED LIST */}
         <Route path="seekers" element={<EmployerSpecific />} />
         <Route path="myseekers" element={<MySeekers />} />
+        <Route path="profile" element={<EmployerProfile />} />
+        <Route path="details" element={<EmployerDetails />}/>
         </Route>
         {/* SEEKER ROUTES */}
         <Route path="/seeker" element={<Navbar />}>
@@ -67,6 +74,7 @@ function App() {
           </Route>
           <Route path="network" element={<MyNetwork />} />
           <Route path="profile" element={<Profile />}/>
+          <Route path="details" element={<SeekerDetails />}/>
         </Route>
       </Routes>
     </div>
