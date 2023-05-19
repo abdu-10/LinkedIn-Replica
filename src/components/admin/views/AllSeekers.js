@@ -1,147 +1,224 @@
-import React from 'react'
-
+import React, { useState } from "react";
+import {
+  Typography,
+  Stack,
+  IconButton,
+  Avatar,
+  Box,
+  Menu,
+  MenuItem,
+  LinearProgress,
+} from "@mui/material";
+import { Navigate, useNavigate } from "react-router-dom";
+import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import CustomTable from "../tables/CustomTable";
 function AllSeekers() {
+  const navigate = useNavigate();
+  const [anchorElNav, setAnchorElNav] = useState(null);
+  const [rowParams, setRowParams] = useState({});
+  const [loading, setLoading] = useState(false);
+
+  const handleCloseMenu = () => {
+    setAnchorElNav(null);
+  };
+
+  const handleMenuItemClick = (prop) => {
+    if (prop === "view") {
+      navigate("/seeker/details");
+      handleCloseMenu();
+    } else if (prop === "verify") {
+      navigate("/seeker/details");
+    } else if (prop === "delete") {
+      navigate();
+    } else handleCloseMenu();
+  };
+  const handleEmployerActionsClick = (params) => (event) => {
+    setRowParams(params.row);
+    setAnchorElNav(event.currentTarget);
+  };
+
+  const SeekerActions = () => {
+    return (
+      <>
+        {" "}
+        {/* <EmployerDetails
+        />{" "} */}
+        {/* <DeleteAccount
+          openDeleteAccount={openDeleteAccount}
+          closeDeleteModal={closeDeleteModal}
+          rider_code={rowParams.code}
+          // deactivationStatus={deactivationStatus}
+          // fetchStays={fetchRiders}
+        /> */}
+        <Menu
+          id="menu-appbar"
+          anchorEl={anchorElNav}
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "right",
+          }}
+          keepMounted
+          transformOrigin={{
+            vertical: "top",
+            horizontal: "left",
+          }}
+          open={Boolean(anchorElNav)}
+          onClose={handleCloseMenu}
+        >
+          <MenuItem onClick={() => handleMenuItemClick("view")}>
+            <Box display="flex" alignItems="center" textAlign="center">
+              <VisibilityOutlinedIcon
+                sx={{
+                  color: `primary.main`,
+                  mr: 1,
+                  fontSize: "medium",
+                }}
+              />
+              View
+            </Box>
+          </MenuItem>
+          <MenuItem onClick={() => handleMenuItemClick("verify")}>
+            <Box display="flex" alignItems="center" textAlign="center">
+              <VisibilityOutlinedIcon
+                sx={{
+                  color: `primary.main`,
+                  mr: 1,
+                  fontSize: "medium",
+                }}
+              />
+              Verify
+            </Box>
+          </MenuItem>
+        </Menu>{" "}
+      </>
+    );
+  };
+
+  const rows = [
+    {
+      code: "eueueomfierfji",
+      full_name: "Moses",
+      email: "mose@gmail.com",
+      location: "Kiambu Road",
+      gender: "Male",
+      date_of_birth: "2000-01-01",
+      phone_number: "254722332233",
+      verified: "false",
+    },
+    {
+      code: "u9ie9idi3",
+      full_name: "Swaleh",
+      email: "swa@gmail.com",
+      location: "Buruburu Road",
+      gender: "Male",
+      date_of_birth: "2000-01-01",
+      phone_number: "254722332233",
+      verified: "false",
+    },
+  ];
+
+  const columns = [
+    {
+      field: "full_name",
+      headerName: "Full Name",
+      width: 250,
+    },
+    {
+      field: "email",
+      headerName: "Email",
+      width: 150,
+    },
+    {
+      field: "location",
+      headerName: "Location",
+      width: 150,
+    },
+    {
+      field: "gender",
+      headerName: "Gender",
+      width: 150,
+    },
+      {
+        field: "date_of_birth",
+        headerName: "D.O.B",
+        width: 150,
+      },
+      {
+        field: "phone_number",
+        headerName: "Phone Number",
+        width: 150,
+      },
+      {
+        field: "verified",
+        headerName: "Verified",
+        width: 150,
+      },
+    {
+      field: "actions",
+      type: "actions",
+      headerName: "Actions",
+      width: 80,
+      renderCell: (params) => {
+        return (
+          <IconButton onClick={handleEmployerActionsClick(params)}>
+            <MoreVertIcon />
+          </IconButton>
+        );
+      },
+    },
+
+    // {
+    //   field: "actions",
+    //   type: "actions",
+    //   headerName: "Actions",
+    //   width: 80,
+    //   renderCell: (params) => {
+    //     return (
+    //       // on click on the viw, user is able to see the rider deatils in depth
+    //       <div onClick={handleRiderActionClick(params)}>
+    //       <Box display="flex" alignItems="center" textAlign="center" >
+    //           <VisibilityOutlinedIcon
+    //             sx={{
+    //               color: `primary.main`,
+    //               mr: 1,
+    //               fontSize: "medium",
+    //             }}
+    //           />
+    //         </Box>
+    //       </div>
+    //     );
+    //   },
+    // },
+  ];
   return (
-    <div>
-      <section class="antialiased bg-gray-100 text-gray-600 h-screen px-4">
-    <div class="flex flex-col justify-center h-full">
-        {/* <!-- Table --> */}
-        <div class="w-full max-w-2xl mx-auto bg-white shadow-lg rounded-sm border border-gray-200">
-            <header class="px-5 py-4 border-b border-gray-100">
-                <h2 class="font-semibold text-gray-800">Seekers</h2>
-            </header>
-            <div class="p-3">
-                <div class="overflow-x-auto">
-                    <table class="table-auto w-full">
-                        <thead class="text-xs font-semibold uppercase text-gray-400 bg-gray-50">
-                            <tr>
-                                <th class="p-2 whitespace-nowrap">
-                                    <div class="font-semibold text-left">Name</div>
-                                </th>
-                                <th class="p-2 whitespace-nowrap">
-                                    <div class="font-semibold text-left">Email</div>
-                                </th>
-                                <th class="p-2 whitespace-nowrap">
-                                    <div class="font-semibold text-left">Gender</div>
-                                </th>
-                                <th class="p-2 whitespace-nowrap">
-                                    <div class="font-semibold text-center">Phone Number</div>
-                                </th>
-                                <th class="p-2 whitespace-nowrap">
-                                    <div class="font-semibold text-center">Verified</div>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody class="text-sm divide-y divide-gray-100">
-                            <tr>
-                                <td class="p-2 whitespace-nowrap">
-                                    <div class="flex items-center">
-                                        <div class="w-10 h-10 flex-shrink-0 mr-2 sm:mr-3"><img class="rounded-full" src="https://raw.githubusercontent.com/cruip/vuejs-admin-dashboard-template/main/src/images/user-36-05.jpg" width="40" height="40" alt="Alex Shatov"/></div>
-                                        <div class="font-medium text-gray-800">Alex Shatov</div>
-                                    </div>
-                                </td>
-                                <td class="p-2 whitespace-nowrap">
-                                    <div class="text-left">alexshatov@gmail.com</div>
-                                </td>
-                                <td class="p-2 whitespace-nowrap">
-                                    <div class="text-left font-medium">Female</div>
-                                </td>
-                                <td class="p-2 whitespace-nowrap">
-                                    <div class="text-lg text-center">+254712345678</div>
-                                </td>
-                                <td class="p-2 whitespace-nowrap">
-                                    <div class="text-lg text-center text-green-500">True</div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="p-2 whitespace-nowrap">
-                                    <div class="flex items-center">
-                                        <div class="w-10 h-10 flex-shrink-0 mr-2 sm:mr-3"><img class="rounded-full" src="https://raw.githubusercontent.com/cruip/vuejs-admin-dashboard-template/main/src/images/user-36-06.jpg" width="40" height="40" alt="Philip Harbach"/></div>
-                                        <div class="font-medium text-gray-800">Philip Harbach</div>
-                                    </div>
-                                </td>
-                                <td class="p-2 whitespace-nowrap">
-                                    <div class="text-left">philip.h@gmail.com</div>
-                                </td>
-                                <td class="p-2 whitespace-nowrap">
-                                    <div class="text-left font-medium">Male</div>
-                                </td>
-                                <td class="p-2 whitespace-nowrap">
-                                    <div class="text-lg text-center">+254712345678</div>
-                                </td>
-                                <td class="p-2 whitespace-nowrap">
-                                    <div class="text-lg text-center text-green-500">True</div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="p-2 whitespace-nowrap">
-                                    <div class="flex items-center">
-                                        <div class="w-10 h-10 flex-shrink-0 mr-2 sm:mr-3"><img class="rounded-full" src="https://raw.githubusercontent.com/cruip/vuejs-admin-dashboard-template/main/src/images/user-36-07.jpg" width="40" height="40" alt="Mirko Fisuk"/></div>
-                                        <div class="font-medium text-gray-800">Mirko Fisuk</div>
-                                    </div>
-                                </td>
-                                <td class="p-2 whitespace-nowrap">
-                                    <div class="text-left">mirkofisuk@gmail.com</div>
-                                </td>
-                                <td class="p-2 whitespace-nowrap">
-                                    <div class="text-left font-medium">Male</div>
-                                </td>
-                                <td class="p-2 whitespace-nowrap">
-                                    <div class="text-lg text-center">+254712345678</div>
-                                </td>
-                                <td class="p-2 whitespace-nowrap">
-                                    <div class="text-lg text-center text-green-500">True</div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="p-2 whitespace-nowrap">
-                                    <div class="flex items-center">
-                                        <div class="w-10 h-10 flex-shrink-0 mr-2 sm:mr-3"><img class="rounded-full" src="https://raw.githubusercontent.com/cruip/vuejs-admin-dashboard-template/main/src/images/user-36-08.jpg" width="40" height="40" alt="Olga Semklo"/></div>
-                                        <div class="font-medium text-gray-800">Olga Semklo</div>
-                                    </div>
-                                </td>
-                                <td class="p-2 whitespace-nowrap">
-                                    <div class="text-left">olga.s@cool.design</div>
-                                </td>
-                                <td class="p-2 whitespace-nowrap">
-                                    <div class="text-left font-medium">Female</div>
-                                </td>
-                                <td class="p-2 whitespace-nowrap">
-                                    <div class="text-lg text-center">+254712345678</div>
-                                </td>
-                                <td class="p-2 whitespace-nowrap">
-                                    <div class="text-lg text-center text-green-500">True</div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="p-2 whitespace-nowrap">
-                                    <div class="flex items-center">
-                                        <div class="w-10 h-10 flex-shrink-0 mr-2 sm:mr-3"><img class="rounded-full" src="https://raw.githubusercontent.com/cruip/vuejs-admin-dashboard-template/main/src/images/user-36-09.jpg" width="40" height="40" alt="Burak Long"/></div>
-                                        <div class="font-medium text-gray-800">Burak Long</div>
-                                    </div>
-                                </td>
-                                <td class="p-2 whitespace-nowrap">
-                                    <div class="text-left">longburak@gmail.com</div>
-                                </td>
-                                <td class="p-2 whitespace-nowrap">
-                                    <div class="text-left font-medium">Female</div>
-                                </td>
-                                <td class="p-2 whitespace-nowrap">
-                                    <div class="text-lg text-center">+254712345678</div>
-                                </td>
-                                <td class="p-2 whitespace-nowrap">
-                                    <div class="text-lg text-center text-green-500">True</div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-    </div>
-  )
+    <>
+      <div class="flex-grow sm:text-left text-center mt-10 mb-10"></div>
+      <Stack
+        direction="row"
+        justifyContent="flex-start"
+        alignItems="flex-start"
+        sx={{ p: 7 }}
+      >
+        <Typography variant="h6" sx={{ fontWeight: "800" }}>
+          These are All the Seekers on the platform
+        </Typography>
+      </Stack>
+      <Box
+        sx={{
+          mt: 5,
+          "& .MuiDataGrid-columnHeaders": {
+            backgroundColor: "primary.lightest_gray",
+            fontSize: 16,
+          },
+        }}
+      >
+        <SeekerActions />
+        {loading && <LinearProgress />}
+        {!loading && <CustomTable columns={columns} rows={rows} />}
+      </Box>
+    </>
+  );
 }
 
-export default AllSeekers
+export default AllSeekers;
