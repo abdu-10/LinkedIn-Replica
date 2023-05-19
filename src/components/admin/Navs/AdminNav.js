@@ -4,7 +4,6 @@ import HomeIcon from "@mui/icons-material/Home";
 import GroupIcon from "@mui/icons-material/Group";
 import WorkIcon from "@mui/icons-material/Work";
 import TextsmsIcon from "@mui/icons-material/Textsms";
-import NotificationsIcon from "@mui/icons-material/Notifications";
 import SearchIcon from "@mui/icons-material/Search";
 import AppsIcon from "@mui/icons-material/Apps";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
@@ -102,7 +101,7 @@ function AdminNav() {
 
   return (
     <div>
-    <div className="Navbar fixed top-0 left-0 right-0 z-30 h-[60px]">
+    <div className="Navbar fixed top-0 left-0 right-0">
       <div className="logo_section">
         <img
           className="cursor-pointer"
@@ -129,13 +128,17 @@ function AdminNav() {
           
           
          
-          <li onClick={()=> navigate("/admin/")}>
+          <li onClick={()=> navigate("/admin/employers")}>
             <GroupIcon />
-            <span className="nav_text">All Users</span>
+            <span className="nav_text">All Employers</span>
           </li>
-          <li onClick={()=> navigate("/admin/")}>
+          <li onClick={()=> navigate("/admin/seekers")}>
+            <GroupIcon />
+            <span className="nav_text">All Seekers</span>
+          </li>
+          <li onClick={()=> navigate("/admin/users")}>
             <WorkIcon />
-            <span className="nav_text"> All Jobs</span>
+            <span className="nav_text"> All Admins</span>
           </li>
           <li onClick={()=> navigate("/admin/")}>
             <TextsmsIcon />
@@ -143,10 +146,6 @@ function AdminNav() {
               4
             </span>
             <span className="nav_text">All Posts</span>
-          </li>
-          <li>
-            <NotificationsIcon />
-            <span className="nav_text"> All Notification</span>
           </li>
           <li onClick={handleAccountActionsClick()}>
             {" "}
