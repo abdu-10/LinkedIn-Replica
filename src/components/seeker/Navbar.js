@@ -28,9 +28,9 @@ function Navbar() {
   const handleMenuItemClick = (prop) => {
     handleCloseMenu();
     if (prop === "view") {
-      navigate("/profile");
+      navigate("/seeker/profile");
     } else if (prop === "edit") {
-      navigate("/profile");
+      navigate("/seeker/profile");
     }else if (prop === "logout"){
       navigate("/");
       handleCloseMenu();
@@ -101,7 +101,7 @@ function Navbar() {
 
   return (
     <div>
-    <div className="Navbar fixed top-0 left-0 right-0 z-30 h-[60px]">
+    <div className="Navbar fixed top-0 left-0 right-0 z-30">
       <div className="logo_section">
         <img
           className="cursor-pointer"
@@ -111,7 +111,7 @@ function Navbar() {
 
         {/* <SearchIcon className = 'spair_search'/> */}
         <div className="search_bar">
-          <SearchIcon className="search_icon" />
+          {/* <SearchIcon className="search_icon" /> */}
           <input placeholder="search"></input>
         </div>
       </div>
