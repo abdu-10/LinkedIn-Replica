@@ -14,14 +14,14 @@ function Login() {
             alt="logo"
           />
         </div>
-        <div className="text-xl  text-gray-800 dark:text-black md:text-2xl">
+        {/* <div className="text-xl  text-gray-800 dark:text-black md:text-2xl">
           Make the most of your professional life
-        </div>
+        </div> */}
 
         {/* <!-- Layout  --> */}
         <div class="bg-white w-96 shadow-xl rounded p-5">
           <h1 class="text-3xl font-medium">Sign In</h1>
-          <p class="text-sm">Stay updated on your professional world</p>
+          {/* <p class="text-sm">Stay updated on your professional world</p> */}
           <form class="space-y-5 mt-5">
             <input
               type="text"
@@ -44,7 +44,7 @@ function Login() {
             </div>
 
             <button class="text-center w-full bg-blue-700 rounded-full text-white py-3 font-medium">
-              Sign Up
+              Sign In
             </button>
           </form>
         </div>
