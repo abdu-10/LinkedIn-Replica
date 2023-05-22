@@ -35,7 +35,7 @@ const UnAuthorized = () => {
                     <Button
                         variant="contained"
                         color="primary"
-                        onClick={() => navigate("/")}
+                        onClick={() => navigate("/login")}
                         style={{ marginLeft: '8px' }}
                     >
                         LOG IN WITH ALLOWED ACCOUNT
