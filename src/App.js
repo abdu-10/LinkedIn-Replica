@@ -3,6 +3,8 @@ import "./App.css";
 import { Route, Routes } from "react-router-dom";
 import Maincontent from "./components/common/Main Page/Maincontent";
 import Login from "../src/components/common/forms/Login";
+import SignIn from "./components/common/forms/SignIn";
+import Register from "./components/common/forms/Register";
 import Profile from "./components/seeker/Profile";
 import Landing from "../src/components/common/Main Page/Landing";
 import JobsPage from "./components/seeker/JobsPage";
@@ -26,6 +28,8 @@ import EmployerProfile from "./components/employer/EmployerProfile";
 import SeekerDetails from "./components/seeker/SeekerDetails"
 import EmployerDetails from "./components/employer/EmployerDetails";
 import CreateAdmin from "./components/admin/CreateAdmin";
+import UnAuthorized from "./components/common/views/UnAuthorized"
+import RequireAuth from "./components/common/forms/RequireAuth";
 
 function App() {
   return (
@@ -34,50 +38,56 @@ function App() {
         {/* Home Paths */}
         <Route path="/" element={<Landing />}></Route>
         {/* SIGNUP?? BELOW */}
-        <Route path="/login" element={<Login />}></Route>
-        <Route path="/signup" element={<SignUp />}></Route>
-        
-        
+        <Route path="/login" element={<SignIn />}></Route>
+        <Route path="/signup" element={<Register />}></Route>
+        <Route path="/unauth" element={<UnAuthorized />}></Route>
+
         {/* <Route path='messages'element={<Messages />}/> */}
         {/* <Route path='notification'element={<Notification />}/> */}
         {/* ADMIN SPECIFIC ROUTES */}
-        <Route path="/admin" element={<AdminNav />}>
-        <Route index element={<AdminDashboard />} />
-          <Route path="employers" element={<AllEmployers />} />
-          <Route path="seekers" element={<AllSeekers />} />
-          <Route path="createadmin" element={<CreateAdmin />} />
-          {/* TO VERIFY USER: Open pop up */}
-          {/* <Route path="verify" element={<Verify />} /> */}
-          {/* element={<UsersNav />} */}
-          <Route path="users" element={<UsersTable />} >
-            {/* <Route index={<UserPage />} /> */}
-            {/* <Route index element={<UsersTable />} /> */}
-            {/* <Route path="add-user" element={<AddAdminForm />} /> */}
+        <Route element={<RequireAuth requiredRouteRole={"ADMIN"} />}>
+          <Route path="/admin" element={<AdminNav />}>
+            <Route index element={<AdminDashboard />} />
+            <Route path="employers" element={<AllEmployers />} />
+            <Route path="seekers" element={<AllSeekers />} />
+            <Route path="createadmin" element={<CreateAdmin />} />
+            {/* TO VERIFY USER: Open pop up */}
+            {/* <Route path="verify" element={<Verify />} /> */}
+            {/* element={<UsersNav />} */}
+            <Route path="users" element={<UsersTable />} >
+              {/* <Route index={<UserPage />} /> */}
+              {/* <Route index element={<UsersTable />} /> */}
+              {/* <Route path="add-user" element={<AddAdminForm />} /> */}
+            </Route>
           </Route>
+
         </Route>
+
         {/* EMPLOYER ROUTES */}
         <Route path="/employer" element={<EmployerNav />}  >
-        <Route index element={<Maincontent />} />
-        <Route path='dashboard' element={<Maincontent />} />
-        <Route path="job-post" element={<JobPosting />} />
-        {/* PENDING: FIND LOGIC TO FIND SEEKERS WHILE DISPLAYING AN INITIAL CURATED LIST */}
-        <Route path="seekers" element={<EmployerSpecific />} />
-        <Route path="myseekers" element={<MySeekers />} />
-        <Route path="profile" element={<EmployerProfile />} />
-        <Route path="details" element={<EmployerDetails />}/>
+          <Route index element={<Maincontent />} />
+          <Route path='dashboard' element={<Maincontent />} />
+          <Route path="job-post" element={<JobPosting />} />
+          {/* PENDING: FIND LOGIC TO FIND SEEKERS WHILE DISPLAYING AN INITIAL CURATED LIST */}
+          <Route path="seekers" element={<EmployerSpecific />} />
+          <Route path="myseekers" element={<MySeekers />} />
+          <Route path="profile" element={<EmployerProfile />} />
+          <Route path="details" element={<EmployerDetails />} />
         </Route>
         {/* SEEKER ROUTES */}
-        <Route path="/seeker" element={<Navbar />}>
-          <Route index={true} element={<Maincontent />} />
-          <Route path="jobs" element={<JobsPage />}>
-            <Route path="apply" exact element={<JobApplication />} />
+        <Route element={<RequireAuth requiredRouteRole={"SEEKER"} />}>
+          <Route path="/seeker" element={<Navbar />}>
+            <Route index={true} element={<Maincontent />} />
+            <Route path="jobs" element={<JobsPage />}>
+              <Route path="apply" exact element={<JobApplication />} />
+            </Route>
+            <Route path="network" element={<MyNetwork />} />
+            <Route path="profile" element={<Profile />} />
+            <Route path="details" element={<SeekerDetails />} />
           </Route>
-          <Route path="network" element={<MyNetwork />} />
-          <Route path="profile" element={<Profile />}/>
-          <Route path="details" element={<SeekerDetails />}/>
         </Route>
       </Routes>
-    </div>
+    </div >
   );
 }
 
