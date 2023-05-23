@@ -111,7 +111,7 @@ function Navbar() {
 
         {/* <SearchIcon className = 'spair_search'/> */}
         <div className="search_bar">
-          {/* <SearchIcon className="search_icon" /> */}
+          <SearchIcon className="search_icon" />
           <input placeholder="search"></input>
         </div>
       </div>
