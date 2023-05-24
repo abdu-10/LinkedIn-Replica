@@ -1,25 +1,50 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import "./Maincontent.css";
 import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import DesktopMacIcon from "@mui/icons-material/DesktopMac";
 import GroupsIcon from "@mui/icons-material/Groups";
 import Options from "./Options";
+import CompleteAccountDialog from "./dialogs/CompleteAccountDialog";
+import { useSelector } from "react-redux";
+import { selectLoggedInUserRef } from "../../../features/users/userSlice";
 
-import { useState, useEffect, useLayoutEffect } from "react";
+
+import { useLayoutEffect } from "react";
 
 import Addpost from "./Addpost";
 import CreatePost from "./CreatePost";
+
+import { getSeekerProfile } from "../../../api/seeker/seekerApis";
 
 
 function Maincontent() {
   const [posts, setPosts] = useState([]); //creates a state to hold input values from textbox
   const [text, setText] = useState(""); //creates a state to hold input values from textbox
-
+  const [openCompleteAccountDialog, setOpenCompleteAccountDialog] = useState(false)
   const [formx, setForm] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showUp, setshowUp] = useState(false);
   const [isFixed, setIsFixed] = useState(false); // to set the second div on the right to fixed
 
+  const seeker_user_ref = useSelector(selectLoggedInUserRef)
+  const checkUserProfile = () => {
+    if (seeker_user_ref){
+      getSeekerProfile(seeker_user_ref)
+      .then((res) => {
+        if (res.status === 200 ){
+          console.log("available")
+          setOpenCompleteAccountDialog(false)
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        setOpenCompleteAccountDialog(true)
+      });
+    }
+  }
+  const closeCompleteAccountDialog = () => {
+    setOpenCompleteAccountDialog(false)
+  }
   // function to set the div to be fixed when scroll > 300 else leave it alone
   const handleScroll = () => {
     if (window.scrollY >= 300 && !isFixed) {
@@ -63,10 +88,21 @@ function Maincontent() {
     }
   };
 
+  useEffect(() => {
+    checkUserProfile();
+    console.log(openCompleteAccountDialog)
+  }, [])
+  
+
   return (
     <>
       <CreatePost formx={formx} setForm={setForm} />
-          {/* left side profile */}
+      <CompleteAccountDialog
+      openCompleteAccountDialog={openCompleteAccountDialog}
+      closeCompleteAccountDialog={closeCompleteAccountDialog}
+
+      />
+      {/* left side profile */}
       <div className="Main_content bg-[rgb(240,239,235)]">
         <div className="left_content ">
           <div className="left_first">
@@ -124,9 +160,8 @@ function Maincontent() {
 
           {/* if position is fixed , set the top to be 70px else leave it as it is */}
           <div
-            className={`left_second w-[240px]  ${
-              isFixed ? `fixed top-[70px] ` : ""
-            }`}
+            className={`left_second w-[240px]  ${isFixed ? `fixed top-[70px] ` : ""
+              }`}
           >
             {/* recents */}
             <h5>Recents</h5>
@@ -150,7 +185,7 @@ function Maincontent() {
               <GroupsIcon />
               <a href="/#">Ghana Professional Netwo...</a>
             </p>
-              {/* groups */}
+            {/* groups */}
             <h5>
               <span className="groups">Groups</span>
             </h5>
@@ -213,7 +248,7 @@ function Maincontent() {
           />
           <Addpost loading={loading} setLoading={setLoading} posts={posts} />
         </div>
-            {/* right side content */}
+        {/* right side content */}
         <div className="right_content ">
           <div className="right_first fixed top-20">
             <img
