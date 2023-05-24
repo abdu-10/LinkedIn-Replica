@@ -85,7 +85,7 @@ export default function Login() {
         if (role === "ADMIN") {
             navigate("/admin")
         } else if (role === "EMPLOYER") {
-            navigate("/company")
+            navigate("/employer")
         } else if (role === "SEEKER") {
             navigate("/seeker")
         } else {
