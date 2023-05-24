@@ -2,16 +2,10 @@ import { apis } from "../axios";
 
 // complete seeker acc
 export const completeSeekerAccount = async (
-  full_name,
-  email,
-  verified,
-  user_code
+  full_name, phone_number, email, gender, user_code,
 ) => {
   return await apis.post(`/seekers`, {
-    full_name,
-    email,
-    verified,
-    user_code,
+    full_name, phone_number, email, gender, user_code, verified: false
   });
 };
 
@@ -49,4 +43,8 @@ export const UpdateSeekerProfile = async (
     availability,
     minimum_salary,
   });
+};
+
+export const getSeekerProfile = async (seeker_user_ref) => {
+  return await apis.get(`/seekers/${seeker_user_ref}`);
 };
