@@ -1,10 +1,37 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import EmployerNav from "../employer/EmployerNav";
+import { useNavigate } from "react-router-dom";
+import EditEmployerProfileDialog from "./dialogs/EditEmployerProfileDialog";
+import { getEmployerProfile } from "../../api/employer/employerApis";
 
 function EmployerProfile() {
+  let employer_code = "iw3l-jfb7-uiym";
+  const [employerDetails, setEmployerDetails] = useState({})
+  // const navigate = useNavigate()
+    const [openEditProfileDialog, setOpenEditProfileDialog] = useState(false)
+
+    const closeEditProfileDialog = () => {
+        setOpenEditProfileDialog(false)
+    }
+    const populateProfile = () => {
+      return getEmployerProfile(employer_code).then ((res) => {
+        if (res.status === 200){
+        setEmployerDetails(res.data)
+        } else{
+          console.log(`err`)
+        }
+      })
+    }
+  
+    useEffect(()=>{
+      populateProfile();
+    }, [])
   return (
     <>
       <EmployerNav />
+      <EditEmployerProfileDialog
+      openEditProfileDialog={openEditProfileDialog}
+      closeEditProfileDialog={closeEditProfileDialog}/>
       <div class=" mx-auto mt-50 my-5 p-5 ">
         <div class="md:flex no-wrap md:-mx-2 mt-9 ">
           {/* <!-- Left Side --> */}
@@ -19,7 +46,7 @@ function EmployerProfile() {
                 />
               </div>
               <h1 class="text-gray-900 font-bold text-xl leading-8 my-1">
-                Motos Ltd
+              {employerDetails.company_name}
               </h1>
               <h3 class="text-gray-600 font-lg text-semibold leading-6">
                 A technology company that builds innovative solutions for
@@ -133,23 +160,23 @@ function EmployerProfile() {
                 <div class="grid md:grid-cols-2 text-sm">
                   <div class="grid grid-cols-2">
                     <div class="px-4 py-2 font-semibold">Company Name</div>
-                    <div class="px-4 py-2">Motos Ltd</div>
+                    <div class="px-4 py-2">{employerDetails.company_name}</div>
                   </div>
                   <div class="grid grid-cols-2">
                     <div class="px-4 py-2 font-semibold">Location</div>
-                    <div class="px-4 py-2">pembe Road</div>
+                    <div class="px-4 py-2">{employerDetails.location}</div>
                   </div>
                   <div class="grid grid-cols-2">
                     <div class="px-4 py-2 font-semibold">Phone Number</div>
-                    <div class="px-4 py-2">+11 998001001</div>
+                    <div class="px-4 py-2">{employerDetails.phone_number}</div>
                   </div>
                   <div class="grid grid-cols-2">
                     <div class="px-4 py-2 font-semibold">Email</div>
-                    <div class="px-4 py-2">motos@gmail.com</div>
+                    <div class="px-4 py-2">{employerDetails.email}</div>
                   </div>
                 </div>
               </div>
-              <button class="block w-full text-blue-800 text-sm font-semibold rounded-lg hover:bg-gray-100 focus:outline-none focus:shadow-outline focus:bg-gray-100 hover:shadow-xs p-3 my-4">
+              <button onClick={() => setOpenEditProfileDialog(true)} class="block w-full text-blue-800 text-sm font-semibold rounded-lg hover:bg-gray-100 focus:outline-none focus:shadow-outline focus:bg-gray-100 hover:shadow-xs p-3 my-4">
                 Edit Profile
               </button>
             </div>
@@ -181,24 +208,7 @@ function EmployerProfile() {
                     <span class="tracking-wide">About</span>
                   </div>
                   <p>
-                    Pivot Access is the leading software and cloud
-                    infrastructure service provider in Rwanda and East Africa
-                    and has a proven track record of delivering exceptional
-                    software solutions that are customized to meet the unique
-                    needs of regulated institutions. With over 12 years of
-                    experience in digital security and a deep understanding of
-                    financial, commercial, and telecommunications digital
-                    environments, Pivot Access is dedicated to creating
-                    solutions that are centered around inclusion, reliability,
-                    and security. The company's product portfolio includes
-                    cutting-edge technologies such as prepaid vending systems,
-                    payment systems, systems integrations, banking applications,
-                    real-time transaction reconciliations, electronic merchant
-                    payments, traffic management solutions, and modern data
-                    center infrastructures. By leveraging its expertise and
-                    experience, Pivot Access is committed to empowering various
-                    industries to innovate while meeting compliance standards
-                    requirements.
+                  {employerDetails.description}
                   </p>
                 </div>
                 <div></div>
