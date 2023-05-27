@@ -1,14 +1,86 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Dialog } from "@mui/material";
+import { UpdateSeekerProfile } from "../../api/seeker/seekerApis";
+import { Password } from "@mui/icons-material";
 
 function EditSeekerDetails() {
+  // HARDCODED PROFILE CODE
+  let seeker_code = "xe6w-cvls-kr88";
+  const [values, setValues] = useState({
+    full_name: "",
+    email: "",
+    username: "",
+    location: "",
+    gender: "",
+    date_of_birth: "",
+    avatar: "",
+    phone_number: "",
+    preferred_job: "",
+    availability: "",
+    minimum_salary: 0,
+    password: "",
+    password_confirmation: "",
+  });
+  const {
+    full_name,
+    email,
+    username,
+    location,
+    gender,
+    date_of_birth,
+    avatar,
+    phone_number,
+    preferred_job,
+    availability,
+    minimum_salary,
+    password,
+        password_confirmation,
+  } = values;
+  function handleChange(e) {
+    const key = e.target.name;
+    const value = e.target.value;
+
+    setValues({
+      ...values,
+      [key]: value,
+    });
+  }
+  function handleSubmit(e) {
+    e.preventDefault();
+    console.log("update");
+    return UpdateSeekerProfile(
+      full_name,
+    email,
+    username,
+    location,
+    gender,
+    date_of_birth,
+    avatar,
+    phone_number,
+    preferred_job,
+    availability,
+    minimum_salary,
+    password,
+        password_confirmation,
+      
+    ).then((res) => {
+      if (res.status == 200) {
+        console.log("Account updated");
+        UpdateSeekerProfile(seeker_code).then((res) => {
+          setValues(res.data)
+        })
+      } else {
+        console.log(res.data.message);
+      }
+    });
+  }
   return (
     <>
     
     
       <div className="bg-white shadow-md rounded mt-20 px-8 pt-6 pb-8 mb-4 flex flex-col my-2">
         <div className="-mx-3 md:flex mb-6">
-          <form className="flex">
+          <form onSubmit={handleSubmit} className="flex">
             <div className="md:w-1/2 px-3 mb-6 md:mb-0">
               <label
                 for="first_name"
@@ -20,7 +92,8 @@ function EditSeekerDetails() {
                 id="full_name"
                 type="text"
                 name="full_name"
-                value={""}
+                value={full_name}
+                onChange={handleChange}
                 className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner"
               />
               <label
@@ -33,7 +106,8 @@ function EditSeekerDetails() {
                 id="email"
                 type="text"
                 name="email"
-                value={""}
+                value={email}
+                onChange={handleChange}
                 className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner"
               />
                <label
@@ -46,7 +120,8 @@ function EditSeekerDetails() {
                 id="username"
                 type="text"
                 name="username"
-                value={""}
+                value={username}
+                onChange={handleChange}
                 className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner"
               />
                <label
@@ -59,7 +134,8 @@ function EditSeekerDetails() {
                 id="gender"
                 type="text"
                 name="gender"
-                value={""}
+                value={gender}
+                onChange={handleChange}
                 className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner"
               />
                <label
@@ -72,7 +148,8 @@ function EditSeekerDetails() {
                 id="preferred_job"
                 type="text"
                 name="preferred_job"
-                value={""}
+                value={preferred_job}
+                onChange={handleChange}
                 className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner"
               />
               <label
@@ -85,7 +162,8 @@ function EditSeekerDetails() {
                 id="minimum_salary"
                 type="text"
                 name="minimum_salary"
-                value={""}
+                value={minimum_salary}
+                onChange={handleChange}
                 className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner"
               />
             </div>
@@ -100,7 +178,8 @@ function EditSeekerDetails() {
                 id="phone_number"
                 type="text"
                 name="phone_number"
-                value={""}
+                value={phone_number}
+                onChange={handleChange}
                 className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner"
               />
                <label
@@ -113,7 +192,8 @@ function EditSeekerDetails() {
                 id="location"
                 type="text"
                 name="location"
-                value={""}
+                value={location}
+                onChange={handleChange}
                 className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner"
               />
                <label
@@ -126,7 +206,8 @@ function EditSeekerDetails() {
                 id="date_of_birth"
                 type="text"
                 name="date_of_birth"
-                value={""}
+                value={date_of_birth}
+                onChange={handleChange}
                 className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner"
               />
               <label
@@ -139,7 +220,8 @@ function EditSeekerDetails() {
                 id="availability"
                 type="text"
                 name="availability"
-                value={""}
+                value={availability}
+                onChange={handleChange}
                 className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner"
               />
               <div className="md:col-span-2">
@@ -149,7 +231,8 @@ function EditSeekerDetails() {
                   name="password"
                   id="password"
                   className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
-                  value={""}
+                  value={password}
+                  onChange={handleChange}
                   placeholder=""
                 />
               </div>
@@ -160,7 +243,8 @@ function EditSeekerDetails() {
                   name="password_confirmation"
                   id="password_confirmation"
                   className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
-                  value={""}
+                  value={password_confirmation}
+                  onChange={handleChange}
                   placeholder=""
                 />
               </div>
