@@ -12,28 +12,29 @@ import { getSeekerProfile } from "../../api/seeker/seekerApis";
 
 function Profile() {
   // HARDCODED PROFILE CODE
-    let seeker_code = "xe6w-cvls-kr88";
-    const [seekerDetails, setSeekerDetails] = useState({})
+    // let seeker_code = "xe6w-cvls-kr88";
+    // const [seekerDetails, setSeekerDetails] = useState({})
   //   const navigate = useNavigate();
+  const seekerDetails = useSelector(selectCurrentSeekerDetail)
   const [openEditProfileDialog, setOpenEditProfileDialog] = useState(false);
 
   const closeEditProfileDialog = () => {
     setOpenEditProfileDialog(false);
   };
 
-  const populateProfile = () => {
-    return getSeekerProfile(seeker_code).then ((res) => {
-      if (res.status === 200){
-      setSeekerDetails(res.data)
-      } else{
-        console.log(`err`)
-      }
-    })
-  }
+  // const populateProfile = () => {
+  //   // return getSeekerProfile(seeker_code).then ((res) => {
+  //   //   if (res.status === 200){
+  //   //   setSeekerDetails(res.data)
+  //   //   } else{
+  //   //     console.log(`err`)
+  //   //   }
+  //   // })
+  // }
 
-  useEffect(()=>{
-    populateProfile();
-  }, [])
+  // useEffect(()=>{
+  //   populateProfile();
+  // }, [])
   
 //   const currentSeekerDetails = useSelector(selectCurrentSeekerDetail);
   
