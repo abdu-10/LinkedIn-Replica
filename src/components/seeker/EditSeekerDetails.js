@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Dialog } from "@mui/material";
-import { UpdateSeekerProfile } from "../../api/seeker/seekerApis";
+import { updateSeekerProfile } from "../../api/seeker/seekerApis";
 import { Password } from "@mui/icons-material";
 
 function EditSeekerDetails() {
@@ -34,7 +34,7 @@ function EditSeekerDetails() {
     availability,
     minimum_salary,
     password,
-        password_confirmation,
+    password_confirmation,
   } = values;
   function handleChange(e) {
     const key = e.target.name;
@@ -48,27 +48,24 @@ function EditSeekerDetails() {
   function handleSubmit(e) {
     e.preventDefault();
     console.log("update");
-    return UpdateSeekerProfile(
-      full_name,
-    email,
-    username,
-    location,
-    gender,
-    date_of_birth,
-    avatar,
-    phone_number,
-    preferred_job,
-    availability,
-    minimum_salary,
-    password,
-        password_confirmation,
-      
+    return updateSeekerProfile(
+      seeker_code,
+      location,
+      gender,
+      date_of_birth,
+      avatar,
+      phone_number,
+      preferred_job,
+      availability,
+      minimum_salary
     ).then((res) => {
       if (res.status == 200) {
         console.log("Account updated");
-        UpdateSeekerProfile(seeker_code).then((res) => {
-          setValues(res.data)
-        })
+        console.log(res.gata)
+        // setValues(...values, res.data)
+        // updateSeekerProfile(seeker_code).then((res) => {
+        //   setValues(res.data)
+        // })
       } else {
         console.log(res.data.message);
       }
@@ -76,8 +73,6 @@ function EditSeekerDetails() {
   }
   return (
     <>
-    
-    
       <div className="bg-white shadow-md rounded mt-20 px-8 pt-6 pb-8 mb-4 flex flex-col my-2">
         <div className="-mx-3 md:flex mb-6">
           <form onSubmit={handleSubmit} className="flex">
@@ -110,7 +105,7 @@ function EditSeekerDetails() {
                 onChange={handleChange}
                 className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner"
               />
-               <label
+              <label
                 for="username"
                 className="block mt-2 text-xs font-semibold text-gray-600 uppercase"
               >
@@ -124,7 +119,7 @@ function EditSeekerDetails() {
                 onChange={handleChange}
                 className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner"
               />
-               <label
+              <label
                 for="gender"
                 className="block text-xs font-semibold text-gray-600 uppercase"
               >
@@ -138,7 +133,7 @@ function EditSeekerDetails() {
                 onChange={handleChange}
                 className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner"
               />
-               <label
+              <label
                 for="preferred_job"
                 className="block text-xs font-semibold text-gray-600 uppercase"
               >
@@ -182,7 +177,7 @@ function EditSeekerDetails() {
                 onChange={handleChange}
                 className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner"
               />
-               <label
+              <label
                 for="location"
                 className="block mt-2 text-xs font-semibold text-gray-600 uppercase"
               >
@@ -196,7 +191,7 @@ function EditSeekerDetails() {
                 onChange={handleChange}
                 className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner"
               />
-               <label
+              <label
                 for="date_of_birth"
                 className="block mt-2 text-xs font-semibold text-gray-600 uppercase"
               >
