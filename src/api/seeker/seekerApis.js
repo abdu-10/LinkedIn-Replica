@@ -22,8 +22,10 @@ export const getJobPerPreference = async (jobtag_code) => {
 };
 
 // update seeker profile
-export const UpdateSeekerProfile = async (
+export const updateSeekerProfile = async (
   seeker_code,
+  full_name,
+  email,
   location,
   gender,
   date_of_birth,
@@ -34,6 +36,8 @@ export const UpdateSeekerProfile = async (
   minimum_salary
 ) => {
   return await apis.patch(`/seekers/${seeker_code}`, {
+    full_name,
+    email,
     location,
     gender,
     date_of_birth,
@@ -45,6 +49,6 @@ export const UpdateSeekerProfile = async (
   });
 };
 
-export const getSeekerProfile = async (seeker_user_ref) => {
-  return await apis.get(`/seekers/${seeker_user_ref}`);
+export const getSeekerProfile = async (user_ref) => {
+  return await apis.get(`/seeker/${user_ref}/profile`);
 };
