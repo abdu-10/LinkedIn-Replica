@@ -62,6 +62,6 @@ export const UpdateEmployerProfile = async (
         description,
     })
 }
-export const getEmployerProfile = async (employer_user_ref) => {
-    return await apis.get(`/employers/${employer_user_ref}`);
+export const getEmployerProfile = async (user_ref) => {
+    return await apis.get(`/employer/${user_ref}/profile`);
   };
