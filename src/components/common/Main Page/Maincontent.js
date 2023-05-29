@@ -5,9 +5,10 @@ import DesktopMacIcon from "@mui/icons-material/DesktopMac";
 import GroupsIcon from "@mui/icons-material/Groups";
 import Options from "./Options";
 import CompleteAccountDialog from "./dialogs/CompleteAccountDialog";
-import { useSelector } from "react-redux";
-import { selectLoggedInUserRef } from "../../../features/users/userSlice";
-
+import { useSelector, useDispatch } from "react-redux";
+import { selectLoggedInUserRef, selectCurrentUserRole } from "../../../features/users/userSlice";
+import { setCurrentEmployerDetail } from "../../../features/employers/employerSlice";
+import { setCurrentSeekerDetail, setSeekerCode } from "../../../features/seekers/seekerSlice";
 
 import { useLayoutEffect } from "react";
 
@@ -15,9 +16,11 @@ import Addpost from "./Addpost";
 import CreatePost from "./CreatePost";
 
 import { getSeekerProfile } from "../../../api/seeker/seekerApis";
+import { getEmployerProfile } from "../../../api/employer/employerApis";
 
 
 function Maincontent() {
+
   const [posts, setPosts] = useState([]); //creates a state to hold input values from textbox
   const [text, setText] = useState(""); //creates a state to hold input values from textbox
   const [openCompleteAccountDialog, setOpenCompleteAccountDialog] = useState(false)
@@ -25,14 +28,29 @@ function Maincontent() {
   const [loading, setLoading] = useState(false);
   const [showUp, setshowUp] = useState(false);
   const [isFixed, setIsFixed] = useState(false); // to set the second div on the right to fixed
-
-  const seeker_user_ref = useSelector(selectLoggedInUserRef)
+  const dispatch = useDispatch();
+  const user_ref = useSelector(selectLoggedInUserRef)
+  const user_role = useSelector(selectCurrentUserRole)
   const checkUserProfile = () => {
-    if (seeker_user_ref){
-      getSeekerProfile(seeker_user_ref)
+    if (user_role === "EMPLOYER"){
+      getEmployerProfile(user_ref)
       .then((res) => {
         if (res.status === 200 ){
-          console.log("available")
+          dispatch(setCurrentEmployerDetail({ currentEmployerDetail: res.data }));
+          setOpenCompleteAccountDialog(false)
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        setOpenCompleteAccountDialog(true)
+      });
+    } else if(user_role === "SEEKER"){
+      getSeekerProfile(user_ref)
+      .then((res) => {
+        if (res.status === 200 ){
+          dispatch(setCurrentSeekerDetail({ currentSeekerDetail: res.data }));
+          dispatch(setSeekerCode({ seekerCode: res.data.seeker_code }));
+
           setOpenCompleteAccountDialog(false)
         }
       })
