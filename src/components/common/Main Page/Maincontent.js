@@ -1,14 +1,21 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import "./Maincontent.css";
 import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import DesktopMacIcon from "@mui/icons-material/DesktopMac";
 import GroupsIcon from "@mui/icons-material/Groups";
 import Options from "./Options";
 import CompleteAccountDialog from "./dialogs/CompleteAccountDialog";
+import EmployerProfileDialog from "./dialogs/EmployerProfileDialog";
 import { useSelector, useDispatch } from "react-redux";
-import { selectLoggedInUserRef, selectCurrentUserRole } from "../../../features/users/userSlice";
+import {
+  selectLoggedInUserRef,
+  selectCurrentUserRole,
+} from "../../../features/users/userSlice";
 import { setCurrentEmployerDetail } from "../../../features/employers/employerSlice";
-import { setCurrentSeekerDetail, setSeekerCode } from "../../../features/seekers/seekerSlice";
+import {
+  setCurrentSeekerDetail,
+  setSeekerCode,
+} from "../../../features/seekers/seekerSlice";
 
 import { useLayoutEffect } from "react";
 
@@ -18,51 +25,56 @@ import CreatePost from "./CreatePost";
 import { getSeekerProfile } from "../../../api/seeker/seekerApis";
 import { getEmployerProfile } from "../../../api/employer/employerApis";
 
-
 function Maincontent() {
-
   const [posts, setPosts] = useState([]); //creates a state to hold input values from textbox
   const [text, setText] = useState(""); //creates a state to hold input values from textbox
-  const [openCompleteAccountDialog, setOpenCompleteAccountDialog] = useState(false)
+  const [openCompleteAccountDialog, setOpenCompleteAccountDialog] =
+    useState(false);
+  const [openEditProfileDialog, setOpenEditProfileDialog] = useState(false);
   const [formx, setForm] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showUp, setshowUp] = useState(false);
   const [isFixed, setIsFixed] = useState(false); // to set the second div on the right to fixed
   const dispatch = useDispatch();
-  const user_ref = useSelector(selectLoggedInUserRef)
-  const user_role = useSelector(selectCurrentUserRole)
+  const user_ref = useSelector(selectLoggedInUserRef);
+  const user_role = useSelector(selectCurrentUserRole);
   const checkUserProfile = () => {
-    if (user_role === "EMPLOYER"){
+    if (user_role === "EMPLOYER") {
       getEmployerProfile(user_ref)
-      .then((res) => {
-        if (res.status === 200 ){
-          dispatch(setCurrentEmployerDetail({ currentEmployerDetail: res.data }));
-          setOpenCompleteAccountDialog(false)
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-        setOpenCompleteAccountDialog(true)
-      });
-    } else if(user_role === "SEEKER"){
+        .then((res) => {
+          if (res.status === 200) {
+            dispatch(
+              setCurrentEmployerDetail({ currentEmployerDetail: res.data })
+            );
+            setOpenEditProfileDialog(false);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          setOpenEditProfileDialog(true);
+        });
+    } else if (user_role === "SEEKER") {
       getSeekerProfile(user_ref)
-      .then((res) => {
-        if (res.status === 200 ){
-          dispatch(setCurrentSeekerDetail({ currentSeekerDetail: res.data }));
-          dispatch(setSeekerCode({ seekerCode: res.data.seeker_code }));
+        .then((res) => {
+          if (res.status === 200) {
+            dispatch(setCurrentSeekerDetail({ currentSeekerDetail: res.data }));
+            dispatch(setSeekerCode({ seekerCode: res.data.seeker_code }));
 
-          setOpenCompleteAccountDialog(false)
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-        setOpenCompleteAccountDialog(true)
-      });
+            setOpenCompleteAccountDialog(false);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          setOpenCompleteAccountDialog(true);
+        });
     }
-  }
+  };
   const closeCompleteAccountDialog = () => {
-    setOpenCompleteAccountDialog(false)
-  }
+    setOpenCompleteAccountDialog(false);
+  };
+  const closeEditProfileDialog = () => {
+    setOpenEditProfileDialog(false);
+  };
   // function to set the div to be fixed when scroll > 300 else leave it alone
   const handleScroll = () => {
     if (window.scrollY >= 300 && !isFixed) {
@@ -108,17 +120,19 @@ function Maincontent() {
 
   useEffect(() => {
     checkUserProfile();
-    console.log(openCompleteAccountDialog)
-  }, [])
-  
+    console.log(openCompleteAccountDialog);
+  }, []);
 
   return (
     <>
       <CreatePost formx={formx} setForm={setForm} />
       <CompleteAccountDialog
-      openCompleteAccountDialog={openCompleteAccountDialog}
-      closeCompleteAccountDialog={closeCompleteAccountDialog}
-
+        openCompleteAccountDialog={openCompleteAccountDialog}
+        closeCompleteAccountDialog={closeCompleteAccountDialog}
+      />
+      <EmployerProfileDialog
+        openEmployerProfileDialog={openEditProfileDialog}
+        closeEmployerProfileDialog={closeEditProfileDialog}
       />
       {/* left side profile */}
       <div className="Main_content bg-[rgb(240,239,235)]">
@@ -178,8 +192,9 @@ function Maincontent() {
 
           {/* if position is fixed , set the top to be 70px else leave it as it is */}
           <div
-            className={`left_second w-[240px]  ${isFixed ? `fixed top-[70px] ` : ""
-              }`}
+            className={`left_second w-[240px]  ${
+              isFixed ? `fixed top-[70px] ` : ""
+            }`}
           >
             {/* recents */}
             <h5>Recents</h5>
