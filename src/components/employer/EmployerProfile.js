@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from "react";
 import EmployerNav from "../employer/EmployerNav";
 import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 import EditEmployerProfileDialog from "./dialogs/EditEmployerProfileDialog";
+import { setCurrentEmployerDetail } from "../../features/employers/employerSlice";
 import { getEmployerProfile } from "../../api/employer/employerApis";
-
+import { selectLoggedInUserRef } from "../../features/users/userSlice";
 function EmployerProfile() {
-  let employer_code = "iw3l-jfb7-uiym";
+  let employer_code = useSelector(selectLoggedInUserRef)
   const [employerDetails, setEmployerDetails] = useState({})
   // const navigate = useNavigate()
+  const dispatch = useDispatch()
     const [openEditProfileDialog, setOpenEditProfileDialog] = useState(false)
 
     const closeEditProfileDialog = () => {
@@ -17,6 +20,9 @@ function EmployerProfile() {
       return getEmployerProfile(employer_code).then ((res) => {
         if (res.status === 200){
         setEmployerDetails(res.data)
+        dispatch(
+          setCurrentEmployerDetail({ currentEmployerDetail: res.data })
+        );
         } else{
           console.log(`err`)
         }
@@ -30,8 +36,9 @@ function EmployerProfile() {
     <>
       <EmployerNav />
       <EditEmployerProfileDialog
-      openEditProfileDialog={openEditProfileDialog}
-      closeEditProfileDialog={closeEditProfileDialog}/>
+        openEditProfileDialog={openEditProfileDialog}
+        closeEditProfileDialog={closeEditProfileDialog}
+      />
       <div class=" mx-auto mt-50 my-5 p-5 ">
         <div class="md:flex no-wrap md:-mx-2 mt-9 ">
           {/* <!-- Left Side --> */}
@@ -41,12 +48,12 @@ function EmployerProfile() {
               <div class="image overflow-hidden">
                 <img
                   class="h-auto w-full mx-auto"
-                  src="https://www.logomaker.com/wpstatic/uploads/2021/10/LogoMaker.jpg"
+                  src={employerDetails.avatar}
                   alt=""
                 />
               </div>
               <h1 class="text-gray-900 font-bold text-xl leading-8 my-1">
-              {employerDetails.company_name}
+                {employerDetails.company_name}
               </h1>
               <h3 class="text-gray-600 font-lg text-semibold leading-6">
                 A technology company that builds innovative solutions for
@@ -176,7 +183,10 @@ function EmployerProfile() {
                   </div>
                 </div>
               </div>
-              <button onClick={() => setOpenEditProfileDialog(true)} class="block w-full text-blue-800 text-sm font-semibold rounded-lg hover:bg-gray-100 focus:outline-none focus:shadow-outline focus:bg-gray-100 hover:shadow-xs p-3 my-4">
+              <button
+                onClick={() => setOpenEditProfileDialog(true)}
+                class="block w-full text-blue-800 text-sm font-semibold rounded-lg hover:bg-gray-100 focus:outline-none focus:shadow-outline focus:bg-gray-100 hover:shadow-xs p-3 my-4"
+              >
                 Edit Profile
               </button>
             </div>
@@ -207,9 +217,7 @@ function EmployerProfile() {
                     </span>
                     <span class="tracking-wide">About</span>
                   </div>
-                  <p>
-                  {employerDetails.description}
-                  </p>
+                  <p>{employerDetails.description}</p>
                 </div>
                 <div></div>
               </div>
