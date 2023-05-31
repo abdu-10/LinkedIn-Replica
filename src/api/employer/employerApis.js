@@ -3,16 +3,15 @@ import { apis } from "../axios";
 // complete employer acc
 export const completeEmployerAccount = async (
     company_name,
+    phone_number,
     email,
-    phone_number,  
-    verified,
     user_code,
 ) => {
     return await apis.post(`/employers`, {
-        company_name,
-        email,
-        phone_number,  
-        verified,
+        company_name,        
+        phone_number,
+        email, 
+        verified: false,
         user_code,
     })
 }
@@ -50,13 +49,19 @@ export const deleteJob = async (job_code) => {
     return await apis.delete(`/jobs/${job_code}`)
 }
 // update employer profile
-export const UpdateEmployerProfile = async (
+export const updateEmployerProfile = async (
     employer_code,
+    company_name,
+    email,
+    phone_number,
     location,
     avatar,
     description,
 ) => {
     return await apis.patch(`/employers/${employer_code}`, {
+        company_name,
+        email,
+        phone_number,
         location,
         avatar,
         description,
