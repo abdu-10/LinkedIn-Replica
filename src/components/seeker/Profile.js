@@ -1,26 +1,37 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "./Navbar";
-// import { useNavigate } from "react-router-dom";
 import EditProfileDialog from "./dialogs/EditProfileDialog";
-import { selectCurrentSeekerDetail } from "../../features/seekers/seekerSlice";
-import { useSelector } from "react-redux";
-import { Typography } from "@mui/material";
+import { setCurrentSeekerDetail } from "../../features/seekers/seekerSlice";
+import { useSelector, useDispatch } from "react-redux";
 
+import { selectLoggedInUserRef } from "../../features/users/userSlice";
 import { getSeekerProfile } from "../../api/seeker/seekerApis";
 
-// commented out unused and errornious displays
-
 function Profile() {
-  // HARDCODED PROFILE CODE
-    // let seeker_code = "xe6w-cvls-kr88";
-    // const [seekerDetails, setSeekerDetails] = useState({})
-  //   const navigate = useNavigate();
-  const seekerDetails = useSelector(selectCurrentSeekerDetail)
+ 
+  let seeker_code = useSelector(selectLoggedInUserRef);
+  const [seekerDetails, setSeekerDetails] = useState({});
+  // const navigate = useNavigate()
+  const dispatch = useDispatch();
   const [openEditProfileDialog, setOpenEditProfileDialog] = useState(false);
 
   const closeEditProfileDialog = () => {
     setOpenEditProfileDialog(false);
   };
+  const populateProfile = () => {
+    return getSeekerProfile(seeker_code).then((res) => {
+      if (res.status === 200) {
+        setSeekerDetails(res.data);
+        dispatch(setCurrentSeekerDetail({ currentSeekerDetail: res.data }));
+      } else {
+        console.log(`err`);
+      }
+    });
+  };
+
+  useEffect(() => {
+    populateProfile();
+  }, []);
 
   // const populateProfile = () => {
   //   // return getSeekerProfile(seeker_code).then ((res) => {
@@ -55,20 +66,18 @@ function Profile() {
               <div class="image overflow-hidden">
                 <img
                   class="h-auto w-full mx-auto"
-                  src="https://cdn-icons-png.flaticon.com/512/180/180679.png"
+                  src={seekerDetails.avatar}
                   alt=""
                 />
               </div>
               <h1 class="text-gray-900 font-bold text-xl leading-8 my-1">
-              {seekerDetails.full_name}
+                {seekerDetails.full_name}
               </h1>
               <h3 class="text-gray-600 font-lg text-semibold leading-6">
-                Owner at Her Company Inc.
+                Owner at His Company Inc.
               </h3>
               <p class="text-sm text-gray-500 hover:text-gray-600 leading-6">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Reprehenderit, eligendi dolorum sequi illum qui unde aspernatur
-                non deserunt
+                {seekerDetails.description}
               </p>
               <ul class="bg-gray-100 text-gray-600 hover:text-gray-700 hover:shadow py-2 px-3 mt-3 divide-y rounded shadow-sm">
                 <li class="flex items-center py-3">
@@ -199,7 +208,7 @@ function Profile() {
                     <div class="px-4 py-2 font-semibold">Email.</div>
                     <div class="px-4 py-2">
                       <a class="text-blue-800" href="mailto:jane@example.com">
-                      {seekerDetails.email}
+                        {seekerDetails.email}
                       </a>
                     </div>
                   </div>
