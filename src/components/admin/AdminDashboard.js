@@ -1,7 +1,49 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import AdminProfileDialog from "../common/MainPage/dialogs/AdminProfileDialog";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  selectLoggedInUserRef,
+  selectCurrentUserRole,
+} from "../../../src/features/users/userSlice";
+import setCurrentAdminDetail from "../../../src/features/admins/adminSlice"
+import { getAdminProfile } from "../../api/admin/adminApis";
+
 
 function AdminDashboard() {
+  const [openEditProfileDialog, setOpenEditProfileDialog] = useState(false);
+  const dispatch = useDispatch();
+  const user_ref = useSelector(selectLoggedInUserRef);
+  const user_role = useSelector(selectCurrentUserRole);
+
+  const checkUserProfile = () => {
+    if (user_role === "ADMIN") {
+      getAdminProfile(user_ref)
+      .then((res) => {
+        if (res.status === 200) {          
+          setOpenEditProfileDialog(false);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        setOpenEditProfileDialog(true);
+      });        
+    } 
+    
+  };
+
+  const closeEditProfileDialog = () => {
+    setOpenEditProfileDialog(false);
+  };
+
+  useEffect(() => {
+    checkUserProfile();
+  }, []);
   return (
+    <>
+    <AdminProfileDialog
+        openAdminProfileDialog={openEditProfileDialog}
+        closeAdminProfileDialog={closeEditProfileDialog}
+      />
     <div>
       <div class="h-full justify-center items-center mr-12 mt-40 mb-10 ">
         {/* <!-- Statistics Cards --> */}
@@ -292,6 +334,7 @@ function AdminDashboard() {
           {/* <!-- ./Recent Activities --> */}
         </div>
       </div>
+      </>
   );
 }
 
