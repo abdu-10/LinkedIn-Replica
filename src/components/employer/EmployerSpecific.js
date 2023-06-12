@@ -1,7 +1,22 @@
-import React from 'react'
+import React, { useState, useEffect } from "react";
 import SeekersTab from './SeekersTab'
+import { getAllSeekers } from "../../api/admin/adminApis";
 
 function EmployerSpecific() {
+  const [seekersPayload, setSeekersPayload] = useState([]);
+
+  const fetchSeekers = () => {
+    getAllSeekers().then((res) => {
+      if (res.status === 200) {
+        setSeekersPayload(res.data);
+        console.log(seekersPayload);
+      }
+    });
+  };
+
+   useEffect(() => {
+    fetchSeekers();
+  }, []);
   return (
    
     <div className='mt-20'>
@@ -14,7 +29,6 @@ function EmployerSpecific() {
         <th scope="col" class="px-6 py-4 font-medium text-gray-900">Availability</th>
         <th scope="col" class="px-6 py-4 font-medium text-gray-900">Gender</th>
         <th scope="col" class="px-6 py-4 font-medium text-gray-900">Preferred Job</th>
-        <th scope="col" class="px-6 py-4 font-medium text-gray-900"></th>
       </tr>
     </thead>
     <tbody class="divide-y divide-gray-100 border-t border-gray-100">
@@ -29,7 +43,7 @@ function EmployerSpecific() {
             <span class="absolute right-0 bottom-0 h-2 w-2 rounded-full bg-green-400 ring ring-white"></span>
           </div>
           <div class="text-sm">
-            <div class="font-medium text-gray-700">Steven Jobs</div>
+          <div class="font-medium text-gray-700">Steven Jobs</div>
             <div class="text-gray-400">jobs@sailboatui.com</div>
           </div>
         </th>
