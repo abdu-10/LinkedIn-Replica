@@ -20,7 +20,7 @@ const CustomTable = ({ rows, columns }) => {
         }}
       >
         <DataGrid
-          getRowId={(row) => row.code}
+          getRowId={(row) => row.seeker_code || row.employer_code || row.admin_code}
           rows={rows}
           columns={columns}
           autoHeight
