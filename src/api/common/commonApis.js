@@ -32,18 +32,18 @@ export const createPost = async (
     media,
     description,
     user_code,
-    likes,
+    
 ) => {
     return await apis.post(`/posts`, {
         title,
         media,
         description,
         user_code,
-        likes,
+        likes: 0,
     })
 }
 
-export const BrowsePosts = async () => {
+export const getPosts = async () => {
     return await apis.get(`/posts`)
 }
 
@@ -72,8 +72,8 @@ export const commentOnPost = async (
     })
 }
 
-export const getAllPostComment = async (post_code) => {
-    return await apis.get(`/posts/comments/${post_code}`)
+export const getAllPostComments = async (post_code) => {
+    return await apis.get(`/comments/post/${post_code}`)
 }
 
 export const deleteComment = async (comment_code) => {
