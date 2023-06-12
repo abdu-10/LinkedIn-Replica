@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Typography,
   Stack,
@@ -9,27 +9,43 @@ import {
   MenuItem,
   LinearProgress,
 } from "@mui/material";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Navigate, useNavigate, Outlet  } from "react-router-dom";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import CustomTable from "../tables/CustomTable";
+import { getAllAdmins } from "../../../api/admin/adminApis";
+import { setCurrentAdminDetail } from "../../../features/admins/adminSlice";
 import UsersNav from "../Navs/UsersNav";
 function UsersTable() {
   const navigate = useNavigate();
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [rowParams, setRowParams] = useState({});
   const [loading, setLoading] = useState(false);
+  const [adminsPayload, setAdminsPayload] = useState([]);
 
   const handleCloseMenu = () => {
     setAnchorElNav(null);
   };
 
+  const fetchAdmins = () => {
+    getAllAdmins().then((res) => {
+      if (res.status === 200) {
+        setAdminsPayload(res.data);
+        console.log(adminsPayload);
+      }
+    });
+  };
+
+  useEffect(() => {
+    fetchAdmins();
+  }, []);
+
   const handleMenuItemClick = (prop) => {
     if (prop === "view") {
-      navigate("/employer/details");
+      navigate("details");
       handleCloseMenu();
-    } else if (prop === "verify") {
-      navigate("/employer/details");
+    } else if (prop === "edit") {
+      navigate("details");
     } else if (prop === "delete") {
       navigate();
     } else handleCloseMenu();
@@ -42,16 +58,6 @@ function UsersTable() {
   const AdminActions = () => {
     return (
       <>
-        {" "}
-        {/* <EmployerDetails
-        />{" "} */}
-        {/* <DeleteAccount
-          openDeleteAccount={openDeleteAccount}
-          closeDeleteModal={closeDeleteModal}
-          rider_code={rowParams.code}
-          // deactivationStatus={deactivationStatus}
-          // fetchStays={fetchRiders}
-        /> */}
         <Menu
           id="menu-appbar"
           anchorEl={anchorElNav}
@@ -79,7 +85,7 @@ function UsersTable() {
               View
             </Box>
           </MenuItem>
-          <MenuItem onClick={() => handleMenuItemClick("verify")}>
+          <MenuItem onClick={() => handleMenuItemClick("edit")}>
             <Box display="flex" alignItems="center" textAlign="center">
               <VisibilityOutlinedIcon
                 sx={{
@@ -88,29 +94,13 @@ function UsersTable() {
                   fontSize: "medium",
                 }}
               />
-              Verify
+              Edit
             </Box>
           </MenuItem>
         </Menu>{" "}
       </>
     );
   };
-
-  const rows = [
-    {
-      code: "eueueuehklll",
-      full_name: "Steve",
-      email: "steve@gmail.com",
-      user_name: "stevo10"
-    },
-    {
-      code: "eueueuehnkii",
-      full_name: "Abdu",
-      email: "abdu@gmail.com",
-      user_name: "abdu10"
-      
-    },
-  ];
 
   const columns = [
     {
@@ -142,28 +132,6 @@ function UsersTable() {
       },
     },
 
-    // {
-    //   field: "actions",
-    //   type: "actions",
-    //   headerName: "Actions",
-    //   width: 80,
-    //   renderCell: (params) => {
-    //     return (
-    //       // on click on the viw, user is able to see the rider deatils in depth
-    //       <div onClick={handleRiderActionClick(params)}>
-    //       <Box display="flex" alignItems="center" textAlign="center" >
-    //           <VisibilityOutlinedIcon
-    //             sx={{
-    //               color: `primary.main`,
-    //               mr: 1,
-    //               fontSize: "medium",
-    //             }}
-    //           />
-    //         </Box>
-    //       </div>
-    //     );
-    //   },
-    // },
   ];
   return (
     <>
@@ -190,7 +158,7 @@ function UsersTable() {
       >
         <AdminActions />
         {loading && <LinearProgress />}
-        {!loading && <CustomTable columns={columns} rows={rows} />}
+        {!loading && <CustomTable columns={columns} rows={adminsPayload} />}
       </Box>
     </>
   );
