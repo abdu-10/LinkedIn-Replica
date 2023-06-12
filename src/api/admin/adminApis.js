@@ -48,3 +48,18 @@ export const verifySeeker = async (seeker_code) => {
 export const deleteUser = async (user_code) => {
     return await apis.delete(`/user/${user_code}`)
 }
+export const getAdminProfile = async (user_ref) => {
+    return await apis.get(`/admin/${user_ref}/profile`);
+  };
+
+  export const configJob = async (
+    group_name,
+  
+) => {
+    return await apis.post(`/jobtags`, {
+        group_name,
+    })
+}
+export const getAllJobTags = async () => {
+    return await apis.get(`/jobtags`)
+}
