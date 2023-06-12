@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Typography,
   Stack,
@@ -9,26 +9,50 @@ import {
   MenuItem,
   LinearProgress,
 } from "@mui/material";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Navigate, useNavigate, Outlet } from "react-router-dom";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import CustomTable from "../tables/CustomTable";
+import { getAllEmployers } from "../../../api/admin/adminApis";
+import { setCurrentEmployerDetail } from "../../../features/employers/employerSlice";
+import { useDispatch } from "react-redux";
 function AllEmployers() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [rowParams, setRowParams] = useState({});
   const [loading, setLoading] = useState(false);
+  const [employersPayload, setEmployersPayload] = useState([]);
 
   const handleCloseMenu = () => {
     setAnchorElNav(null);
   };
+  const fetchEmployers = () => {
+    getAllEmployers().then((res) => {
+      if (res.status === 200) {
+        setEmployersPayload(res.data);
+        console.log(employersPayload);
+      }
+    });
+  };
+
+  useEffect(() => {
+    fetchEmployers();
+  }, []);
 
   const handleMenuItemClick = (prop) => {
+    // console.log(rowParams);
     if (prop === "view") {
-      navigate("/employer/details");
+      navigate("details");
+      dispatch(
+        setCurrentEmployerDetail({
+          currentEmployerDetail: rowParams,
+        })
+      );
+
       handleCloseMenu();
     } else if (prop === "verify") {
-      navigate("/employer/details");
+      navigate("details");
     } else if (prop === "delete") {
       navigate();
     } else handleCloseMenu();
@@ -78,6 +102,18 @@ function AllEmployers() {
               View
             </Box>
           </MenuItem>
+          <MenuItem onClick={() => handleMenuItemClick("edit")}>
+            <Box display="flex" alignItems="center" textAlign="center">
+              <VisibilityOutlinedIcon
+                sx={{
+                  color: `primary.main`,
+                  mr: 1,
+                  fontSize: "medium",
+                }}
+              />
+              Edit
+            </Box>
+          </MenuItem>
           <MenuItem onClick={() => handleMenuItemClick("verify")}>
             <Box display="flex" alignItems="center" textAlign="center">
               <VisibilityOutlinedIcon
@@ -94,25 +130,6 @@ function AllEmployers() {
       </>
     );
   };
-
-  const rows = [
-    {
-      code: "eueueuehfufeuf",
-      company_name: "Auger",
-      email: "auger@gmail.com",
-      phone_number: "+254712345678",
-      location: "Lusaka Road",
-      verified: "false",
-    },
-    {
-      code: "eueueueh",
-      company_name: "Motos Ltd",
-      email: "motos@gmail.com",
-      phone_number: "+254712345678",
-      location: "Pembe Road",
-      verified: "false",
-    },
-  ];
 
   const columns = [
     {
@@ -148,29 +165,6 @@ function AllEmployers() {
         );
       },
     },
-
-    // {
-    //   field: "actions",
-    //   type: "actions",
-    //   headerName: "Actions",
-    //   width: 80,
-    //   renderCell: (params) => {
-    //     return (
-    //       // on click on the viw, user is able to see the rider deatils in depth
-    //       <div onClick={handleRiderActionClick(params)}>
-    //       <Box display="flex" alignItems="center" textAlign="center" >
-    //           <VisibilityOutlinedIcon
-    //             sx={{
-    //               color: `primary.main`,
-    //               mr: 1,
-    //               fontSize: "medium",
-    //             }}
-    //           />
-    //         </Box>
-    //       </div>
-    //     );
-    //   },
-    // },
   ];
   return (
     <>
@@ -196,8 +190,9 @@ function AllEmployers() {
       >
         <EmployerActions />
         {loading && <LinearProgress />}
-        {!loading && <CustomTable columns={columns} rows={rows} />}
+        {!loading && <CustomTable columns={columns} rows={employersPayload} />}
       </Box>
+      <Outlet />
     </>
   );
 }
