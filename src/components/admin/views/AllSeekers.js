@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Typography,
   Stack,
@@ -9,26 +9,49 @@ import {
   MenuItem,
   LinearProgress,
 } from "@mui/material";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Navigate, useNavigate, Outlet } from "react-router-dom";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import CustomTable from "../tables/CustomTable";
+import { getAllSeekers } from "../../../api/admin/adminApis";
+import { setCurrentSeekerDetail } from "../../../features/seekers/seekerSlice";
+import { useDispatch } from "react-redux";
 function AllSeekers() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [rowParams, setRowParams] = useState({});
   const [loading, setLoading] = useState(false);
+  const [seekersPayload, setSeekersPayload] = useState([]);
 
   const handleCloseMenu = () => {
     setAnchorElNav(null);
   };
 
+  const fetchSeekers = () => {
+    getAllSeekers().then((res) => {
+      if (res.status === 200) {
+        setSeekersPayload(res.data);
+        console.log(seekersPayload);
+      }
+    });
+  };
+
+  useEffect(() => {
+    fetchSeekers();
+  }, []);
+
   const handleMenuItemClick = (prop) => {
     if (prop === "view") {
-      navigate("/seeker/details");
+      navigate("details");
+      dispatch(
+        setCurrentSeekerDetail({
+          currentSeekerDetail: rowParams,
+        })
+      );
       handleCloseMenu();
     } else if (prop === "verify") {
-      navigate("/seeker/details");
+      navigate("details");
     } else if (prop === "delete") {
       navigate();
     } else handleCloseMenu();
@@ -78,6 +101,18 @@ function AllSeekers() {
               View
             </Box>
           </MenuItem>
+          <MenuItem onClick={() => handleMenuItemClick("edit")}>
+            <Box display="flex" alignItems="center" textAlign="center">
+              <VisibilityOutlinedIcon
+                sx={{
+                  color: `primary.main`,
+                  mr: 1,
+                  fontSize: "medium",
+                }}
+              />
+              Edit
+            </Box>
+          </MenuItem>
           <MenuItem onClick={() => handleMenuItemClick("verify")}>
             <Box display="flex" alignItems="center" textAlign="center">
               <VisibilityOutlinedIcon
@@ -94,29 +129,6 @@ function AllSeekers() {
       </>
     );
   };
-
-  const rows = [
-    {
-      code: "eueueomfierfji",
-      full_name: "Moses",
-      email: "mose@gmail.com",
-      location: "Kiambu Road",
-      gender: "Male",
-      date_of_birth: "2000-01-01",
-      phone_number: "254722332233",
-      verified: "false",
-    },
-    {
-      code: "u9ie9idi3",
-      full_name: "Swaleh",
-      email: "swa@gmail.com",
-      location: "Buruburu Road",
-      gender: "Male",
-      date_of_birth: "2000-01-01",
-      phone_number: "254722332233",
-      verified: "false",
-    },
-  ];
 
   const columns = [
     {
@@ -168,28 +180,6 @@ function AllSeekers() {
       },
     },
 
-    // {
-    //   field: "actions",
-    //   type: "actions",
-    //   headerName: "Actions",
-    //   width: 80,
-    //   renderCell: (params) => {
-    //     return (
-    //       // on click on the viw, user is able to see the rider deatils in depth
-    //       <div onClick={handleRiderActionClick(params)}>
-    //       <Box display="flex" alignItems="center" textAlign="center" >
-    //           <VisibilityOutlinedIcon
-    //             sx={{
-    //               color: `primary.main`,
-    //               mr: 1,
-    //               fontSize: "medium",
-    //             }}
-    //           />
-    //         </Box>
-    //       </div>
-    //     );
-    //   },
-    // },
   ];
   return (
     <>
@@ -215,7 +205,7 @@ function AllSeekers() {
       >
         <SeekerActions />
         {loading && <LinearProgress />}
-        {!loading && <CustomTable columns={columns} rows={rows} />}
+        {!loading && <CustomTable columns={columns} rows={seekersPayload} />}
       </Box>
     </>
   );
