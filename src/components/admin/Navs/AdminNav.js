@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import "./adminnav.css";
 import HomeIcon from "@mui/icons-material/Home";
 import GroupIcon from "@mui/icons-material/Group";
-import WorkIcon from "@mui/icons-material/Work";
-import TextsmsIcon from "@mui/icons-material/Textsms";
 import SearchIcon from "@mui/icons-material/Search";
 import AppsIcon from "@mui/icons-material/Apps";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
@@ -11,7 +9,10 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import { Avatar, Box, Menu, MenuItem,} from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
-
+import HailIcon from '@mui/icons-material/Hail';
+import Groups2Icon from '@mui/icons-material/Groups2';
+import Diversity3Icon from '@mui/icons-material/Diversity3';
+import BrowseGalleryIcon from '@mui/icons-material/BrowseGallery';
 
 function AdminNav() {
   const navigate = useNavigate()
@@ -129,7 +130,7 @@ function AdminNav() {
           
          
           <li onClick={()=> navigate("/admin/employers")}>
-            <GroupIcon />
+            <Groups2Icon />
             <span className="nav_text">All Employers</span>
           </li>
           <li onClick={()=> navigate("/admin/seekers")}>
@@ -137,11 +138,15 @@ function AdminNav() {
             <span className="nav_text">All Seekers</span>
           </li>
           <li onClick={()=> navigate("/admin/users")}>
-            <WorkIcon />
+            <Diversity3Icon />
             <span className="nav_text"> All Admins</span>
           </li>
+          <li onClick={()=> navigate("/admin/configjob")}>
+            <HailIcon />
+            <span className="nav_text">Config Jobs</span>
+          </li>
           <li onClick={()=> navigate("/admin/")}>
-            <TextsmsIcon />
+            <BrowseGalleryIcon />
             <span className=" text-white pl-1 pr-1 rounded-full -mt-[20px] ml-[16px]">
               4
             </span>
