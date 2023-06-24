@@ -234,14 +234,6 @@ function MainContent() {
               <GroupsIcon />
               <a href="/#">African intelligence , Deep...</a>
             </p>
-            <p>
-              <GroupsIcon />
-              <a href="/#">African Banking, Network-Fi...</a>
-            </p>
-            <p>
-              <GroupsIcon />
-              <a href="/#">Ghana Professional Netwo...</a>
-            </p>
             {/* groups */}
             <h5>
               <span className="groups">Groups</span>
@@ -249,22 +241,6 @@ function MainContent() {
             <p>
               <GroupsIcon />
               <a href="/#">Leadership Think Tank</a>
-            </p>
-            <p>
-              <GroupsIcon />
-              <a href="/#">African intelligence , Deep...</a>
-            </p>
-            <p>
-              <GroupsIcon />
-              <a href="/#">Ghana Professional Netwo...</a>
-            </p>
-            <p>
-              <GroupsIcon />
-              <a href="/#">Python Developers Commu...</a>
-            </p>
-            <p>
-              <GroupsIcon />
-              <a href="/#">UX Design</a>
             </p>
             <p>
               <a href="/#">view all</a>
