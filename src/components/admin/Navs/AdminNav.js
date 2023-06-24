@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./adminnav.css";
 import HomeIcon from "@mui/icons-material/Home";
 import GroupIcon from "@mui/icons-material/Group";
@@ -13,10 +13,16 @@ import HailIcon from '@mui/icons-material/Hail';
 import Groups2Icon from '@mui/icons-material/Groups2';
 import Diversity3Icon from '@mui/icons-material/Diversity3';
 import BrowseGalleryIcon from '@mui/icons-material/BrowseGallery';
-
+import { getAdminProfile } from "../../../api/admin/adminApis";
+import { selectLoggedInUserRef } from "../../../features/users/userSlice";
+import { setCurrentAdminDetail } from "../../../features/admins/adminSlice";
+import { useSelector, useDispatch } from "react-redux";
 function AdminNav() {
+  let admin_code = useSelector(selectLoggedInUserRef);
   const navigate = useNavigate()
+  const dispatch = useDispatch();
   const [anchMenu, setAnchMenu] = useState(null)
+  const [adminDetails, setAdminDetails] = useState({});
 
   const handleAccountActionsClick = () => (event) => {
     // setSelectedOption(params);
@@ -29,15 +35,32 @@ function AdminNav() {
   const handleMenuItemClick = (prop) => {
     handleCloseMenu();
     if (prop === "view") {
-      navigate("/profile");
+      navigate("/admin/profile");
     } else if (prop === "edit") {
-      navigate("/profile");
+      navigate("/admin/profile");
     }else if (prop === "logout"){
       navigate("/");
       handleCloseMenu();
     } else
     handleCloseMenu();
   };
+
+ const populateProfile = () => {
+    return getAdminProfile(admin_code).then((res) => {
+      if (res.status === 200) {
+        setAdminDetails(res.data);
+        dispatch(setCurrentAdminDetail({ currentAdminDetail: res.data }));
+      } else {
+        console.log(`err`);
+      }
+    });
+  };
+
+  useEffect(() => {
+    populateProfile();
+  }, []);
+
+  
 
   const AccountDetails = () => {
     return (
@@ -141,11 +164,11 @@ function AdminNav() {
             <Diversity3Icon />
             <span className="nav_text"> All Admins</span>
           </li>
-          <li onClick={()=> navigate("/admin/configjob")}>
+          <li onClick={()=> navigate("/admin/job-tags")}>
             <HailIcon />
-            <span className="nav_text">Config Jobs</span>
+            <span className="nav_text">Job Tags</span>
           </li>
-          <li onClick={()=> navigate("/admin/")}>
+          <li onClick={()=> navigate("/admin/all-posts")}>
             <BrowseGalleryIcon />
             <span className=" text-white pl-1 pr-1 rounded-full -mt-[20px] ml-[16px]">
               4
@@ -154,15 +177,14 @@ function AdminNav() {
           </li>
           <li onClick={handleAccountActionsClick()}>
             {" "}
-            <Avatar sx={{ mr: 1, m: -1  }}
-            
-            />
-            <span className="nav_text"> Me</span>
+            <Avatar
+            src={adminDetails.avatar_url}
+             sx={{ mr: 1, m: -1 }}
+              />
+            <span className="nav_text"> {adminDetails.full_name}</span>
           </li>
           <li className="line"></li>
-          <li className="work">
-            <AppsIcon /> Work
-          </li>
+         
         </ul>
       </div>
     </div>
