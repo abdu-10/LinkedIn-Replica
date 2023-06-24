@@ -136,24 +136,21 @@ function UsersTable() {
   return (
     <>
     <UsersNav/>
-      <div class="flex-grow sm:text-left text-center mt-10 mb-10"></div>
-      <Stack
-        direction="row"
-        justifyContent="flex-start"
-        alignItems="flex-start"
-        sx={{ p: 7 }}
-      >
+     
+      <Stack 
+       direction="row" justifyContent="center" alignItems="flex-start" sx={{ p: 4, }}>
+      
         <Typography variant="h6" sx={{ fontWeight: "800" }}>
           These are All the Admins on the platform
         </Typography>
       </Stack>
       <Box
         sx={{
-          mt: 5,
-          "& .MuiDataGrid-columnHeaders": {
-            backgroundColor: "primary.lightest_gray",
-            fontSize: 16,
-          },
+          mb:50,
+          mx: 9,
+          boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+          borderRadius: "8px",
+          overflow: "hidden",
         }}
       >
         <AdminActions />
