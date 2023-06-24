@@ -44,7 +44,7 @@ function CreateJobs() {
             group_name: "",
 
 
-            snackbarMessage: "Job Tag Created Succesfullyy",
+            snackbarMessage: "Job Tag Created Succesfully",
               openSnackbar: true,
               snackbarSeverity: "success",
           });
