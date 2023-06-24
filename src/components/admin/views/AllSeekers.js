@@ -16,6 +16,7 @@ import CustomTable from "../tables/CustomTable";
 import { getAllSeekers } from "../../../api/admin/adminApis";
 import { setCurrentSeekerDetail } from "../../../features/seekers/seekerSlice";
 import { useDispatch } from "react-redux";
+
 function AllSeekers() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -56,6 +57,7 @@ function AllSeekers() {
       navigate();
     } else handleCloseMenu();
   };
+
   const handleEmployerActionsClick = (params) => (event) => {
     setRowParams(params.row);
     setAnchorElNav(event.currentTarget);
@@ -64,16 +66,6 @@ function AllSeekers() {
   const SeekerActions = () => {
     return (
       <>
-        {" "}
-        {/* <EmployerDetails
-        />{" "} */}
-        {/* <DeleteAccount
-          openDeleteAccount={openDeleteAccount}
-          closeDeleteModal={closeDeleteModal}
-          rider_code={rowParams.code}
-          // deactivationStatus={deactivationStatus}
-          // fetchStays={fetchRiders}
-        /> */}
         <Menu
           id="menu-appbar"
           anchorEl={anchorElNav}
@@ -93,7 +85,7 @@ function AllSeekers() {
             <Box display="flex" alignItems="center" textAlign="center">
               <VisibilityOutlinedIcon
                 sx={{
-                  color: `primary.main`,
+                  color: "primary.main",
                   mr: 1,
                   fontSize: "medium",
                 }}
@@ -105,7 +97,7 @@ function AllSeekers() {
             <Box display="flex" alignItems="center" textAlign="center">
               <VisibilityOutlinedIcon
                 sx={{
-                  color: `primary.main`,
+                  color: "primary.main",
                   mr: 1,
                   fontSize: "medium",
                 }}
@@ -117,7 +109,7 @@ function AllSeekers() {
             <Box display="flex" alignItems="center" textAlign="center">
               <VisibilityOutlinedIcon
                 sx={{
-                  color: `primary.main`,
+                  color: "primary.main",
                   mr: 1,
                   fontSize: "medium",
                 }}
@@ -125,7 +117,7 @@ function AllSeekers() {
               Verify
             </Box>
           </MenuItem>
-        </Menu>{" "}
+        </Menu>
       </>
     );
   };
@@ -134,7 +126,7 @@ function AllSeekers() {
     {
       field: "full_name",
       headerName: "Full Name",
-      width: 250,
+      width: 200,
     },
     {
       field: "email",
@@ -149,28 +141,28 @@ function AllSeekers() {
     {
       field: "gender",
       headerName: "Gender",
+      width: 120,
+    },
+    {
+      field: "date_of_birth",
+      headerName: "D.O.B",
       width: 150,
     },
-      {
-        field: "date_of_birth",
-        headerName: "D.O.B",
-        width: 150,
-      },
-      {
-        field: "phone_number",
-        headerName: "Phone Number",
-        width: 150,
-      },
-      {
-        field: "verified",
-        headerName: "Verified",
-        width: 150,
-      },
+    {
+      field: "phone_number",
+      headerName: "Phone Number",
+      width: 150,
+    },
+    {
+      field: "verified",
+      headerName: "Verified",
+      width: 120,
+    },
     {
       field: "actions",
       type: "actions",
       headerName: "Actions",
-      width: 80,
+      width: 100,
       renderCell: (params) => {
         return (
           <IconButton onClick={handleEmployerActionsClick(params)}>
@@ -179,33 +171,36 @@ function AllSeekers() {
         );
       },
     },
-
   ];
+
   return (
     <>
-      <div class="flex-grow sm:text-left text-center mt-10 mb-10"></div>
-      <Stack
-        direction="row"
-        justifyContent="flex-start"
-        alignItems="flex-start"
-        sx={{ p: 7 }}
-      >
+      <Stack direction="row" justifyContent="center" alignItems="flex-start" sx={{ p: 12 }}>
         <Typography variant="h6" sx={{ fontWeight: "800" }}>
           These are All the Seekers on the platform
         </Typography>
       </Stack>
       <Box
         sx={{
-          mt: 5,
-          "& .MuiDataGrid-columnHeaders": {
-            backgroundColor: "primary.lightest_gray",
-            fontSize: 16,
-          },
+          mb:20,
+          mx: 9,
+          boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+          borderRadius: "8px",
+          overflow: "hidden",
         }}
       >
         <SeekerActions />
         {loading && <LinearProgress />}
-        {!loading && <CustomTable columns={columns} rows={seekersPayload} />}
+        {!loading && (
+          <CustomTable
+            columns={columns}
+            rows={seekersPayload}
+            disableColumnMenu
+            disableColumnSelector
+            pageSize={10}
+            density="comfortable"
+          />
+        )}
       </Box>
     </>
   );

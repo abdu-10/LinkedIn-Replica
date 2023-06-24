@@ -1,14 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  Typography,
-  Stack,
-  IconButton,
-  Avatar,
-  Box,
-  Menu,
-  MenuItem,
-  LinearProgress,
-} from "@mui/material";
+import { Typography, Stack, IconButton, Box, Menu, MenuItem, LinearProgress } from "@mui/material";
 import { Navigate, useNavigate, Outlet } from "react-router-dom";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
@@ -16,6 +7,7 @@ import CustomTable from "../tables/CustomTable";
 import { getAllEmployers } from "../../../api/admin/adminApis";
 import { setCurrentEmployerDetail } from "../../../features/employers/employerSlice";
 import { useDispatch } from "react-redux";
+
 function AllEmployers() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -27,11 +19,11 @@ function AllEmployers() {
   const handleCloseMenu = () => {
     setAnchorElNav(null);
   };
+
   const fetchEmployers = () => {
     getAllEmployers().then((res) => {
       if (res.status === 200) {
         setEmployersPayload(res.data);
-        console.log(employersPayload);
       }
     });
   };
@@ -41,7 +33,6 @@ function AllEmployers() {
   }, []);
 
   const handleMenuItemClick = (prop) => {
-    // console.log(rowParams);
     if (prop === "view") {
       navigate("details");
       dispatch(
@@ -49,14 +40,16 @@ function AllEmployers() {
           currentEmployerDetail: rowParams,
         })
       );
-
       handleCloseMenu();
     } else if (prop === "verify") {
       navigate("details");
     } else if (prop === "delete") {
       navigate();
-    } else handleCloseMenu();
+    } else {
+      handleCloseMenu();
+    }
   };
+
   const handleEmployerActionsClick = (params) => (event) => {
     setRowParams(params.row);
     setAnchorElNav(event.currentTarget);
@@ -65,16 +58,6 @@ function AllEmployers() {
   const EmployerActions = () => {
     return (
       <>
-        {" "}
-        {/* <EmployerDetails
-        />{" "} */}
-        {/* <DeleteAccount
-          openDeleteAccount={openDeleteAccount}
-          closeDeleteModal={closeDeleteModal}
-          rider_code={rowParams.code}
-          // deactivationStatus={deactivationStatus}
-          // fetchStays={fetchRiders}
-        /> */}
         <Menu
           id="menu-appbar"
           anchorEl={anchorElNav}
@@ -92,41 +75,23 @@ function AllEmployers() {
         >
           <MenuItem onClick={() => handleMenuItemClick("view")}>
             <Box display="flex" alignItems="center" textAlign="center">
-              <VisibilityOutlinedIcon
-                sx={{
-                  color: `primary.main`,
-                  mr: 1,
-                  fontSize: "medium",
-                }}
-              />
+              <VisibilityOutlinedIcon sx={{ color: "primary.main", mr: 1, fontSize: "medium" }} />
               View
             </Box>
           </MenuItem>
           <MenuItem onClick={() => handleMenuItemClick("edit")}>
             <Box display="flex" alignItems="center" textAlign="center">
-              <VisibilityOutlinedIcon
-                sx={{
-                  color: `primary.main`,
-                  mr: 1,
-                  fontSize: "medium",
-                }}
-              />
+              <VisibilityOutlinedIcon sx={{ color: "primary.main", mr: 1, fontSize: "medium" }} />
               Edit
             </Box>
           </MenuItem>
           <MenuItem onClick={() => handleMenuItemClick("verify")}>
             <Box display="flex" alignItems="center" textAlign="center">
-              <VisibilityOutlinedIcon
-                sx={{
-                  color: `primary.main`,
-                  mr: 1,
-                  fontSize: "medium",
-                }}
-              />
+              <VisibilityOutlinedIcon sx={{ color: "primary.main", mr: 1, fontSize: "medium" }} />
               Verify
             </Box>
           </MenuItem>
-        </Menu>{" "}
+        </Menu>
       </>
     );
   };
@@ -140,7 +105,7 @@ function AllEmployers() {
     {
       field: "email",
       headerName: "Email",
-      width: 150,
+      width: 200,
     },
     {
       field: "location",
@@ -150,13 +115,13 @@ function AllEmployers() {
     {
       field: "verified",
       headerName: "Verified",
-      width: 150,
+      width: 120,
     },
     {
       field: "actions",
       type: "actions",
       headerName: "Actions",
-      width: 80,
+      width: 100,
       renderCell: (params) => {
         return (
           <IconButton onClick={handleEmployerActionsClick(params)}>
@@ -166,31 +131,35 @@ function AllEmployers() {
       },
     },
   ];
+
   return (
     <>
-      <div class="flex-grow sm:text-left text-center mt-10 mb-10"></div>
-      <Stack
-        direction="row"
-        justifyContent="flex-start"
-        alignItems="flex-start"
-        sx={{ p: 7 }}
-      >
+      <Stack direction="row" justifyContent="center" alignItems="center" sx={{ p: 12 }}>
         <Typography variant="h6" sx={{ fontWeight: "800" }}>
-          These are All the Employers on the platform
+          These are all the Employers on the platform
         </Typography>
       </Stack>
       <Box
         sx={{
-          mt: 5,
-          "& .MuiDataGrid-columnHeaders": {
-            backgroundColor: "primary.lightest_gray",
-            fontSize: 16,
-          },
+          mb:20,
+          mx: 9,
+          boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+          borderRadius: "8px",
+          overflow: "hidden",
         }}
       >
         <EmployerActions />
         {loading && <LinearProgress />}
-        {!loading && <CustomTable columns={columns} rows={employersPayload} />}
+        {!loading && (
+          <CustomTable
+            columns={columns}
+            rows={employersPayload}
+            disableColumnMenu
+            disableColumnSelector
+            pageSize={10}
+            density="comfortable"
+          />
+        )}
       </Box>
       <Outlet />
     </>
