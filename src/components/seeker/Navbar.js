@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./navbar.css";
 import HomeIcon from "@mui/icons-material/Home";
 import GroupIcon from "@mui/icons-material/Group";
@@ -12,9 +12,15 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import { Avatar, Box, Menu, MenuItem,} from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
-
+import { getSeekerProfile } from "../../api/seeker/seekerApis";
+import { selectLoggedInUserRef } from "../../features/users/userSlice";
+import { setCurrentSeekerDetail } from "../../features/seekers/seekerSlice";
+import { useSelector, useDispatch } from "react-redux";
 function Navbar() {
+  let seeker_code = useSelector(selectLoggedInUserRef);
+  const [seekerDetails, setSeekerDetails] = useState({});
   const navigate = useNavigate()
+  const dispatch = useDispatch();
   const [anchMenu, setAnchMenu] = useState(null)
 
   const handleAccountActionsClick = () => (event) => {
@@ -37,6 +43,20 @@ function Navbar() {
     } else
     handleCloseMenu();
   };
+  const populateProfile = () => {
+    return getSeekerProfile(seeker_code).then((res) => {
+      if (res.status === 200) {
+        setSeekerDetails(res.data);
+        dispatch(setCurrentSeekerDetail({ currentSeekerDetail: res.data }));
+      } else {
+        console.log(`err`);
+      }
+    });
+  };
+
+  useEffect(() => {
+    populateProfile();
+  }, []);
 
   const AccountDetails = () => {
     return (
@@ -149,15 +169,15 @@ function Navbar() {
           </li>
           <li onClick={handleAccountActionsClick()}>
             {" "}
-            <Avatar sx={{ mr: 1, m: -1  }}
+            <Avatar
+            src={seekerDetails.avatar_url}
+             sx={{ mr: 1, m: -1  }}
             
             />
-            <span className="nav_text"> Me</span>
+            <span className="nav_text"> {seekerDetails.full_name}</span>
           </li>
           <li className="line"></li>
-          <li className="work">
-            <AppsIcon /> Work
-          </li>
+          
         </ul>
       </div>
     </div>
