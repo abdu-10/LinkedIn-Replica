@@ -10,6 +10,8 @@ function EmployerProfile() {
   let employer_code = useSelector(selectLoggedInUserRef)
   const [employerDetails, setEmployerDetails] = useState({})
   // const navigate = useNavigate()
+  // console.log(employerDetails)
+
   const dispatch = useDispatch()
     const [openEditProfileDialog, setOpenEditProfileDialog] = useState(false)
 
@@ -48,7 +50,7 @@ function EmployerProfile() {
               <div class="image overflow-hidden">
                 <img
                   class="h-auto w-full mx-auto"
-                  src={employerDetails.avatar}
+                  src={employerDetails.avatar_url}
                   alt=""
                 />
               </div>
@@ -59,11 +61,6 @@ function EmployerProfile() {
                 A technology company that builds innovative solutions for
                 regulated industries.
               </h3>
-              <p class="text-sm text-gray-500 hover:text-gray-600 leading-6">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Reprehenderit, eligendi dolorum sequi illum qui unde aspernatur
-                non deserunt
-              </p>
               <ul class="bg-gray-100 text-gray-600 hover:text-gray-700 hover:shadow py-2 px-3 mt-3 divide-y rounded shadow-sm">
                 <li class="flex items-center py-3">
                   <span>Status</span>
@@ -81,63 +78,7 @@ function EmployerProfile() {
             </div>
             {/* <!-- End of profile card --> */}
             <div class="my-4"></div>
-            {/* <!-- Friends card --> */}
-            <div class="bg-white p-3 hover:shadow">
-              <div class="flex items-center space-x-3 font-semibold text-gray-900 text-xl leading-8">
-                <span class="text-green-500">
-                  <svg
-                    class="h-5 fill-current"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-                    />
-                  </svg>
-                </span>
-                <span>Similar Profiles</span>
-              </div>
-              <div class="grid grid-cols-3">
-                <div class="text-center my-2">
-                  <img
-                    class="h-16 w-16 rounded-full mx-auto"
-                    src="https://cdn.australianageingagenda.com.au/wp-content/uploads/2015/06/28085920/Phil-Beckett-2-e1435107243361.jpg"
-                    alt=""
-                  />
-                  Kojstantin
-                </div>
-                <div class="text-center my-2">
-                  <img
-                    class="h-16 w-16 rounded-full mx-auto"
-                    src="https://avatars2.githubusercontent.com/u/24622175?s=60&amp;v=4"
-                    alt=""
-                  />
-                  James
-                </div>
-                <div class="text-center my-2">
-                  <img
-                    class="h-16 w-16 rounded-full mx-auto"
-                    src="https://img.freepik.com/premium-vector/businesswoman-avatar-cartoon-character-profile_18591-50143.jpg?w=2000"
-                    alt=""
-                  />
-                  Natie
-                </div>
-                <div class="text-center my-2">
-                  <img
-                    class="h-16 w-16 rounded-full mx-auto"
-                    src="https://img.freepik.com/premium-vector/businessman-character-avatar-icon_24877-8260.jpg?w=2000"
-                    alt=""
-                  />
-                  Casey
-                </div>
-              </div>
-            </div>
-            {/* <!-- End of friends card --> */}
+            
           </div>
           {/* <!-- Right Side --> */}
           <div class="w-full md:w-9/12 mx-2">
