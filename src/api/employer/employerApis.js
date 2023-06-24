@@ -5,14 +5,14 @@ export const completeEmployerAccount = async (
     company_name,
     phone_number,
     email,
-    user_code,
+    user_id,
 ) => {
     return await apis.post(`/employers`, {
         company_name,        
         phone_number,
         email, 
         verified: false,
-        user_code,
+        user_id,
     })
 }
 
@@ -34,39 +34,30 @@ export const ConfigJobType = async (
 export const PostJob = async (
     job_name,
     job_description,
-    employer_code,
-     jobtag_code,
+    employer_id,
+     jobtag_id,
 ) => {
     return await apis.post(`/jobs`, {
        job_name,
    job_description,
-   employer_code,
-    jobtag_code,
+   employer_id,
+    jobtag_id,
     })
 }
 
-export const deleteJob = async (job_code) => {
-    return await apis.delete(`/jobs/${job_code}`)
+export const deleteJob = async (job_id) => {
+    return await apis.delete(`/jobs/${job_id}`)
 }
 // update employer profile
 export const updateEmployerProfile = async (
-    employer_code,
-    company_name,
-    email,
-    phone_number,
-    location,
-    avatar,
-    description,
+    employer_code, formData
 ) => {
-    return await apis.patch(`/employers/${employer_code}`, {
-        company_name,
-        email,
-        phone_number,
-        location,
-        avatar,
-        description,
+    return await apis.patch(`/employers/${employer_code}`, formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
     })
 }
-export const getEmployerProfile = async (user_ref) => {
-    return await apis.get(`/employer/${user_ref}/profile`);
+export const getEmployerProfile = async (id) => {
+    return await apis.get(`/employer/${id}/profile`);
   };
