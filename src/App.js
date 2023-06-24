@@ -33,6 +33,8 @@ import RequireAuth from "./components/common/forms/RequireAuth";
 import EditSeekerDetails from "./components/seeker/EditSeekerDetails";
 import ConfigJobs from "./components/admin/ConfigJobs";
 import CreateJobs from "./components/admin/CreateJobs";
+import AdminProfile from "./components/admin/AdminProfile";
+import AllPosts from "./components/admin/AllPosts";
 
 function App() {
   return (
@@ -59,9 +61,10 @@ function App() {
           <Route index element={<AllSeekers />} />
           <Route path="details" element={<SeekerDetails />} />
           </Route>
-          <Route path="createadmin" element={<CreateAdmin />} />
-          <Route path="configjob" element={<ConfigJobs />} />
-          <Route path="createjob" element={<CreateJobs />} />
+          <Route path="create-admin" element={<CreateAdmin />} />
+          <Route path="job-tags" element={<ConfigJobs />} />
+          <Route path="create-tags" element={<CreateJobs />} />
+          <Route path="all-posts" element={<AllPosts />} />
           {/* TO VERIFY USER: Open pop up */}
           {/* <Route path="verify" element={<Verify />} /> */}
           {/* element={<UsersNav />} */}
@@ -70,6 +73,7 @@ function App() {
             {/* <Route index element={<UsersTable />} /> */}
             {/* <Route path="add-user" element={<AddAdminForm />} /> */}
           </Route>
+          <Route path="profile" element={<AdminProfile />} />
         </Route>
 
         {/* </Route> */}
