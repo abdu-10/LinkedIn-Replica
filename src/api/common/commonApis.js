@@ -31,14 +31,14 @@ export const createPost = async (
     title,
     media,
     description,
-    user_code,
+    user_id,
     
 ) => {
     return await apis.post(`/posts`, {
         title,
         media,
         description,
-        user_code,
+        user_id,
         likes: 0,
     })
 }
@@ -47,37 +47,37 @@ export const getPosts = async () => {
     return await apis.get(`/posts`)
 }
 
-export const getUserPost = async (user_code) => {
-    return await apis.get(`/posts/users/${user_code}`)
+export const getUserPost = async (user_id) => {
+    return await apis.get(`/posts/users/${user_id}`)
 }
 
-export const getIndividualPost = async (post_code) => {
-    return await apis.get(`/posts/${post_code}`)
+export const getIndividualPost = async (id) => {
+    return await apis.get(`/posts/${id}`)
 }
 
-export const deletePost = async (post_code) => {
-    return await apis.delete(`/posts/${post_code}`)
+export const deletePost = async (id) => {
+    return await apis.delete(`/posts/${id}`)
 }
 
 // Comment on post
 export const commentOnPost = async (
     content,
-    post_code,
-    user_code,
+    post_id,
+    user_id,
 ) => {
     return await apis.post(`/comments`, {
         content,
-        post_code,
-        user_code,
+        post_id,
+        user_id,
     })
 }
 
-export const getAllPostComments = async (post_code) => {
-    return await apis.get(`/comments/post/${post_code}`)
+export const getAllPostComments = async (post_id) => {
+    return await apis.get(`/comments/post/${post_id}`)
 }
 
-export const deleteComment = async (comment_code) => {
-    return await apis.delete(`/comments/${comment_code}`)
+export const deleteComment = async (id) => {
+    return await apis.delete(`/comments/${id}`)
 }
 
 
