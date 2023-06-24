@@ -4,11 +4,21 @@ import { useSelector } from "react-redux";
 import { selectCurrentSeekerDetail} from "../../../features/seekers/seekerSlice";
 import { updateSeekerProfile } from "../../../api/seeker/seekerApis";
 import CustomSnackbar from "../../common/utils/CustomSnackbar";
+// apis
+import { apis } from "../../../api/axios";
+
+
 const EditProfileDialog = ({ openEditProfileDialog, closeEditProfileDialog }) => {
     // get details from state
     const currentSeekerDetails = useSelector(selectCurrentSeekerDetail);
-    const seeker_code = currentSeekerDetails.seeker_code
-    console.log(seeker_code);
+    const seeker_code = currentSeekerDetails.id
+  const [avatar, setAvatar] = useState(null);
+
+    const handleAvatarChange = (event) => {
+    setAvatar(event.target.files[0]);    
+  };
+
+    
     const [values, setValues] = useState({
         full_name: "",
         email: "",
@@ -16,7 +26,6 @@ const EditProfileDialog = ({ openEditProfileDialog, closeEditProfileDialog }) =>
         location: "",
         gender: "",
         date_of_birth: "",
-        avatar: "",
         phone_number: "",
         preferred_job: "",
         availability: "",
@@ -35,7 +44,6 @@ const EditProfileDialog = ({ openEditProfileDialog, closeEditProfileDialog }) =>
         location,
         gender,
         date_of_birth,
-        avatar,
         phone_number,
         preferred_job,
         availability,
@@ -72,47 +80,47 @@ const EditProfileDialog = ({ openEditProfileDialog, closeEditProfileDialog }) =>
     }
     setValues({ ...values, openSnackbar: false });
   };
-    function handleSubmit(e) {
-        e.preventDefault();
-        return updateSeekerProfile(
-            seeker_code,
-            full_name,
-            email,
-            location,
-            gender,
-            date_of_birth,
-            avatar,
-            phone_number,
-            preferred_job,
-            availability,
-            minimum_salary
-        ).then((res) => {
-            if (res.status == 200) {
-                console.log("Account updated");
-                 setValues({
-          ...values,
-          snackbarMessage: "Account Updated Succesfully",
-          openSnackbar: true,
-          snackbarSeverity: "success",
-        });
-        setTimeout(() => {
-          closeEditProfileDialog();
-        }, 3000);              
-            } else {
-                console.log(res.data.message);
-            }
-        })
-        .catch((err) => {
-        // log error and display error snackbar
-        console.log(err);
-        setValues({
-          ...values,
-          snackbarMessage: err.message,
-          openSnackbar: true,
-          snackbarSeverity: "error",
-        });
+   const handleSubmit = async (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    {avatar && (formData.append('avatar', avatar))}
+    {full_name && formData.append('full_name', full_name)}
+    {email && formData.append('email', email)}
+    {phone_number && formData.append('phone_number', phone_number)}
+    {location && formData.append('location', location)}
+    {gender && formData.append('gender', gender)}
+    {date_of_birth && formData.append('date_of_birth', date_of_birth)}
+    {preferred_job && formData.append('preferred_job', preferred_job)}
+    {availability && formData.append('availability', availability)}
+     {minimum_salary && formData.append('minimum_salary', minimum_salary)}
+     
+    console.log(formData)
+    try {
+      await apis.patch(`/seekers/${seeker_code}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
+      setValues({
+        ...values,
+        snackbarMessage: "Profile Updated Succesfully",
+        openSnackbar: true,
+        snackbarSeverity: "success",
       });
-    }
+      setTimeout(() => {
+        closeEditProfileDialog();
+      }, 2000);
+    }catch(err) {
+      // log error and display error snackbar
+      console.log(err);
+      setValues({
+        ...values,
+        snackbarMessage: err.message,
+        openSnackbar: true,
+        snackbarSeverity: "error",
+      });
+    };
+  }
 
     return (
       <Dialog
@@ -201,20 +209,6 @@ const EditProfileDialog = ({ openEditProfileDialog, closeEditProfileDialog }) =>
                   onChange={handleChange}
                   className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner"
                 />
-                <label
-                  for="avatar"
-                  className="block text-xs font-semibold text-gray-600 uppercase"
-                >
-                  Avatar
-                </label>
-                <input
-                  id="avatar"
-                  type="text"
-                  name="avatar"
-                  value={avatar}
-                  onChange={handleChange}
-                  className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner"
-                />
               </div>
               <div className="md:w-1/2 px-3">
                 <label
@@ -273,32 +267,20 @@ const EditProfileDialog = ({ openEditProfileDialog, closeEditProfileDialog }) =>
                   onChange={handleChange}
                   className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner"
                 />
-                <div className="md:col-span-2">
-                  <label for="password">Enter Preferred Password</label>
-                  <input
-                    type="password"
-                    name="password"
-                    id="password"
-                    className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
-                    value={password}
-                    onChange={handleChange}
-                    placeholder=""
-                  />
-                </div>
-                <div className="md:col-span-2">
-                  <label for="password_confirmation">
-                    Enter Password Again
-                  </label>
-                  <input
-                    type="password"
-                    name="password_confirmation"
-                    id="password_confirmation"
-                    className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
-                    value={password_confirmation}
-                    onChange={handleChange}
-                    placeholder=""
-                  />
-                </div>
+                <label
+                  for="avatar"
+                  className="block text-xs font-semibold text-gray-600 uppercase"
+                >
+                  Avatar
+                </label>
+                <input
+                  id="avatar"
+                  type="file"
+                  name="avatar"
+                  // value={avatar}
+                  onChange={handleAvatarChange}
+                  className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner"
+                />
               </div>
               <div className="md:col-span-5 text-right">
                 <div className="inline-flex items-end">
