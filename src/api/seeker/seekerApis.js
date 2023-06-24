@@ -2,10 +2,10 @@ import { apis } from "../axios";
 
 // complete seeker acc
 export const completeSeekerAccount = async (
-  full_name, phone_number, email, gender, user_code,
+  full_name, phone_number, email, gender, user_id,
 ) => {
   return await apis.post(`/seekers`, {
-    full_name, phone_number, email, gender, user_code, verified: false
+    full_name, phone_number, email, gender, user_id, verified: false
   });
 };
 
@@ -17,13 +17,13 @@ export const getAllJobs = async () => {
   return await apis.get(`/jobs`);
 };
 
-export const getJobPerPreference = async (jobtag_code) => {
-  return await apis.get(`jobs/search/${jobtag_code}`);
+export const getJobPerPreference = async (jobtag_id) => {
+  return await apis.get(`jobs/search/${jobtag_id}`);
 };
 
 // update seeker profile
 export const updateSeekerProfile = async (
-  seeker_code,
+  id,
   full_name,
   email,
   location,
@@ -35,7 +35,7 @@ export const updateSeekerProfile = async (
   availability,
   minimum_salary
 ) => {
-  return await apis.patch(`/seekers/${seeker_code}`, {
+  return await apis.patch(`/seekers/${id}`, {
     full_name,
     email,
     location,
