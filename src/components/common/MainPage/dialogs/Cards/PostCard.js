@@ -49,12 +49,25 @@ function PostCard({ postData }) {
             <p>{postData.description}</p>
           </div>
 
-          <div className="w-full object-contain">
-            <img
-              src={postData.media}
-              className="max-w-full h-[450px]"
-              alt="post"
-            />
+           <div className="w-full object-contain">
+            {postData.media_url && (
+              <>
+                {postData.media_url.includes(".mp4") ? (
+                  <video
+                    src={postData.media_url}
+                    className="max-w-full h-[950px]"
+                    alt="post"
+                    controls
+                  />
+                ) : (
+                  <img
+                    src={postData.media_url}
+                    className="max-w-full h-[450px]"
+                    alt="post"
+                  />
+                )}
+              </>
+            )}
           </div>
 
           <div className="flex items-center justify-between mt-2 mb-5 pl-5">
