@@ -3,112 +3,103 @@ import "./Maincontent.css";
 import CloseIcon from "@mui/icons-material/Close";
 import Picker from "emoji-picker-react";
 import { createPost } from "../../../api/common/commonApis";
-import CustomSnackbar from '../utils/CustomSnackbar';
-import {
-  selectLoggedInUserRef,
-} from "../../../features/users/userSlice";
+import CustomSnackbar from "../utils/CustomSnackbar";
+import { selectLoggedInUserRef } from "../../../features/users/userSlice";
 import { useSelector } from "react-redux";
+// apis
+import { apis } from "../../../api/axios";
 
-function CreatePost({ formx, setForm,}) {
+function CreatePost({ formx, setForm }) {
   const [text, setText] = useState("");
   const [showPicker, setShowPicker] = useState(false);
   const [image, setImage] = useState(null); //preview selected image
   const [imagePost, setImagePost] = useState(""); //carry the actual image and save in storage bucket
   const [imageName, setImageName] = useState("");
-  const user_code = useSelector(selectLoggedInUserRef);
+  const user_id = useSelector(selectLoggedInUserRef);
+  console.log(user_id)
+
+  const [media, setMedia] = useState(null);
+
+  const handleMediaChange = (event) => {
+    setMedia(event.target.files[0]);
+  };
+
   const [values, setValues] = useState({
     title: "",
-    media: "",
     description: "",
-    user_code: "",
+    user_id: "",
     likes: 0,
 
     snackbarMessage: "",
     openSnackbar: false,
     snackbarSeverity: "success",
-})
+  });
 
-const {
-  title,
-  media,
-  description,
-  likes,
+  const {
+    title,
+    description,
+    likes,
 
     snackbarMessage,
     openSnackbar,
     snackbarSeverity,
-} = values;
+  } = values;
 
-const handleChange = (prop) => (event) => {
-  setValues({ ...values, [prop]: event.target.value });
-};
+  const handleChange = (prop) => (event) => {
+    setValues({ ...values, [prop]: event.target.value });
+  };
 
-const closeSnackbar = (event, reason) => {
-  if (reason === "clickaway") {
+  const closeSnackbar = (event, reason) => {
+    if (reason === "clickaway") {
       return;
-  }
-  setValues({ ...values, openSnackbar: false });
-};
+    }
+    setValues({ ...values, openSnackbar: false });
+  };
 
-const handleSubmit = (event) => {
-  event.preventDefault();
-  console.log(values)
-  createPost(
-    title,
-    media,
-    description,
-    user_code,
-    likes,
-  ).then((res) => {
-      if (res.status === 201) {
-          setValues({
-            title: "",
-            media: "",
-            description: "",
-            user_code: "",
-            likes: 0,
-            
-
-              snackbarMessage: "Posted Succesfully",
-              openSnackbar: true,
-              snackbarSeverity: "success",
-          })
-
-          setTimeout(() => {
-              closeForm();
-          }, 3000);
-      } else {
-          setValues({
-            title: "",
-            media: "",
-            description: "",
-            user_code: "",
-            likes: 0,
-            
-
-              snackbarMessage: "Something Went Wrong, please retry",
-              openSnackbar: true,
-              snackbarSeverity: "error",
-          });
-      }
-  })
-      .catch((err) => {
-          // TODO: DISPLAY ERROR MESSAGES ON APPROPRIATE FIELD
-          setValues({
-            title: "",
-            media: "",
-            description: "",
-            user_code: "",
-            likes: 0,
-
-
-              snackbarMessage: "Something Went Wrong, please retry",
-              openSnackbar: true,
-              snackbarSeverity: "error",
-          });
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    {
+      media && formData.append("media", media);
+    }
+    {
+      title && formData.append("title", title);
+    }
+    {
+      description && formData.append("description", description);
+    }
+    {
+      user_id && formData.append("user_id", user_id);
+    }
+    {
+      likes && formData.append("likes", likes);
+    }
+    console.log(formData);
+    try {
+      await apis.post(`/posts`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       });
-};
-
+      setValues({
+        ...values,
+        snackbarMessage: "Posted Succesfully",
+        openSnackbar: true,
+        snackbarSeverity: "success",
+      });
+      setTimeout(() => {
+        closeForm();
+      }, 2000);
+    } catch (err) {
+      // TODO: DISPLAY ERROR MESSAGES ON APPROPRIATE FIELD
+      setValues({
+        ...values,
+        snackbarMessage: "Something Went Wrong, please retry",
+        openSnackbar: true,
+        snackbarSeverity: "error",
+      });
+    }
+  };
   //  show emoji in textbox
   const onEmojiClick = (event, emojiObject) => {
     setText((prevInput) => prevInput + emojiObject.emoji);
@@ -130,7 +121,7 @@ const handleSubmit = (event) => {
 
   return (
     <>
-    <CustomSnackbar
+      <CustomSnackbar
         openSnackbar={openSnackbar}
         handleClose={closeSnackbar}
         snackbarMessage={snackbarMessage}
@@ -167,50 +158,50 @@ const handleSubmit = (event) => {
 
             <div className="mt-[20px]">
               <form onSubmit={handleSubmit}>
-              <label
-              for="title"
-              class="block mb-2 text-lg font-medium text-gray-900"
-            >
-              Title
-            </label>
+                <label
+                  for="title"
+                  class="block mb-2 text-lg font-medium text-gray-900"
+                >
+                  Title
+                </label>
                 <input
                   id="title"
-                type="text"
-                name="title"
+                  type="text"
+                  name="title"
                   className="w-[99%] p-3 outline-none border-none"
                   value={title}
                   onChange={handleChange("title")}
                   placeholder="Post Title here"
                 />
                 <label
-              for="description"
-              class="block mb-2 text-lg font-medium text-gray-900"
-            >
-              Description
-            </label>
+                  for="description"
+                  class="block mb-2 text-lg font-medium text-gray-900"
+                >
+                  Description
+                </label>
                 <textarea
                   rows="2"
                   id="description"
-                type="text"
-                name="description"
+                  type="text"
+                  name="description"
                   className="w-[99%] p-3 outline-none border-none"
                   value={description}
                   onChange={handleChange("description")}
                   placeholder="what do you want to talk about ?"
                 />
-                 <label
-              for="media"
-              class="block mb-2 text-lg font-medium text-gray-900"
-            >
-              Media
-            </label>
+                <label
+                  for="media"
+                  class="block mb-2 text-lg font-medium text-gray-900"
+                >
+                  Media
+                </label>
                 <input
                   id="media"
-                type="text"
-                name="media"
+                  type="file"
+                  name="media"
                   className="w-[99%] p-3 outline-none border-none"
-                  value={media}
-                  onChange={handleChange("media")}
+                  // value={media}
+                  onChange={handleMediaChange}
                   placeholder="Enter image url"
                 />
 
@@ -250,14 +241,11 @@ const handleSubmit = (event) => {
 
                 {/* navigations below the form */}
                 <div className="mt-[20px] flex text-gray-600 ml-2 cursor-pointer items-center">
-                  <div className=" space-x-3 border-r-2">
-                  </div>
+                  <div className=" space-x-3 border-r-2"></div>
 
                   <div className=" ml-96">
-                  
                     <button
                       onClick={handleSubmit}
-                      
                       className=" bg-gray-400 text-white cursor-pointer w-[80px] rounded-[15px]  p-2 text-[14px] font-bold"
                     >
                       post
