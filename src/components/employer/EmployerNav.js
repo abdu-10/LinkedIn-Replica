@@ -1,4 +1,4 @@
-import React,{useState} from "react";
+import React,{useState, useEffect} from "react";
 import "./employernav.css";
 import HomeIcon from "@mui/icons-material/Home";
 import GroupIcon from "@mui/icons-material/Group";
@@ -12,9 +12,15 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import { Avatar, Box, Menu, MenuItem,} from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
-
-
+import { selectLoggedInUserRef } from "../../features/users/userSlice";
+import { useSelector, useDispatch } from "react-redux";
+import { setCurrentEmployerDetail } from "../../features/employers/employerSlice";
+import { getEmployerProfile } from "../../api/employer/employerApis";
 export default function EmployerNav() {
+  let employer_code = useSelector(selectLoggedInUserRef)
+  const [employerDetails, setEmployerDetails] = useState({})
+
+  const dispatch = useDispatch()
   const navigate = useNavigate()
   const [anchMenu, setAnchMenu] = useState(null)
 
@@ -38,6 +44,22 @@ export default function EmployerNav() {
     } else
     handleCloseMenu();
   };
+  const populateProfile = () => {
+    return getEmployerProfile(employer_code).then ((res) => {
+      if (res.status === 200){
+      setEmployerDetails(res.data)
+      dispatch(
+        setCurrentEmployerDetail({ currentEmployerDetail: res.data })
+      );
+      } else{
+        console.log(`err`)
+      }
+    })
+  }
+
+  useEffect(()=>{
+    populateProfile();
+  }, [])
 
   const AccountDetails = () => {
     return (
@@ -144,15 +166,15 @@ export default function EmployerNav() {
           </li>
           <li onClick={handleAccountActionsClick()}>
             {" "}
-            <Avatar sx={{ mr: 1, m: -1  }}
+            <Avatar
+            src={employerDetails.avatar_url}
+            sx={{ mr: 1, m: -1  }}
             
             />
-            <span className="nav_text"> Me</span>
+            <span className="nav_text"> {employerDetails.company_name}</span>
           </li>
           <li className="line"></li>
-          <li className="work">
-            <AppsIcon /> Work
-          </li>
+          
         </ul>
       </div>
     </div>
