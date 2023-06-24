@@ -1,23 +1,30 @@
 import React, { useState, useEffect } from "react";
 import { Dialog } from "@mui/material";
-import { updateEmployerProfile } from "../../../api/employer/employerApis";
+
 import { useSelector } from "react-redux";
 import { selectCurrentEmployerDetail } from "../../../features/employers/employerSlice";
 import CustomSnackbar from "../../common/utils/CustomSnackbar";
+
+// apis
+import { apis } from "../../../api/axios";
+import { updateEmployerProfile } from "../../../api/employer/employerApis";
 
 const EditEmployerProfileDialog = ({
   openEditProfileDialog,
   closeEditProfileDialog,
 }) => {
   const currentEmployerDetails = useSelector(selectCurrentEmployerDetail);
-  const employer_code = currentEmployerDetails.employer_code;
-  console.log(employer_code);
+  const employer_code = currentEmployerDetails.id;  
+  const [avatar, setAvatar] = useState(null);
+
+  const handleAvatarChange = (event) => {
+    setAvatar(event.target.files[0]);    
+  };
   const [values, setValues] = useState({
     company_name: "",
     email: "",
     phone_number: "",
     location: "",
-    avatar: "",
     description: "",
     password: "",
     password_confirmation: "",
@@ -31,7 +38,6 @@ const EditEmployerProfileDialog = ({
     email,
     phone_number,
     location,
-    avatar,
     description,
     password,
     password_confirmation,
@@ -65,44 +71,41 @@ const EditEmployerProfileDialog = ({
     }
     setValues({ ...values, openSnackbar: false });
   };
-  function handleSubmit(e) {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    return updateEmployerProfile(
-      employer_code,
-      company_name,
-      email,
-      phone_number,
-      location,
-      avatar,
-      description,
-      password,
-      password_confirmation
-    ).then((res) => {
-      if (res.status == 200) {
-        console.log("Account updated");
-        setValues({
-          ...values,
-          snackbarMessage: "Account Updated Succesfully",
-          openSnackbar: true,
-          snackbarSeverity: "success",
-        });
-        setTimeout(() => {
-          closeEditProfileDialog();
-        }, 3000);
-      } else {
-       console.log(res.data.message);
-      }
-    })
-    .catch((err) => {
-        // log error and display error snackbar
-        console.log(err);
-        setValues({
-          ...values,
-          snackbarMessage: err.message,
-          openSnackbar: true,
-          snackbarSeverity: "error",
-        });
+    const formData = new FormData();
+    {avatar && (formData.append('avatar', avatar))}
+    {company_name && formData.append('company_name', company_name)}
+    {email && formData.append('email', email)}
+    {phone_number && formData.append('phone_number', phone_number)}
+    {location && formData.append('location', location)}
+    {description && formData.append('description', description)}
+    console.log(formData)
+    try {
+      await apis.patch(`/employers/${employer_code}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
+      setValues({
+        ...values,
+        snackbarMessage: "Profile Updated Succesfully",
+        openSnackbar: true,
+        snackbarSeverity: "success",
       });
+      setTimeout(() => {
+        closeEditProfileDialog();
+      }, 2000);
+    }catch(err) {
+      // log error and display error snackbar
+      console.log(err);
+      setValues({
+        ...values,
+        snackbarMessage: err.message,
+        openSnackbar: true,
+        snackbarSeverity: "error",
+      });
+    };
   }
   return (
     <Dialog
@@ -149,34 +152,22 @@ const EditEmployerProfileDialog = ({
                 onChange={handleChange}
                 className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner"
               />
-              <label
-                for="avatar"
-                className="block text-xs font-semibold text-gray-600 uppercase"
-              >
-                Avatar
-              </label>
-              <input
-                id="avatar"
-                type="text"
-                name="avatar"
-                value={avatar}
-                onChange={handleChange}
-                class="w-full font-serif  p-4 text-black bg-stone-50 outline-none rounded-md"
-              ></input>
+
               <label
                 for="description"
                 className="block text-xs font-semibold text-gray-600 uppercase"
               >
                 Description
               </label>
-              <input
+              <textarea
                 id="description"
-                type="text"
+                rows={4}
+                // type="text"
                 name="description"
                 value={description}
                 onChange={handleChange}
                 class="w-full font-serif  p-4 text-black bg-stone-50 outline-none rounded-md"
-              ></input>
+              ></textarea>
             </div>
             <div className="md:w-1/2 px-3">
               <label
@@ -207,31 +198,21 @@ const EditEmployerProfileDialog = ({
                 onChange={handleChange}
                 className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner"
               />
-
-              <div className="md:col-span-2">
-                <label for="password">Enter Preferred Password</label>
-                <input
-                  type="password"
-                  name="password"
-                  id="password"
-                  className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
-                  value={password}
-                  onChange={handleChange}
-                  placeholder=""
-                />
-              </div>
-              <div className="md:col-span-2">
-                <label for="password_confirmation">Enter Password Again</label>
-                <input
-                  type="password"
-                  name="password_confirmation"
-                  id="password_confirmation"
-                  className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
-                  value={password_confirmation}
-                  onChange={handleChange}
-                  placeholder=""
-                />
-              </div>
+            {/* TODO: ACCEPT IMAGE UPLOADS */}
+              <label
+                for="avatar"
+                className="block text-xs font-semibold text-gray-600 uppercase"
+              >
+                Avatar
+              </label>
+              <input
+                id="avatar"
+                type="file"
+                name="avatar"
+                // value={avatar}
+                onChange={handleAvatarChange}
+                class="w-full font-serif  p-4 text-black bg-stone-50 outline-none rounded-md"
+              ></input>
             </div>
             <div className="md:col-span-5 text-right">
               <div className="inline-flex items-end">
