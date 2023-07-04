@@ -85,7 +85,7 @@ function App() {
           <Route index element={<MainContent />} />
           <Route path="dashboard" element={<MainContent />} />
           <Route path="job-post" element={<JobPosting />} />
-          <Route path="desc" element={<RolePostPost />} />
+          <Route path="desc" element={<RolePost />} />
           {/* PENDING: FIND LOGIC TO FIND SEEKERS WHILE DISPLAYING AN INITIAL CURATED LIST */}
           <Route path="seekers" element={<EmployerSpecific />} />
           <Route path="myseekers" element={<MySeekers />} />
