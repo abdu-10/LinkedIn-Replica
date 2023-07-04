@@ -35,6 +35,7 @@ import ConfigJobs from "./components/admin/ConfigJobs";
 import CreateJobs from "./components/admin/CreateJobs";
 import AdminProfile from "./components/admin/AdminProfile";
 import AllPosts from "./components/admin/AllPosts";
+import RolePost from "./components/employer/RolePost";
 
 function App() {
   return (
@@ -84,10 +85,12 @@ function App() {
           <Route index element={<MainContent />} />
           <Route path="dashboard" element={<MainContent />} />
           <Route path="job-post" element={<JobPosting />} />
+          <Route path="desc" element={<RolePostPost />} />
           {/* PENDING: FIND LOGIC TO FIND SEEKERS WHILE DISPLAYING AN INITIAL CURATED LIST */}
           <Route path="seekers" element={<EmployerSpecific />} />
           <Route path="myseekers" element={<MySeekers />} />
           <Route path="profile" element={<EmployerProfile />} />
+          
         </Route>
         {/* </Route> */}
         {/* SEEKER ROUTES */}
