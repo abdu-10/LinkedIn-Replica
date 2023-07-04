@@ -61,3 +61,70 @@ export const updateEmployerProfile = async (
 export const getEmployerProfile = async (id) => {
     return await apis.get(`/employer/${id}/profile`);
   };
+
+  export const createjob = async (
+    job_title,
+    company_name,
+    workplace_type,
+    location,
+    job_type,
+    employer_id,
+) => {
+    return await apis.post(`/job_posts`, {
+        job_title,
+        company_name,
+        workplace_type,
+        location,
+        job_type,
+        employer_id,
+    })
+}
+export const add_Desc_skill = async (
+    job_post_id,
+    description,
+    skills,
+    ) => {
+    return await apis.patch(`/job_posts/${job_post_id}/desc&skill`, {
+        description,
+        skills,
+    })
+}
+
+export const add_Cont_filter = async (
+    job_post_id,
+    notifier,
+    screener_questions,
+    qualification_setting,
+    ) => {
+    return await apis.patch(`/job_posts/${job_post_id}/cont&filters`, {
+        notifier,
+    screener_questions,
+    qualification_setting,
+    })
+}
+
+export const verifyEmail = async (
+    user_ref,
+    job_post_id,
+   email,
+) => {
+    return await apis.post(`/job_posts/${job_post_id}/${user_ref}/`, {
+       email,
+    })
+}
+
+export const activateJobPost = async (
+    job_post_id,
+    confirmation_code
+    ) => {
+    return await apis.patch(`/job_posts/${job_post_id}/verify`, {
+        confirmation_code
+    })
+}
+
+
+
+
+
+
+
