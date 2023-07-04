@@ -1,53 +1,201 @@
-import React from 'react'
+import React, { useState } from "react";
+import { createjob } from "../../api/employer/employerApis";
+import { useSelector} from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { selectCurrentEmployerDetail } from "../../features/employers/employerSlice";
+import CustomSnackbar from "../../components/common/utils/CustomSnackbar";
+import ContinueJobPost from "./RolePost";
+const JobPosting = () => {
+  const navigate = useNavigate();
+  const loggedInEmployer = useSelector(selectCurrentEmployerDetail);
+  const employer_id = loggedInEmployer.id
+  const [formData, setFormData] = useState({
+    jobTitle: "",
+    companyName: "",
+    workplaceType: "",
+    location: "",
+    jobType: "",
 
-function JobPosting() {
-  return (
-    <div>
-      
-<form>
-  <div class="bg-stone-100 mt-10 min-h-screen md:px-20 pt-6">
-    <div class=" bg-white rounded-md px-6 py-10 max-w-2xl mx-auto">
-      <h1 class="text-center text-2xl font-bold text-blue-500 mb-10">POST A JOB</h1>
-      <div class="space-y-4">
-        <div>
-          <label for="title" class="text-lx font-serif">Job Title:</label>
-          <input type="text" placeholder="title" id="title" class="ml-2 outline-none py-1 px-2 text-md border-2 rounded-md" />
-        </div>
-        <div>
-          <label for="description" class="block mb-2 text-lg font-serif"> Job Description:</label>
-          <textarea id="description" cols="30" rows="10" placeholder="write here.." class="w-full font-serif  p-4 text-blue-600 bg-blue-50 outline-none rounded-md"></textarea>
-        </div>
-        <div>
-       
-<div class="max-w-lg m-3">
-  <div class="relative">
-  <label for="description" class="block mb-2 text-md font-serif"> Job tags:</label>
-    <input class="appearance-none block w-full bg-white text-gray-700 border border-gray-200 rounded py-2 px-4 leading-tight focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500" placeholder="Enter related job tags"/>
-    <div class="hidden">
-      <div class="absolute z-40 left-0 mt-2 w-full">
-        <div class="py-1 text-sm bg-white rounded shadow-lg border border-gray-300">
-          <a class="block py-1 px-5 cursor-pointer hover:bg-indigo-600 hover:text-white">Add tag "<span class="font-semibold" x-text="textInput"></span>"</a>
-        </div>
-      </div>
-    </div>
-    {/* <!-- selections --> */}
-    <div class="bg-blue-100 inline-flex items-center text-sm rounded mt-2 mr-1 overflow-hidden">
-      <span class="ml-2 mr-1 leading-relaxed truncate max-w-xs px-1" x-text="tag">tag</span>
-      <button class="w-6 h-8 inline-block align-middle text-gray-500 bg-blue-200 focus:outline-none">
-        <svg class="w-6 h-6 fill-current mx-auto" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M15.78 14.36a1 1 0 0 1-1.42 1.42l-2.82-2.83-2.83 2.83a1 1 0 1 1-1.42-1.42l2.83-2.82L7.3 8.7a1 1 0 0 1 1.42-1.42l2.83 2.83 2.82-2.83a1 1 0 0 1 1.42 1.42l-2.83 2.83 2.83 2.82z"/></svg>
-      </button>
-    </div>
-  </div>
-</div>
-        </div>
+    snackbarMessage: "",
+    openSnackbar: false,
+    snackbarSeverity: "success",
+  });
+
+  const {
+   jobTitle,
+   companyName,
+   workplaceType,
+   location,
+   jobType,
+
+    snackbarMessage,
+    openSnackbar,
+    snackbarSeverity,
+  } = formData;
+
+  const handleChange = (prop) => (event) => {
+    setFormData({ ...formData, [prop]: event.target.value });
+  }; console.log(formData)
+
+  const closeSnackbar = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setFormData({ ...formData, openSnackbar: false });
+  };
+
+
+  const handleJobSubmit = (e) => {
+    e.preventDefault();
+
+    createjob(
+      jobTitle,
+      companyName,
+      workplaceType,
+      location,
+      jobType,
+      employer_id
+     
+    )
+      .then((response) => {
+        if (response.status === 201) {
+          // Job posted successfully, handle success case
+          console.log("posted successfully");
+          // Reset form values
+          setFormData({
+           ...formData,
+
+           snackbarMessage: "Account Updated Succesfully",
+            openSnackbar: true,
+            snackbarSeverity: "success",
+          });
+          setTimeout(() => {
+            navigate("/employer/desc");
+          }, 3000);
+         
         
-        <button class=" px-6 py-2 mx-auto block rounded-md text-lg font-semibold text-indigo-100 bg-blue-600  ">ADD POST</button>
-      </div>
-    </div>
-  </div>
-</form>
-    </div>
-  )
-}
+      
+        } else {
+          console.log("Job posting failed.");
+        }
+      })
+      .catch((error) => {
+        // log error and display error snackbar
+        console.log(error);
+        setFormData({
+          ...formData,
+          snackbarMessage: error.message,
+          openSnackbar: true,
+          snackbarSeverity: "error",
+        });
+      });
+  };
 
-export default JobPosting
+  return (
+    <>
+    <CustomSnackbar
+                openSnackbar={openSnackbar}
+                handleClose={closeSnackbar}
+                snackbarMessage={snackbarMessage}
+                snackbarSeverity={snackbarSeverity}
+            />
+    <div className="container  mx-auto mt-12 px-4 py-4">
+      <h2 className="text-2xl font-bold text-center mb-4">Post Job Now</h2>
+      <form onSubmit={(e) => handleJobSubmit(e)} className="max-w-sm mx-auto bg-white rounded-lg shadow-md px-6 py-4">
+        <div className="mb-4">
+          <label htmlFor="jobTitle" className="block text-gray-800 text-sm font-semibold mb-1">
+            Job Title
+          </label>
+          <input
+            type="text"
+            id="jobTitle"
+            name="jobTitle"
+            className="w-full bg-gray-100 border border-gray-300 rounded py-2 px-3 text-gray-800 leading-tight focus:outline-none focus:border-blue-500"
+            value={jobTitle}
+            onChange={handleChange("jobTitle")}
+            required
+          />
+        </div>
+        <div className="mb-4">
+          <label htmlFor="companyName" className="block text-gray-800 text-sm font-semibold mb-1">
+            Company Name
+          </label>
+          <input
+            type="text"
+            id="companyName"
+            name="companyName"
+            className="w-full bg-gray-100 border border-gray-300 rounded py-2 px-3 text-gray-800 leading-tight focus:outline-none focus:border-blue-500"
+            value={companyName}
+            onChange={handleChange("companyName")}
+            required
+          />
+        </div>
+        <div className="mb-4">
+          <label htmlFor="workplaceType" className="block text-gray-800 text-sm font-semibold mb-1">
+            Workplace Type
+          </label>
+          <select
+            id="workplaceType"
+            name="workplaceType"
+            className="w-full bg-gray-100 border border-gray-300 rounded py-2 px-3 text-gray-800 leading-tight focus:outline-none focus:border-blue-500"
+            value={workplaceType}
+            onChange={handleChange("workplaceType")}
+            required
+          >
+            <option value="office">On-site</option>
+            <option value="Office">Hybrid</option>
+            <option value="Remote">Remote</option>
+          </select>
+        </div>
+        <div className="mb-4">
+          <label htmlFor="location" className="block text-gray-800 text-sm font-semibold mb-1">
+            Location
+          </label>
+          <input
+            type="text"
+            id="location"
+            name="location"
+            className="w-full bg-gray-100 border border-gray-300 rounded py-2 px-3 text-gray-800 leading-tight focus:outline-none focus:border-blue-500"
+            value={location}
+            onChange={handleChange("location")}
+            required
+          />
+        </div>
+        <div className="mb-4">
+          <label htmlFor="jobType" className="block text-gray-800 text-sm font-semibold mb-1">
+            Job Type
+          </label>
+          <select
+            id="jobType"
+            name="jobType"
+            className="w-full bg-gray-100 border border-gray-300 rounded py-2 px-3 text-gray-800 leading-tight focus:outline-none focus:border-blue-500"
+            value={jobType}
+            onChange={handleChange("jobType")}
+            required
+          >
+            <option value="Full-time">Full-time</option>
+            <option value="Part-time">Part-time</option>
+            <option value="Part-time">Contract</option>
+            <option value="Contract">Temporary</option>
+            <option value="Contract">Other</option>
+            <option value="Contract">Volunteer</option>
+            <option value="Contract">Internship</option>
+          </select>
+        </div>
+        <div className="flex justify-center">
+          <button
+            type="submit"
+            className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+          >
+            Submit
+          </button>
+        </div>
+      </form>
+    </div>
+    
+    
+    </>
+  );
+};
+
+export default JobPosting;
