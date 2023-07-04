@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getPosts } from "../../api/common/commonApis";
+import { getPosts, deletePost  } from "../../api/common/commonApis";
 
 const AllPosts = () => {
   const [posts, setPosts] = useState([]);
@@ -13,35 +13,60 @@ const AllPosts = () => {
       }
     });
   };
+  const handleDeletePost = () => {
+    deletePost()
+      .then((response) => {
+        if (response.status === 200) {
+          setPosts(posts);
+        } else {
+          console.log("Deleting post failed.");
+        }
+      })
+  };
+
   useEffect(() => {
     fetchPosts();
   }, []);
 
   return (
-    <div className="container mx-auto mt-12 px-4 py-8">
+    <div className="container mx-auto mt-12 px-80 py-20">
       <h2 className="text-3xl font-bold text-center mb-8">All Posts</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {posts.map((post) => (
-            <div
-              key={post.id}
-              className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
-            >
-              <img
-                src={post.media_url}
-                alt={post.title}
-                className="object-cover w-full h-48"
-              />
-              <div className="p-4">
-                <h2 className="text-xl font-semibold text-gray-800 mb-2">
-                  {post.title}
-                </h2>
-                <p className="text-gray-600 line-clamp-3">{post.description}</p>
-                <div className="mt-4 flex items-center"></div>
+      <div className="grid grid-cols-1 gap-8">
+        {posts.map((post) => (
+          <div
+            key={post.id}
+            className="bg-white rounded-md shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
+          >
+            <img
+              src={post.media_url}
+              alt={post.title}
+              className="object-fit w-full h-full sm:h-48"
+            />
+            <div className="p-4">
+              <h2 className="text-lg font-semibold text-gray-800 mb-2">
+                {post.title}
+              </h2>
+              <p className="text-gray-600 text-sm line-clamp-3">
+                {post.description}
+              </p>
+              <div className="mt-3">
+                <p className="text-gray-500 text-xs">
+                  Posted by: {post.user.role}
+                </p>
+                  <div className="flex items-center mt-2">
+                    <button onClick={handleDeletePost} className="text-red-500 text-xs font-semibold mr-2 px-2 py-1 border border-red-500 rounded-md hover:bg-red-500 hover:text-white">
+                      Delete Post
+                    </button>
+                    <button className="text-blue-500 text-xs font-semibold px-2 py-1 border border-blue-500 rounded-md hover:bg-blue-500 hover:text-white">
+                      Contact User
+                    </button>
+                  </div>
+               
               </div>
             </div>
-          ))}
-        </div>
-      
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
