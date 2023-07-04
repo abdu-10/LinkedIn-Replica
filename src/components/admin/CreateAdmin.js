@@ -7,7 +7,6 @@ function CreateAdmin() {
     username: "",
     password: "",
     password_confirmation: "",
-    role: "ADMIN",
 
     snackbarMessage: "",
     openSnackbar: false,
@@ -18,7 +17,6 @@ function CreateAdmin() {
     username,
     password,
     password_confirmation,
-    role,
 
     snackbarMessage,
     openSnackbar,
@@ -38,12 +36,8 @@ function CreateAdmin() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    createUserAccount(
-      username,
-      password,
-      password_confirmation,
-      role,
-    )
+    let role;
+    createUserAccount(username, password, password_confirmation, role="ADMIN")
       .then((res) => {
         if (res.status === 201) {
           setValues({
@@ -51,7 +45,7 @@ function CreateAdmin() {
             username: "",
             password: "",
             password_confirmation: "",
-            role: "ADMIN",
+            role: "",
             snackbarMessage: "Account Created Successfully",
             openSnackbar: true,
             snackbarSeverity: "success",
@@ -70,7 +64,7 @@ function CreateAdmin() {
       })
       .catch((err) => {
         setValues({
-         username: "",
+          username: "",
           password: "",
           password_confirmation: "",
           role: "",
@@ -204,43 +198,7 @@ function CreateAdmin() {
                   />
                 </div>
               </div>
-              <div class="flex flex-col mb-6">
-  <label
-    for="role"
-    class="mb-1 text-xs sm:text-sm tracking-wide text-gray-600"
-  >
-    Role:
-  </label>
-  <div class="relative">
-    <div class="inline-flex items-center justify-center absolute left-0 top-0 h-full w-10 text-gray-400">
-      <span>
-        <svg
-          class="h-6 w-6"
-          fill="none"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path d="M12 14c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM16 19v2H8v-2M12 3a2 2 0 100 4 2 2 0 000-4z" />
-        </svg>
-      </span>
-    </div>
-
-    <input
-      id="role"
-      type="text"
-      name="role"
-      class="text-sm sm:text-base placeholder-gray-500 pl-10 pr-4 rounded-lg border border-gray-400 w-full py-2 focus:outline-none focus:border-blue-400"
-      placeholder="Enter role"
-      value={role}
-      onChange={handleChange("role")}
-      readOnly
-    />
-  </div>
-</div>
-
+              
               <div class="flex w-full">
                 <button
                   type="submit"
