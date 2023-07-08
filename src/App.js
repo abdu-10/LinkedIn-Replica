@@ -31,6 +31,10 @@ import CreateAdmin from "./components/admin/CreateAdmin";
 import UnAuthorized from "./components/common/views/UnAuthorized";
 import RequireAuth from "./components/common/forms/RequireAuth";
 import EditSeekerDetails from "./components/seeker/EditSeekerDetails";
+import JobPost from "./components/employer/jobs/JobPost";
+// import EditorComponent from "./components/employer/jobs/FiltersNotifier";
+import SkillDescription from "./components/employer/jobs/SkillDescription";
+// import FiltersNotifier from "./components/employer/jobs/FiltersNotifier";
 
 function App() {
   return (
@@ -69,7 +73,10 @@ function App() {
           <Route path="/employer" element={<EmployerNav />}>
             <Route index element={<Maincontent />} />
             <Route path="dashboard" element={<Maincontent />} />
-            <Route path="job-post" element={<JobPosting />} />
+            {/* <Route path="job-post" element={<JobPosting />} /> */}
+            {/* <Route path="job-post" element={<JobPost />} /> */}
+            <Route path="job-post" element={<SkillDescription />} />
+            {/* <Route path="job-post" element={<FiltersNotifier />} /> */}
             {/* PENDING: FIND LOGIC TO FIND SEEKERS WHILE DISPLAYING AN INITIAL CURATED LIST */}
             <Route path="seekers" element={<EmployerSpecific />} />
             <Route path="myseekers" element={<MySeekers />} />
