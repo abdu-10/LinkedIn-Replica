@@ -7,18 +7,17 @@ import CustomSnackbar from "../../common/utils/CustomSnackbar";
 
 // apis
 import { apis } from "../../../api/axios";
-import { updateEmployerProfile } from "../../../api/employer/employerApis";
 
 const EditEmployerProfileDialog = ({
   openEditProfileDialog,
   closeEditProfileDialog,
 }) => {
   const currentEmployerDetails = useSelector(selectCurrentEmployerDetail);
-  const employer_code = currentEmployerDetails.id;  
+  const employer_code = currentEmployerDetails.id;
   const [avatar, setAvatar] = useState(null);
 
   const handleAvatarChange = (event) => {
-    setAvatar(event.target.files[0]);    
+    setAvatar(event.target.files[0]);
   };
   const [values, setValues] = useState({
     company_name: "",
@@ -74,19 +73,31 @@ const EditEmployerProfileDialog = ({
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData();
-    {avatar && (formData.append('avatar', avatar))}
-    {company_name && formData.append('company_name', company_name)}
-    {email && formData.append('email', email)}
-    {phone_number && formData.append('phone_number', phone_number)}
-    {location && formData.append('location', location)}
-    {description && formData.append('description', description)}
-    console.log(formData)
+    {
+      avatar && formData.append("avatar", avatar);
+    }
+    {
+      company_name && formData.append("company_name", company_name);
+    }
+    {
+      email && formData.append("email", email);
+    }
+    {
+      phone_number && formData.append("phone_number", phone_number);
+    }
+    {
+      location && formData.append("location", location);
+    }
+    {
+      description && formData.append("description", description);
+    }
+    // console.log(formData);
     try {
       await apis.patch(`/employers/${employer_code}`, formData, {
         headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      })
+          "Content-Type": "multipart/form-data",
+        },
+      });
       setValues({
         ...values,
         snackbarMessage: "Profile Updated Succesfully",
@@ -96,7 +107,7 @@ const EditEmployerProfileDialog = ({
       setTimeout(() => {
         closeEditProfileDialog();
       }, 2000);
-    }catch(err) {
+    } catch (err) {
       // log error and display error snackbar
       console.log(err);
       setValues({
@@ -105,8 +116,8 @@ const EditEmployerProfileDialog = ({
         openSnackbar: true,
         snackbarSeverity: "error",
       });
-    };
-  }
+    }
+  };
   return (
     <Dialog
       maxWidth="md"
@@ -198,7 +209,7 @@ const EditEmployerProfileDialog = ({
                 onChange={handleChange}
                 className="block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:bg-gray-300 focus:shadow-inner"
               />
-            {/* TODO: ACCEPT IMAGE UPLOADS */}
+              {/* TODO: ACCEPT IMAGE UPLOADS */}
               <label
                 for="avatar"
                 className="block text-xs font-semibold text-gray-600 uppercase"

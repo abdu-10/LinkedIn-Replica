@@ -10,7 +10,7 @@ const CompleteAccountDialog = ({
   closeCompleteAccountDialog,
 }) => {
   const user_code = useSelector(selectLoggedInUserRef);
-  console.log(user_code);
+
 
   const dispatch = useDispatch();
 
@@ -66,9 +66,7 @@ const CompleteAccountDialog = ({
           setTimeout(() => {
             closeCompleteAccountDialog();
           }, 3000);
-          dispatch(
-            setCurrentSeekerDetail({ currentSeekerDetail: res.data })
-          );
+          dispatch(setCurrentSeekerDetail({ currentSeekerDetail: res.data }));
         }
       })
       .catch((err) => {

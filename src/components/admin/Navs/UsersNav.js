@@ -1,10 +1,10 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { Link } from "react-router-dom";
 
 function UsersNav() {
   return (
     <div>
-      <div className='mt-20 ml-5 w-1/3'>
+      <div className="mt-20 ml-5 w-1/3">
         <ul className="hidden text-sm font-medium text-center text-black divide-gray-200 rounded-lg shadow sm:flex dark:divide-blue-700 dark:text-blue-400">
           <li className="w-1/2">
             <Link
@@ -18,7 +18,7 @@ function UsersNav() {
           <li className="w-1/2">
             <Link
               to="/admin/create-admin"
-              className="inline-block w-full p-4 bg-white hover:text-black hover:bg-gray-50 focus:ring-4 focus:ring-blue-300 focus:outline-none dark:hover:text-white dark:bg-white dark:hover:bg-blue-400 hover:bg-blue-200 rounded-r-lg"
+              className="inline-block w-full p-4 bg-white hover:text-black hover:bg-gray-50 focus:ring-4 focus:ring-blue-300 focus:outline-none dark:hover:text-white dark:bg-white dark:hover:bg-blue-400 rounded-r-lg"
             >
               Create Admin
             </Link>

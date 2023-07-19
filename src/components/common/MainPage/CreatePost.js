@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./Maincontent.css";
 import CloseIcon from "@mui/icons-material/Close";
 import Picker from "emoji-picker-react";
-import { createPost } from "../../../api/common/commonApis";
 import CustomSnackbar from "../utils/CustomSnackbar";
 import { selectLoggedInUserRef } from "../../../features/users/userSlice";
 import { useSelector } from "react-redux";
@@ -12,11 +11,10 @@ import { apis } from "../../../api/axios";
 function CreatePost({ formx, setForm }) {
   const [text, setText] = useState("");
   const [showPicker, setShowPicker] = useState(false);
-  const [image, setImage] = useState(null); //preview selected image
-  const [imagePost, setImagePost] = useState(""); //carry the actual image and save in storage bucket
+  const [image, setImage] = useState(null);
+  const [imagePost, setImagePost] = useState("");
   const [imageName, setImageName] = useState("");
   const user_id = useSelector(selectLoggedInUserRef);
-  console.log(user_id)
 
   const [media, setMedia] = useState(null);
 
@@ -29,7 +27,6 @@ function CreatePost({ formx, setForm }) {
     description: "",
     user_id: "",
     likes: 0,
-
     snackbarMessage: "",
     openSnackbar: false,
     snackbarSeverity: "success",
@@ -39,7 +36,6 @@ function CreatePost({ formx, setForm }) {
     title,
     description,
     likes,
-
     snackbarMessage,
     openSnackbar,
     snackbarSeverity,
@@ -59,22 +55,12 @@ function CreatePost({ formx, setForm }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData();
-    {
-      media && formData.append("media", media);
-    }
-    {
-      title && formData.append("title", title);
-    }
-    {
-      description && formData.append("description", description);
-    }
-    {
-      user_id && formData.append("user_id", user_id);
-    }
-    {
-      likes && formData.append("likes", likes);
-    }
-    console.log(formData);
+    media && formData.append("media", media);
+    title && formData.append("title", title);
+    description && formData.append("description", description);
+    user_id && formData.append("user_id", user_id);
+    likes && formData.append("likes", likes);
+
     try {
       await apis.post(`/posts`, formData, {
         headers: {
@@ -83,7 +69,7 @@ function CreatePost({ formx, setForm }) {
       });
       setValues({
         ...values,
-        snackbarMessage: "Posted Succesfully",
+        snackbarMessage: "Posted Successfully",
         openSnackbar: true,
         snackbarSeverity: "success",
       });
@@ -91,29 +77,26 @@ function CreatePost({ formx, setForm }) {
         closeForm();
       }, 2000);
     } catch (err) {
-      // TODO: DISPLAY ERROR MESSAGES ON APPROPRIATE FIELD
       setValues({
         ...values,
-        snackbarMessage: "Something Went Wrong, please retry",
+        snackbarMessage: "Something Went Wrong, Please Retry",
         openSnackbar: true,
         snackbarSeverity: "error",
       });
     }
   };
-  //  show emoji in textbox
+
   const onEmojiClick = (event, emojiObject) => {
     setText((prevInput) => prevInput + emojiObject.emoji);
     setShowPicker(false);
   };
 
-  // close form
   const closeForm = () => {
     setForm(false);
     setImage("");
     setImagePost("");
   };
 
-  // delete selected image
   const deleteImage = () => {
     setImage("");
     setImagePost("");
@@ -128,55 +111,45 @@ function CreatePost({ formx, setForm }) {
         snackbarSeverity={snackbarSeverity}
       />
       {formx && (
-        <div className="flex flex-row h-screen wrapper fixed top-0 left-0 right-0 z-50  w-[100%] justify-start ">
-          <div className="max-h-screen container bg-white w-[40%] mt-[40px] m-auto p-[10px] rounded-[8px] relative">
-            <div className="head flex items-center space-x-96 ">
-              <div className="text-[23px]">
-                <p>New Post</p>
-              </div>
+        <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
+          <div className="w-3/4 max-w-lg bg-white rounded-lg p-6 relative shadow-lg">
+            <div className="flex items-center justify-between mb-6">
+              <div className="text-2xl font-bold">New Post</div>
               <div
-                className="hover:rounded-full hover:bg-gray-300 p-1 cursor-pointer"
+                className="hover:bg-gray-200 p-2 rounded-full cursor-pointer"
                 onClick={() => closeForm()}
               >
                 <CloseIcon />
               </div>
             </div>
-            <hr className="mt-3 mb-3 " />
-            <div className="flex">
+            <hr className="my-4" />
+            <div className="flex items-center mb-6">
               <div>
                 <img
-                  className="rounded-full w-[60px]"
+                  className="rounded-full w-16"
                   src="https://png.pngtree.com/png-vector/20190710/ourmid/pngtree-user-vector-avatar-png-image_1541962.jpg"
                   alt="profile_image"
                 />
               </div>
-              <div className="ml-5">
-                <p className="text-18 font-bold">Abdu</p>
+              <div className="ml-4">
+                <p className="text-lg font-bold">Abdu</p>
               </div>
             </div>
-            {/* form  */}
-
-            <div className="mt-[20px]">
+            <div>
               <form onSubmit={handleSubmit}>
-                <label
-                  for="title"
-                  class="block mb-2 text-lg font-medium text-gray-900"
-                >
+                <label htmlFor="title" className="block mb-2 text-lg font-medium text-gray-900">
                   Title
                 </label>
                 <input
                   id="title"
                   type="text"
                   name="title"
-                  className="w-[99%] p-3 outline-none border-none"
+                  className="w-full p-3 border rounded-md outline-none focus:border-blue-500"
                   value={title}
                   onChange={handleChange("title")}
                   placeholder="Post Title here"
                 />
-                <label
-                  for="description"
-                  class="block mb-2 text-lg font-medium text-gray-900"
-                >
+                <label htmlFor="description" className="block mb-2 text-lg font-medium text-gray-900">
                   Description
                 </label>
                 <textarea
@@ -184,30 +157,25 @@ function CreatePost({ formx, setForm }) {
                   id="description"
                   type="text"
                   name="description"
-                  className="w-[99%] p-3 outline-none border-none"
+                  className="w-full p-3 border rounded-md outline-none focus:border-blue-500"
                   value={description}
                   onChange={handleChange("description")}
-                  placeholder="what do you want to talk about ?"
+                  placeholder="What do you want to talk about?"
                 />
-                <label
-                  for="media"
-                  class="block mb-2 text-lg font-medium text-gray-900"
-                >
+                <label htmlFor="media" className="block mb-2 text-lg font-medium text-gray-900">
                   Media
                 </label>
                 <input
                   id="media"
                   type="file"
                   name="media"
-                  className="w-[99%] p-3 outline-none border-none"
-                  // value={media}
+                  className="w-full p-3 border rounded-md outline-none focus:border-blue-500"
                   onChange={handleMediaChange}
-                  placeholder="Enter image url"
+                  placeholder="Enter image URL"
                 />
 
-                {/* display emoji image so that the user clickes on it to display the emoji picker */}
                 <img
-                  className="emoji-icon cursor-pointer w-[20px] ml-3 "
+                  className="emoji-icon cursor-pointer w-6 ml-3"
                   src="https://icons.getbootstrap.com/assets/icons/emoji-smile.svg"
                   onClick={() => setShowPicker((val) => !val)}
                   alt=""
@@ -219,7 +187,6 @@ function CreatePost({ formx, setForm }) {
                   />
                 )}
 
-                {/* display selected image */}
                 {image ? (
                   <div className="p-3">
                     <div
@@ -231,33 +198,25 @@ function CreatePost({ formx, setForm }) {
                     <img
                       src={image}
                       alt="selected_image"
-                      className="w-[98%] p-3 h-[250px]"
+                      className="w-full p-3 h-48 object-cover rounded-md"
                     />
                     <h2>{imageName}</h2>
                   </div>
-                ) : (
-                  ""
-                )}
+                ) : null}
 
-                {/* navigations below the form */}
-                <div className="mt-[20px] flex text-gray-600 ml-2 cursor-pointer items-center">
-                  <div className=" space-x-3 border-r-2"></div>
-
-                  <div className=" ml-96">
-                    <button
-                      onClick={handleSubmit}
-                      className=" bg-gray-400 text-white cursor-pointer w-[80px] rounded-[15px]  p-2 text-[14px] font-bold"
-                    >
-                      post
-                    </button>
-                  </div>
+                <div className="mt-6 flex justify-end">
+                  <button
+                    onClick={handleSubmit}
+                    className="bg-blue-500 text-white cursor-pointer px-4 py-2 rounded-md text-lg font-bold"
+                  >
+                    Post
+                  </button>
                 </div>
               </form>
             </div>
           </div>
         </div>
       )}
-      {/* <Maincontent form = {form} setForm = {setForm}/> */}
     </>
   );
 }

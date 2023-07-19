@@ -10,9 +10,8 @@ const EmployerProfileDialog = ({
   closeEmployerProfileDialog,
 }) => {
   const user_code = useSelector(selectLoggedInUserRef);
-  console.log(user_code);
-  const dispatch = useDispatch()
- 
+  const dispatch = useDispatch();
+
   const [values, setValues] = useState({
     company_name: "",
     email: "",
@@ -35,7 +34,8 @@ const EmployerProfileDialog = ({
 
   const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value });
-  }; console.log(values)
+  };
+  console.log(values);
 
   const closeSnackbar = (event, reason) => {
     if (reason === "clickaway") {
@@ -46,12 +46,7 @@ const EmployerProfileDialog = ({
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    return completeEmployerAccount(
-      company_name,
-      phone_number,
-      email,
-      user_code
-    )
+    return completeEmployerAccount(company_name, phone_number, email, user_code)
       .then((res) => {
         if (res.status === 201) {
           // success snackbar and close the daialog

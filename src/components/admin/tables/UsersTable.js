@@ -3,13 +3,13 @@ import {
   Typography,
   Stack,
   IconButton,
-  Avatar,
   Box,
   Menu,
   MenuItem,
   LinearProgress,
 } from "@mui/material";
-import { Navigate, useNavigate, Outlet  } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import CustomTable from "../tables/CustomTable";
@@ -18,6 +18,7 @@ import { setCurrentAdminDetail } from "../../../features/admins/adminSlice";
 import UsersNav from "../Navs/UsersNav";
 function UsersTable() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [rowParams, setRowParams] = useState({});
   const [loading, setLoading] = useState(false);
@@ -42,10 +43,15 @@ function UsersTable() {
 
   const handleMenuItemClick = (prop) => {
     if (prop === "view") {
-      navigate("details");
+      navigate("profile");
+      dispatch(
+        setCurrentAdminDetail({
+          currentAdminDetail: rowParams,
+        })
+      );
       handleCloseMenu();
     } else if (prop === "edit") {
-      navigate("details");
+      navigate("profile");
     } else if (prop === "delete") {
       navigate();
     } else handleCloseMenu();
@@ -131,22 +137,24 @@ function UsersTable() {
         );
       },
     },
-
   ];
   return (
     <>
-    <UsersNav/>
-     
-      <Stack 
-       direction="row" justifyContent="center" alignItems="flex-start" sx={{ p: 4, }}>
-      
+      <UsersNav />
+
+      <Stack
+        direction="row"
+        justifyContent="center"
+        alignItems="flex-start"
+        sx={{ p: 4 }}
+      >
         <Typography variant="h6" sx={{ fontWeight: "800" }}>
           These are All the Admins on the platform
         </Typography>
       </Stack>
       <Box
         sx={{
-          mb:50,
+          mb: 50,
           mx: 9,
           boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
           borderRadius: "8px",

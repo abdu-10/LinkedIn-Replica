@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Dialog } from "@mui/material";
 import { updateSeekerProfile } from "../../api/seeker/seekerApis";
-import { Password } from "@mui/icons-material";
+
 
 function EditSeekerDetails() {
   // HARDCODED PROFILE CODE
@@ -47,7 +46,6 @@ function EditSeekerDetails() {
   }
   function handleSubmit(e) {
     e.preventDefault();
-    console.log("update");
     return updateSeekerProfile(
       seeker_code,
       location,
@@ -61,7 +59,6 @@ function EditSeekerDetails() {
     ).then((res) => {
       if (res.status == 200) {
         console.log("Account updated");
-        console.log(res.gata)
         // setValues(...values, res.data)
         // updateSeekerProfile(seeker_code).then((res) => {
         //   setValues(res.data)

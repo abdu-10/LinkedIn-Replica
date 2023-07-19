@@ -37,7 +37,12 @@ function CreateAdmin() {
   const handleSubmit = (event) => {
     event.preventDefault();
     let role;
-    createUserAccount(username, password, password_confirmation, role="ADMIN")
+    createUserAccount(
+      username,
+      password,
+      password_confirmation,
+      (role = "ADMIN")
+    )
       .then((res) => {
         if (res.status === 201) {
           setValues({
@@ -198,7 +203,7 @@ function CreateAdmin() {
                   />
                 </div>
               </div>
-              
+
               <div class="flex w-full">
                 <button
                   type="submit"

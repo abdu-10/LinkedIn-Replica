@@ -1,39 +1,34 @@
 import React, { useState, useEffect } from "react";
 import EmployerNav from "../employer/EmployerNav";
-import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import EditEmployerProfileDialog from "./dialogs/EditEmployerProfileDialog";
 import { setCurrentEmployerDetail } from "../../features/employers/employerSlice";
 import { getEmployerProfile } from "../../api/employer/employerApis";
 import { selectLoggedInUserRef } from "../../features/users/userSlice";
 function EmployerProfile() {
-  let employer_code = useSelector(selectLoggedInUserRef)
-  const [employerDetails, setEmployerDetails] = useState({})
-  // const navigate = useNavigate()
-  // console.log(employerDetails)
+  let employer_code = useSelector(selectLoggedInUserRef);
+  const [employerDetails, setEmployerDetails] = useState({});
 
-  const dispatch = useDispatch()
-    const [openEditProfileDialog, setOpenEditProfileDialog] = useState(false)
+  const dispatch = useDispatch();
+  const [openEditProfileDialog, setOpenEditProfileDialog] = useState(false);
 
-    const closeEditProfileDialog = () => {
-        setOpenEditProfileDialog(false)
-    }
-    const populateProfile = () => {
-      return getEmployerProfile(employer_code).then ((res) => {
-        if (res.status === 200){
-        setEmployerDetails(res.data)
-        dispatch(
-          setCurrentEmployerDetail({ currentEmployerDetail: res.data })
-        );
-        } else{
-          console.log(`err`)
-        }
-      })
-    }
-  
-    useEffect(()=>{
-      populateProfile();
-    }, [])
+  const closeEditProfileDialog = () => {
+    setOpenEditProfileDialog(false);
+  };
+  const populateProfile = () => {
+    return getEmployerProfile(employer_code).then((res) => {
+      if (res.status === 200) {
+        setEmployerDetails(res.data);
+        dispatch(setCurrentEmployerDetail({ currentEmployerDetail: res.data }));
+      } else {
+        console.log(`err`);
+      }
+    });
+  };
+
+  useEffect(() => {
+    populateProfile();
+  }, []);
   return (
     <>
       <EmployerNav />
@@ -78,7 +73,6 @@ function EmployerProfile() {
             </div>
             {/* <!-- End of profile card --> */}
             <div class="my-4"></div>
-            
           </div>
           {/* <!-- Right Side --> */}
           <div class="w-full md:w-9/12 mx-2">

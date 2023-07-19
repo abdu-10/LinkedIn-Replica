@@ -9,7 +9,6 @@ function PostCard({ postData }) {
   const [likes, setLikes] = useState(postData.likes);
   const controls = useAnimation();
 
-
   const handleLike = () => {
     // Increment the likes locally
     setLikes(likes + 1);
@@ -19,7 +18,7 @@ function PostCard({ postData }) {
   };
   console.log(likes);
 
-// A function that inverts the variable open comment card
+  // A function that inverts the variable open comment card
   const renderCommentCard = () => {
     setOpenCommentCard(!openCommentCard);
   };
@@ -49,7 +48,7 @@ function PostCard({ postData }) {
             <p>{postData.description}</p>
           </div>
 
-           <div className="w-full object-contain">
+          <div className="w-full object-contain">
             {postData.media_url && (
               <>
                 {postData.media_url.includes(".mp4") ? (
@@ -94,10 +93,9 @@ function PostCard({ postData }) {
               <span className="text-xs">Comment</span>
             </button>
           </div>
-          {openCommentCard && <RenderComments postCode={postData.post_code} />}          
+          {openCommentCard && <RenderComments postCode={postData.post_code} />}
         </div>
       </div>
-      
     </>
   );
 }

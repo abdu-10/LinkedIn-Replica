@@ -3,11 +3,9 @@ import { Box } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 
 import PreventRowOverlay from "./PreventRowOverLay";
-import { useEffect } from "react";
 
 const CustomTable = ({ rows, columns }) => {
   const [pageSize, setPageSize] = useState(5);
-  
 
   return (
     <>
@@ -28,7 +26,7 @@ const CustomTable = ({ rows, columns }) => {
           rowsPerPageOptions={[5, 10, 15, 20, 25, 50, 100]}
           onPageSizeChange={(newValue) => setPageSize(newValue)}
           components={{
-            NoRowsOverlay: PreventRowOverlay,         
+            NoRowsOverlay: PreventRowOverlay,
           }}
         />
       </Box>

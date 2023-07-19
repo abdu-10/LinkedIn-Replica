@@ -12,9 +12,7 @@ function JobApplication() {
         <div class="grid grid-cols-1 gap-1 lg:grid-cols-2">
           <div class="overflow-hidden rounded-2xl p-4 lg:p-12">
             <div class="flex items-center bg-blue-500 text-white">
-              <p class="text-md">
-                Jobs based on your profile
-              </p>
+              <p class="text-md">Jobs based on your profile</p>
             </div>
 
             <div class="pt--10 pr-0 pb-10 pl-0">
@@ -37,7 +35,6 @@ function JobApplication() {
                       <p class="text-gray-600 text-md">Slack</p>
                     </div>
                   </div>
-                  
                 </div>
               </div>
               <div class="pt-5 pr-0 pb-0 pl-0 mt-5 mr-0 mb-0 ml-0">
@@ -124,7 +121,7 @@ function JobApplication() {
                       <p class="text-gray-600 text-md">Pinterest</p>
                     </div>
                   </div>
-              </div>
+                </div>
               </div>
             </div>
 

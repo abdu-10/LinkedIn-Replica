@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import SeekersTab from './SeekersTab'
+import SeekersTab from "./SeekersTab";
 import { getAllSeekers } from "../../api/admin/adminApis";
 
 function EmployerSpecific() {
@@ -14,16 +14,24 @@ function EmployerSpecific() {
   }, []);
 
   return (
-    <div className='mt-20'>
+    <div className="mt-20">
       <SeekersTab />
       <div className="overflow-hidden rounded-lg border mt-20 border-gray-200 shadow-md m-5">
         <table className="w-full border-collapse bg-white text-left text-sm text-gray-500">
           <thead className="bg-gray-50">
             <tr>
-              <th scope="col" className="px-6 py-4 font-medium text-gray-900">Name</th>
-              <th scope="col" className="px-6 py-4 font-medium text-gray-900">Availability</th>
-              <th scope="col" className="px-6 py-4 font-medium text-gray-900">Gender</th>
-              <th scope="col" className="px-6 py-4 font-medium text-gray-900">Preferred Job</th>
+              <th scope="col" className="px-6 py-4 font-medium text-gray-900">
+                Name
+              </th>
+              <th scope="col" className="px-6 py-4 font-medium text-gray-900">
+                Availability
+              </th>
+              <th scope="col" className="px-6 py-4 font-medium text-gray-900">
+                Gender
+              </th>
+              <th scope="col" className="px-6 py-4 font-medium text-gray-900">
+                Preferred Job
+              </th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100 border-t border-gray-100">
@@ -39,7 +47,9 @@ function EmployerSpecific() {
                     <span className="absolute right-0 bottom-0 h-2 w-2 rounded-full bg-green-400 ring ring-white"></span>
                   </div>
                   <div className="text-sm">
-                    <div className="font-medium text-gray-700">{seeker.full_name}</div>
+                    <div className="font-medium text-gray-700">
+                      {seeker.full_name}
+                    </div>
                     <div className="text-gray-400">{seeker.email}</div>
                   </div>
                 </th>

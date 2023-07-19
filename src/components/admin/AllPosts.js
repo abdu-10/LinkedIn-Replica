@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getPosts, deletePost  } from "../../api/common/commonApis";
+import { getPosts, deletePost } from "../../api/common/commonApis";
 
 const AllPosts = () => {
   const [posts, setPosts] = useState([]);
@@ -14,14 +14,13 @@ const AllPosts = () => {
     });
   };
   const handleDeletePost = () => {
-    deletePost()
-      .then((response) => {
-        if (response.status === 200) {
-          setPosts(posts);
-        } else {
-          console.log("Deleting post failed.");
-        }
-      })
+    deletePost().then((response) => {
+      if (response.status === 200) {
+        setPosts(posts);
+      } else {
+        console.log("Deleting post failed.");
+      }
+    });
   };
 
   useEffect(() => {
@@ -53,15 +52,17 @@ const AllPosts = () => {
                 <p className="text-gray-500 text-xs">
                   Posted by: {post.user.role}
                 </p>
-                  <div className="flex items-center mt-2">
-                    <button onClick={handleDeletePost} className="text-red-500 text-xs font-semibold mr-2 px-2 py-1 border border-red-500 rounded-md hover:bg-red-500 hover:text-white">
-                      Delete Post
-                    </button>
-                    <button className="text-blue-500 text-xs font-semibold px-2 py-1 border border-blue-500 rounded-md hover:bg-blue-500 hover:text-white">
-                      Contact User
-                    </button>
-                  </div>
-               
+                <div className="flex items-center mt-2">
+                  <button
+                    onClick={handleDeletePost}
+                    className="text-red-500 text-xs font-semibold mr-2 px-2 py-1 border border-red-500 rounded-md hover:bg-red-500 hover:text-white"
+                  >
+                    Delete Post
+                  </button>
+                  <button className="text-blue-500 text-xs font-semibold px-2 py-1 border border-blue-500 rounded-md hover:bg-blue-500 hover:text-white">
+                    Contact User
+                  </button>
+                </div>
               </div>
             </div>
           </div>

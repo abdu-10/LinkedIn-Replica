@@ -40,16 +40,12 @@ function MainContent() {
   const user_ref = useSelector(selectLoggedInUserRef);
   const user_role = useSelector(selectCurrentUserRole);
 
-  
-  
-  
-
   const fetchPostsToDisplay = () => {
     getPosts()
       .then((response) => {
-        if (response.status === 200){          
-        setPosts(response.data);
-        }        
+        if (response.status === 200) {
+          setPosts(response.data);
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -58,7 +54,6 @@ function MainContent() {
 
   useEffect(() => {
     fetchPostsToDisplay();
-    console.log(posts)
   }, []);
 
   const checkUserProfile = () => {
@@ -143,7 +138,6 @@ function MainContent() {
 
   useEffect(() => {
     checkUserProfile();
-    console.log(openCompleteAccountDialog);
   }, []);
 
   return (
@@ -169,11 +163,7 @@ function MainContent() {
                 backgroundRepeat: "no-repeat",
               }}
             >
-              <img
-                src={user_ref.avatar}
-                alt="profile_image"
-              />
-            
+              <img src={user_ref.avatar} alt="profile_image" />
             </div>
 
             <div className="profile_name">
@@ -279,21 +269,13 @@ function MainContent() {
             name3="Job"
             name4="Write article"
           />
-          
-          {
-            posts.length > 0 && (
-              posts.map((field, index) => {
-                return(
-                  <PostCard
-                  key={index}
-                  postData={field}
-                  />
-                )
-              })
-            )
-          }
+
+          {posts.length > 0 &&
+            posts.map((field, index) => {
+              return <PostCard key={index} postData={field} />;
+            })}
         </div>
-        
+
         {/* right side content */}
         <div className="right_content ">
           <div className="right_first fixed top-20">

@@ -3,13 +3,12 @@ import {
   Typography,
   Stack,
   IconButton,
-  Avatar,
   Box,
   Menu,
   MenuItem,
   LinearProgress,
 } from "@mui/material";
-import { Navigate, useNavigate, Outlet } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import CustomTable from "../tables/CustomTable";
@@ -175,14 +174,19 @@ function AllSeekers() {
 
   return (
     <>
-      <Stack direction="row" justifyContent="center" alignItems="flex-start" sx={{ p: 12 }}>
+      <Stack
+        direction="row"
+        justifyContent="center"
+        alignItems="flex-start"
+        sx={{ p: 12 }}
+      >
         <Typography variant="h6" sx={{ fontWeight: "800" }}>
           These are All the Seekers on the platform
         </Typography>
       </Stack>
       <Box
         sx={{
-          mb:20,
+          mb: 20,
           mx: 9,
           boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
           borderRadius: "8px",

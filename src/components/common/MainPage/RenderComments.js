@@ -2,17 +2,19 @@ import React, { useState, useEffect } from "react";
 import { selectLoggedInUserRef } from "../../../features/users/userSlice";
 import { useSelector } from "react-redux";
 import {
-    Chip,
-    Card,
-    CardHeader,
-    CardContent,
-    Grid,
-    Avatar,
-    Typography,
-} from '@mui/material';
-import { red } from '@mui/material/colors';
-import { getAllPostComments, commentOnPost } from "../../../api/common/commonApis";
-
+  Chip,
+  Card,
+  CardHeader,
+  CardContent,
+  Grid,
+  Avatar,
+  Typography,
+} from "@mui/material";
+import { red } from "@mui/material/colors";
+import {
+  getAllPostComments,
+  commentOnPost,
+} from "../../../api/common/commonApis";
 
 function RenderComments({ postCode }) {
   const [text, setText] = useState("");
@@ -45,17 +47,17 @@ function RenderComments({ postCode }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    let post_code = postCode
-    if (commentData){
-        commentOnPost(commentData.content, post_code, user_code).then((res) => {
-            if (res.status === 201){
-                setCommentData({...commentData, content: ""});
-                // todo snackar message
-                // todo: rerender page
-                fetchComments();
-            }
-        })
-    }    
+    let post_code = postCode;
+    if (commentData) {
+      commentOnPost(commentData.content, post_code, user_code).then((res) => {
+        if (res.status === 201) {
+          setCommentData({ ...commentData, content: "" });
+          // todo snackar message
+          // todo: rerender page
+          fetchComments();
+        }
+      });
+    }
   };
   const handleChange = (prop) => (event) => {
     setCommentData({ ...commentData, [prop]: event.target.value });
@@ -71,26 +73,26 @@ function RenderComments({ postCode }) {
 
     /* eslint-disable no-bitwise */
     for (i = 0; i < string.length; i += 1) {
-        hash = string.charCodeAt(i) + ((hash << 5) - hash);
+      hash = string.charCodeAt(i) + ((hash << 5) - hash);
     }
 
-    let color = '#';
+    let color = "#";
 
     for (i = 0; i < 3; i += 1) {
-        const value = (hash >> (i * 8)) & 0xff;
-        color += `00${value.toString(16)}`.slice(-2);
+      const value = (hash >> (i * 8)) & 0xff;
+      color += `00${value.toString(16)}`.slice(-2);
     }
     /* eslint-enable no-bitwise */
     return color;
-}
-function stringAvatar(name) {
+  }
+  function stringAvatar(name) {
     return {
-        sx: {
-            bgcolor: stringToColor(name),
-        },
-        children: `${name.split(' ')[0][0]}`,
+      sx: {
+        bgcolor: stringToColor(name),
+      },
+      children: `${name.split(" ")[0][0]}`,
     };
-} 
+  }
 
   return (
     <div className="border border-white flex-1 h-220 bg-white rounded-2xl">
