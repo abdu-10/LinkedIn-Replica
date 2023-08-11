@@ -49,7 +49,7 @@ function EmployerJobs() {
                   <div className="sm:flex sm:items-center sm:justify-between sm:space-x-5">
                     <div className="flex items-center flex-1 min-w-0">
                       <img
-                        src={job.avatar_url}
+                        src={profile.avatar_url}
                         className="flex-shrink-0 object-cover rounded-full btn- w-10 h-10"
                         alt={`${job.company_name} Logo`}
                       />
