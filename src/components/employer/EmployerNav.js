@@ -143,9 +143,9 @@ export default function EmployerNav() {
               <GroupIcon />
               <span className="nav_text">Seekers</span>
             </li>
-            <li onClick={() => navigate("/employer/job-post")}>
+            <li onClick={() => navigate("/employer/myjobs")}>
               <WorkIcon />
-              <span className="nav_text"> Post Jobs</span>
+              <span className="nav_text"> Jobs</span>
             </li>
             <li>
               <TextsmsIcon />
