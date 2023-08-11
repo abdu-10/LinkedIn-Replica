@@ -31,6 +31,11 @@ import ConfigJobs from "./components/admin/ConfigJobTags";
 import CreateJobs from "./components/admin/CreateJobTag";
 import EditAdminProfile from "./components/admin/EditAdminProfile"
 import AllPosts from "./components/admin/AllPosts";
+import FiltersNotifier from "./components/employer/jobs/FiltersNotifier";
+import EmailConfirmation from "./components/employer/jobs/EmailConfirmation";
+import CodeConfirmation from "./components/employer/jobs/CodeConfirmation";
+import JobOutlet from "./components/employer/jobs/JobOutlet";
+import EmployerJobs from "./components/employer/jobs/EmployerJobs";
 function App() {
   return (
     <div className="App">
@@ -73,14 +78,21 @@ function App() {
           <Route path="/employer" element={<EmployerNav />}>
             <Route index element={<MainContent />} />
             <Route path="dashboard" element={<MainContent />} />
-            <Route path="job-post" element={<JobPost />} />
-            <Route path="skill" element={<SkillDescription />} />
+            <Route path="myjobs" element={<EmployerJobs />} />
+            <Route path="job-post" element={<JobOutlet />}>
+              <Route index element={<JobPost />}/>
+              <Route path="desc&skill" element={< SkillDescription/>}/>
+              <Route path="cont&filters" element={< FiltersNotifier/>}/>
+              <Route path="job_verification" element={< EmailConfirmation/>}/>
+              <Route path="complete_posting" element={< CodeConfirmation/>}/>
+            </Route>
             {/* <Route path="job-post" element={<FiltersNotifier />} /> */}
             {/* PENDING: FIND LOGIC TO FIND SEEKERS WHILE DISPLAYING AN INITIAL CURATED LIST */}
             <Route path="seekers" element={<EmployerSpecific />} />
             <Route path="myseekers" element={<MySeekers />} />
             <Route path="profile" element={<EmployerProfile />} />
             <Route path="details" element={<EmployerDetails />} />
+            
           </Route>
         {/* </Route> */}
         {/* SEEKER ROUTES */}
