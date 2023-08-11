@@ -1,8 +1,5 @@
 import React, { useState, useEffect } from "react";
 import "./Maincontent.css";
-import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
-import DesktopMacIcon from "@mui/icons-material/DesktopMac";
-import GroupsIcon from "@mui/icons-material/Groups";
 import Options from "./Options";
 import CompleteAccountDialog from "./dialogs/CompleteAccountDialog";
 import EmployerProfileDialog from "./dialogs/EmployerProfileDialog";
@@ -25,7 +22,9 @@ import { getSeekerProfile } from "../../../api/seeker/seekerApis";
 import { getEmployerProfile } from "../../../api/employer/employerApis";
 import { getPosts } from "../../../api/common/commonApis";
 import PostCard from "./dialogs/Cards/PostCard";
-
+import { selectCurrentEmployerDetail } from "../../../features/employers/employerSlice";
+import { selectCurrentSeekerDetail } from "../../../features/seekers/seekerSlice";
+import CustomSnackbar from "../utils/CustomSnackbar";
 function MainContent() {
   const [posts, setPosts] = useState([]); //creates a state to hold input values from textbox
   const [text, setText] = useState(""); //creates a state to hold input values from textbox
@@ -39,6 +38,43 @@ function MainContent() {
   const dispatch = useDispatch();
   const user_ref = useSelector(selectLoggedInUserRef);
   const user_role = useSelector(selectCurrentUserRole);
+
+  // Define a state variable to hold the current profile data
+  const [profile, setProfile] = useState({
+    avatar_url: "",
+    company_name: "",
+    full_name: "",
+  });
+
+  const profile1 = useSelector(selectCurrentEmployerDetail);
+  const profile2 = useSelector(selectCurrentSeekerDetail);
+
+  const [values, setValues] = useState({
+    snackbarMessage: "",
+    openSnackbar: false,
+    snackbarSeverity: "success",
+  });
+  const { snackbarMessage, openSnackbar, snackbarSeverity } = values;
+
+  const closeSnackbar = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setValues({ ...values, openSnackbar: false });
+  };
+
+  // Function to display the appropriate profile based on user role
+  const displayProfile = () => {
+    if (user_role === "SEEKER") {
+      setProfile(profile2);
+    } else {
+      setProfile(profile1);
+    }
+  };
+
+  useEffect(() => {
+    displayProfile();
+  }, []);
 
   const fetchPostsToDisplay = () => {
     getPosts()
@@ -56,29 +92,42 @@ function MainContent() {
     fetchPostsToDisplay();
   }, []);
 
+  // Function to fetch and check user profile
   const checkUserProfile = () => {
     if (user_role === "EMPLOYER") {
       getEmployerProfile(user_ref)
         .then((res) => {
-          if (res.status === 200) {
+          if (res.data.error === "Employer not found") {
+            setValues({
+              ...values,
+              snackbarMessage:
+                "Please complete your profile to proceed utilize app",
+              openSnackbar: true,
+              snackbarSeverity: "error",
+            });
+            setOpenEditProfileDialog(true);
+          } else {
+            setProfile(res.data);
             dispatch(
               setCurrentEmployerDetail({ currentEmployerDetail: res.data })
             );
-            setOpenEditProfileDialog(false);
           }
         })
-        .catch((err) => {
-          console.log(err);
-          setOpenEditProfileDialog(true);
-        });
     } else if (user_role === "SEEKER") {
       getSeekerProfile(user_ref)
         .then((res) => {
-          if (res.status === 200) {
+          if (res.data.error === "Seeker not found") {
+            setValues({
+              ...values,
+              snackbarMessage:
+                "Please complete your profile to proceed utilize app",
+              openSnackbar: true,
+              snackbarSeverity: "error",
+            });
+          } else {
+            setProfile(res.data);
             dispatch(setCurrentSeekerDetail({ currentSeekerDetail: res.data }));
             dispatch(setSeekerCode({ seekerCode: res.data.seeker_code }));
-
-            setOpenCompleteAccountDialog(false);
           }
         })
         .catch((err) => {
@@ -142,6 +191,12 @@ function MainContent() {
 
   return (
     <>
+      <CustomSnackbar
+        openSnackbar={openSnackbar}
+        handleClose={closeSnackbar}
+        snackbarMessage={snackbarMessage}
+        snackbarSeverity={snackbarSeverity}
+      />
       <CreatePost formx={formx} setForm={setForm} />
       <CompleteAccountDialog
         openCompleteAccountDialog={openCompleteAccountDialog}
@@ -163,78 +218,13 @@ function MainContent() {
                 backgroundRepeat: "no-repeat",
               }}
             >
-              <img src={user_ref.avatar} alt="profile_image" />
+              <img src={profile.avatar_url} alt="profile_image" />
             </div>
 
             <div className="profile_name">
-              <h3>{user_ref.company_name}</h3>
-              <p className="-mt-[9px] text-[12px] text-gray-500 p-2">
-                C# || Laravel || React.JS || React Native || Redux || Next.js
-              </p>
+              <h3>{profile.company_name || profile.full_name}</h3>
               <hr className="mt-3" />
             </div>
-
-            <div className="reactions_ text-[rgb(101,101,101)] text-[13px] mt-2">
-              <h5 className="hover:bg-gray-200 cursor-pointer p-1 pl-3 ">
-                Who's Viewed your profile{" "}
-                <span className="count text-[rgb(18,80,181)] ml-3">500</span>
-              </h5>
-              <h5 className="hover:bg-gray-200 cursor-pointer p-1 -mt-[9px] pl-3">
-                Impressions on post{" "}
-                <span className="count_ text-[rgb(18,80,181)] ml-[45px]">
-                  1,200
-                </span>
-              </h5>
-            </div>
-            <hr className="mt-2" />
-            <div className="premium">
-              <p className="premium_note">
-                Access exclusive tools and insights
-              </p>
-              <p className="premium_link -mt-[10px]">
-                <a href="/#">Try premium for free</a>
-              </p>
-            </div>
-            <hr />
-            <div className="wishlist p-1">
-              <p className="text-[13px] ml-1">
-                <ReceiptLongIcon />
-                My items
-              </p>
-            </div>
-          </div>
-
-          {/* if position is fixed , set the top to be 70px else leave it as it is */}
-          <div
-            className={`left_second w-[240px]  ${
-              isFixed ? `fixed top-[70px] ` : ""
-            }`}
-          >
-            {/* recents */}
-            <h5>Recents</h5>
-            <p>
-              <DesktopMacIcon />
-              <a href="/#">Make an App worth $1,000...</a>
-            </p>
-            <p>
-              <GroupsIcon />
-              <a href="/#">Leadership Think Tank</a>
-            </p>
-            <p>
-              <GroupsIcon />
-              <a href="/#">African intelligence , Deep...</a>
-            </p>
-            {/* groups */}
-            <h5>
-              <span className="groups">Groups</span>
-            </h5>
-            <p>
-              <GroupsIcon />
-              <a href="/#">Leadership Think Tank</a>
-            </p>
-            <p>
-              <a href="/#">view all</a>
-            </p>
           </div>
         </div>
 
@@ -242,7 +232,7 @@ function MainContent() {
         <div className="center_content ">
           <div className="head_content">
             <img
-              src="https://png.pngtree.com/png-vector/20190710/ourmid/pngtree-user-vector-avatar-png-image_1541962.jpg"
+              src={profile.avatar_url}
               alt="profile_image"
             />
             <form className="hover:bg-gray-200 cursor-pointer">
@@ -286,41 +276,12 @@ function MainContent() {
           </div>
           <div className="right_second  fixed top-[330px]">
             <div className="footer_details">
-              <ul className="p-2 borde w-[300px]">
-                <li>
-                  <a href="/#">About</a>
-                </li>
-                <li>
-                  <a href="/#">Accessibility</a>
-                </li>
-                <li>
-                  <a href="/#">Help Center</a>
-                </li>
-                <li>
-                  <a href="/#">Privacy and Terms</a>
-                </li>
-                <li>
-                  <a href="/#">Add Choices</a>
-                </li>
-                <li>
-                  <a href="/#">Advertising</a>
-                </li>
-                <li>
-                  <a href="/#">Business Services</a>
-                </li>
-                <li>
-                  <a href="/#">Get the LinkedIn app</a>
-                </li>
-                <li>
-                  <a href="/#">More</a>
-                </li>
-              </ul>
               <p className="font-[12px] w-[280px]">
                 <img
                   src="https://www.logo.wine/a/logo/LinkedIn/LinkedIn-Logo.wine.svg"
                   alt="logo"
                 />
-                Abdu 🙂 © 2023
+                LinkedIn 🙂 © 2023
               </p>
             </div>
           </div>
