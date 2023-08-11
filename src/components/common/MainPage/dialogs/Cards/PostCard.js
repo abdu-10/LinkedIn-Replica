@@ -1,13 +1,35 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
 import MessageRoundedIcon from "@mui/icons-material/MessageRounded";
 import { motion, useAnimation } from "framer-motion";
 import RenderComments from "../../RenderComments";
-
+import { selectCurrentUserRole } from "../../../../../features/users/userSlice";
+import { selectCurrentEmployerDetail } from "../../../../../features/employers/employerSlice";
+import { selectCurrentSeekerDetail } from "../../../../../features/seekers/seekerSlice";
 function PostCard({ postData }) {
   const [openCommentCard, setOpenCommentCard] = useState(false);
   const [likes, setLikes] = useState(postData.likes);
   const controls = useAnimation();
+  const profile1 = useSelector(selectCurrentEmployerDetail);
+  const profile2 = useSelector(selectCurrentSeekerDetail);
+const user_role = useSelector(selectCurrentUserRole);
+
+// Define a state variable to hold the current profile data
+const [profile, setProfile] = useState({});
+
+ // Function to display the appropriate profile based on user role
+ const displayProfile = () => {
+  if (user_role === "SEEKER") {
+    setProfile(profile2);
+  } else {
+    setProfile(profile1);
+  }
+};
+
+useEffect(() => {
+  displayProfile();
+}, []);
 
   const handleLike = () => {
     // Increment the likes locally
@@ -30,7 +52,7 @@ function PostCard({ postData }) {
           <div className="flex">
             <div className="w-10 h-10 rounded-full mr-10">
               <img
-                src="https://png.pngtree.com/png-vector/20190710/ourmid/pngtree-user-vector-avatar-png-image_1541962.jpg"
+                src={profile.avatar_url}
                 alt="profile_image"
               />
             </div>
