@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
-
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import {
   Box,
   Card,
@@ -12,19 +13,13 @@ import {
   Select,
 } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
+import JobCard from "./JobCard";
 import { useSelector } from "react-redux";
 import { selectCurrentEmployerDetail } from "../../../features/employers/employerSlice";
+import { setCurrentJobDetail } from "../../../features/jobs/jobSlice";
 import { postJob } from "../../../api/employer/employerApis";
-
+import CustomSnackbar from "../../common/utils/CustomSnackbar";
 export default function JobPost() {
-  // {
-  //     "job_title": "Senior Cashier",
-  //     "company_name": "Auger Automotives",
-  //     "workplace_type": "On-site",
-  //     "location": "Nairobi, KE",
-  //     "job_type": "Full time",
-  //     "employer_id": "438332e5-5744-4222-8406-dbaab90a2ca8"
-  // }
   const employer = useSelector(selectCurrentEmployerDetail);
   const employer_id = employer.id;
   const comp_name = employer.company_name;
@@ -34,55 +29,106 @@ export default function JobPost() {
     workplace_type: "",
     location: "",
     job_type: "",
-  });
 
-  const { job_title, company_name, workplace_type, location, job_type } =
-    values;
+    snackbarMessage: "",
+    openSnackbar: false,
+    snackbarSeverity: "success",
+  });
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const {
+    job_title,
+    company_name,
+    workplace_type,
+    location,
+    job_type,
+
+    snackbarMessage,
+    openSnackbar,
+    snackbarSeverity,
+  } = values;
 
   // handle input details
   const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value });
   };
 
+  const closeSnackbar = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setValues({ ...values, openSnackbar: false });
+  };
+
   //   create initial job object
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(
+    return postJob(
       job_title,
       company_name,
       workplace_type,
       location,
       job_type,
       employer_id
-    );
-    // return postJob(
-    //   job_title,
-    //   company_name,
-    //   workplace_type,
-    //   location,
-    //   job_type,
-    //   employer_id
-    // )
-    //   .then((res) => {
-    //     if (res.status === 201) {
-    //       console.log("suceess");
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
+    )
+      .then((res) => {
+        if (res.status === 201) {
+          setValues({
+            job_title: "",
+            company_name: comp_name,
+            workplace_type: "",
+            location: "",
+            job_type: "",
+
+            snackbarMessage: "Job Created Succesfully",
+            openSnackbar: true,
+            snackbarSeverity: "success",
+          });
+
+          dispatch(setCurrentJobDetail({ currentJobDetail: res.data }));
+          navigate("desc&skill");
+        }
+      })
+      .catch((err) => {
+        setValues({
+          job_title: "",
+          company_name: comp_name,
+          workplace_type: "",
+          location: "",
+          job_type: "",
+
+          snackbarMessage: err.message,
+          openSnackbar: true,
+          snackbarSeverity: "error",
+        });
+      });
+    // utilize the error block to render the error message in a snackBar
   };
 
   return (
+    <>
+    <CustomSnackbar
+        openSnackbar={openSnackbar}
+        handleClose={closeSnackbar}
+        snackbarMessage={snackbarMessage}
+        snackbarSeverity={snackbarSeverity}
+      />
     <Grid container spacing={2}>
-      <Grid xs={4}></Grid>
+      <Grid xs={4}  sx={{
+        mt: 12,
+        mr:5,
+        
+      }}>
+        <JobCard/>
+      </Grid>
       <Grid xs={4} sx={{ m: 3 }}>
         {" "}
         <Box>
           {" "}
           <Card
             sx={{
-              mt: 2,
+              mt: 6,
             }}
           >
             <CardContent>
@@ -188,5 +234,6 @@ export default function JobPost() {
       </Grid>
       <Grid xs={4}></Grid>
     </Grid>
+    </>
   );
 }
