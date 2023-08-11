@@ -2,6 +2,7 @@ import React from "react";
 import { styled } from "@mui/material/styles";
 import Chip from "@mui/material/Chip";
 import { Box } from "@mui/material";
+import { getAllJobTags } from "../../../api/admin/adminApis";
 
 const ListItem = styled("li")(({ theme }) => ({
   margin: theme.spacing(0.5),
@@ -19,39 +20,12 @@ class SkillSelector extends React.Component {
   }
 
   componentDidMount() {
-    // Simulating API call
+    // API call
     this.fetchSkills();
-  }
+  }  
 
   fetchSkills = () => {
-    // Simulating API call to get available skills
-    const availableSkills = [
-      {
-        id: "232f03e5-bacc-43a6-b702-01b20c093280",
-        group_name: "PostgreSQL",
-      },
-      {
-        id: "1167a815-b626-4ff7-9e19-0d98d6603e3e",
-        group_name: "Python",
-      },
-      {
-        id: "1e9898b8-0c65-453a-a8ab-fd5d8cfaf68b",
-        group_name: "Networking",
-      },
-      {
-        id: "fe5c4b85-55d9-489d-8b3d-1ea12c541439",
-        group_name: "Penetration testing",
-      },
-      {
-        id: "42482d56-72a6-4576-a669-bea82b1a2ee6",
-        group_name: "Accounting",
-      },
-      {
-        id: "415f145e-d01f-4e45-80c9-a0ef1f88f7ec",
-        group_name: "Finance",
-      },
-    ];
-    this.setState({ availableSkills });
+    getAllJobTags().then((res) => this.setState({ availableSkills: res.data }))
   };
 
   handleSearchChange = (event) => {
@@ -86,7 +60,10 @@ class SkillSelector extends React.Component {
 
   render() {
     const { skills, search, availableSkills, selectedSkills } = this.state;
-    console.log(skills);
+    
+    this.props.func(skills)
+
+    // props.func(skills);
 
     return (
       <div>
