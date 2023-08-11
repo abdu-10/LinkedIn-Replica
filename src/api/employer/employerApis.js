@@ -32,7 +32,6 @@ export const getSkills = async () => {
   return await apis.get(`/jobtags`);
 };
 
-
 export const deleteJob = async (job_code) => {
   return await apis.delete(`/jobs/${job_code}`);
 };
@@ -55,8 +54,11 @@ export const updateEmployerProfile = async (
     description,
   });
 };
-export const getEmployerProfile = async (user_ref) => {
-  return await apis.get(`/employer/${user_ref}/profile`);
+// export const getEmployerProfile = async (user_ref) => {
+//   return await apis.get(`/employer/${user_ref}/profile`);
+// };
+export const getEmployerProfile = (user_ref) => {
+  return apis.get(`/employer/${user_ref}/profile`);
 };
 
 // initial job post
@@ -85,17 +87,8 @@ export const addJobDesc = async (description, skills, job_id) => {
   });
 };
 
-export const addJobMetas = async (
-  notifier,
-  screener_questions,
-  qualification_setting,
-  job_id
-) => {
-  return await apis.patch(`/job_posts/${job_id}/cont&filters`, {
-    notifier: notifier,
-    screener_questions: screener_questions,
-    qualification_setting: qualification_setting,
-  });
+export const addJobMetas = async (filter_payload, job_id) => {
+  return await apis.patch(`/job_posts/${job_id}/cont&filters`, filter_payload);
 };
 
 export const requestJobeCode = async (job_id, user_ref, email) => {
@@ -108,4 +101,8 @@ export const verifyJobListing = async (job_id, confirmation_code) => {
   return await apis.patch(`job_posts/${job_id}/verify`, {
     confirmation_code,
   });
+};
+
+export const getEmployerJobs = async (employer_id) => {
+  return await apis.get(`/job_posts/employer/${employer_id}`);
 };
