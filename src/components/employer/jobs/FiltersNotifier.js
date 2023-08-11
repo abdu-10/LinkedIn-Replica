@@ -3,7 +3,6 @@ import { styled } from "@mui/system";
 import Checkbox from "@mui/material/Checkbox";
 import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
 import {
-  Stack,
   Box,
   Typography,
   Button,
@@ -14,22 +13,38 @@ import {
   CardContent,
   CardActions,
 } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 import { addJobMetas } from "../../../api/employer/employerApis";
+import { selectCurrentJobDetail, setCurrentJobDetail } from "../../../features/jobs/jobSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const StyledCheckbox = styled(Checkbox)({
   color: "#1976d2",
 });
 
 const FiltersNotifier = () => {
-  const [qualificationSetting, setQualificationSetting] = useState(false);
+  const dispatch = useDispatch();
+  const job = useSelector(selectCurrentJobDetail);
+  const job_id = job.id;
+  const navigate = useNavigate();
+  const [qualificationSetting, setQualificationSetting] = useState(false); //anticipates value for filter
   const [screenerQuestions, setScreenerQuestions] = useState([
     { question: "", response: "" },
-  ]);
+  ]); //forms a basis of the questions structure
+
   const [notifier, setNotifier] = useState({
     notifier_type: "email",
     detail: "",
-  });
+  }); // shall pick the preferred contact or application mode
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setNotifier((prevNotifier) => ({
+      ...prevNotifier,
+      [name]: value,
+    }));
+  };
 
   const handleCheckboxChange = (event) => {
     setQualificationSetting(event.target.checked);
@@ -52,15 +67,35 @@ const FiltersNotifier = () => {
 
   const handleInputChange = (index, event) => {
     const values = [...screenerQuestions];
-    const updatedValue = event.target.name;
-    values[index][updatedValue] = event.target.value;
+    const { name, value } = event.target;
+    values[index][name] = value;
 
     setScreenerQuestions(values);
+    console.log(screenerQuestions);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(screenerQuestions, qualificationSetting);
+
+    if (notifier.detail !== "") {
+      const filter_payload = {
+        notifier: notifier,
+        screener_questions: screenerQuestions,
+        qualification_setting: qualificationSetting,
+      };
+
+      addJobMetas(filter_payload, job_id).then((r) => {
+        if (r.status === 200){
+          dispatch(setCurrentJobDetail({ currentJobDetail: r.data }));
+          navigate("/employer/job-post/job_verification");
+        }
+      })
+    }
+
+  };
+
+  const handleAddCustomQuestion = () => {
+    handleAddScreenerQuestions();
   };
 
   return (
@@ -69,154 +104,191 @@ const FiltersNotifier = () => {
         <Grid container spacing={2} sx={{ mt: 2 }}>
           <Grid xs={2}></Grid>
           <Grid xs={8}>
-            {" "}
             <Card>
               <CardContent>
-                <Grid xs={12} md={6}>
-                  <Box>
-                    {" "}
-                    <Typography sx={{ fontWeight: "500" }}>
-                      Receive applicants
-                    </Typography>{" "}
-                    <Select
-                      fullWidth
-                      value={notifier_type}
-                      onChange={handleChange("notifier_type")}
-                    >
-                      <MenuItem value="email">By email</MenuItem>
-                      <MenuItem value="website">
-                        At an external website
-                      </MenuItem>
-                    </Select>
-                  </Box>
-                </Grid>
-                <Grid xs={12} md={6}>
-                  {notifier_type === "email" ? (
+                <Typography sx={{ fontWeight: "900", mb: 4 }}>
+                  Receive qualified applicants
+                </Typography>
+                <Grid container spacing={2}>
+                  <Grid item xs={12} md={6}>
                     <Box>
-                      {" "}
                       <Typography sx={{ fontWeight: "500" }}>
-                        Email address*
+                        Receive applicants
                       </Typography>
-                      <TextValidator
+                      <Select
                         fullWidth
-                        onChange={handleChange("detail")}
-                        name="detail"
-                        value={detail}
-                        validators={["required"]}
-                        errorMessages={["This Field is Required"]}
-                      />
+                        value={notifier.notifier_type}
+                        onChange={handleChange}
+                        name="notifier_type"
+                      >
+                        <MenuItem value="email">By email</MenuItem>
+                        <MenuItem value="website">
+                          At an external website
+                        </MenuItem>
+                      </Select>
                     </Box>
-                  ) : (
-                    <Box>
-                      {" "}
-                      <Typography sx={{ fontWeight: "500" }}>
-                        Website address*
-                      </Typography>
-                      <TextValidator
-                        fullWidth
-                        onChange={handleChange("detail")}
-                        name="detail"
-                        value={detail}
-                        validators={["required"]}
-                        errorMessages={["This Field is Required"]}
-                      />
-                    </Box>
-                  )}
+                  </Grid>
+                  <Grid item xs={12} md={6}>
+                    {notifier.notifier_type === "email" ? (
+                      <Box>
+                        <Typography sx={{ fontWeight: "500" }}>
+                          Email address*
+                        </Typography>
+                        <TextValidator
+                          fullWidth
+                          onChange={handleChange}
+                          name="detail"
+                          value={notifier.detail}
+                          validators={["required", "isEmail"]}
+                          errorMessages={[
+                            "This Field is Required",
+                            "Invalid email",
+                          ]}
+                        />
+                      </Box>
+                    ) : (
+                      <Box>
+                        <Typography sx={{ fontWeight: "500" }}>
+                          Website address*
+                        </Typography>
+                        <TextValidator
+                          fullWidth
+                          onChange={handleChange}
+                          name="detail"
+                          value={notifier.detail}
+                          validators={["required", "isUrl"]}
+                          errorMessages={[
+                            "This Field is Required",
+                            "Invalid URL",
+                          ]}
+                        />
+                      </Box>
+                    )}
+                  </Grid>
                 </Grid>
               </CardContent>
-              <CardContent>
-                {screenerQuestions.length > 0 &&
-                  screenerQuestions.map((field, index) => {
-                    return (
-                      <>
-                        <Grid container spacing={5}>
-                          <Grid xs={2}></Grid>
-                          <Grid
-                            key={index}
-                            container
-                            xs={8}
-                            mt={6}
-                            // component="fieldset"
-                            // sx={{
-                            //   border: "solid 3px #295FAB",
-                            //   borderRadius: "15px",
-                            //   padding: (theme) => theme.spacing(2),
-                            // }}
+              {notifier.notifier_type === "email" && (
+                <CardContent>
+                  <Typography
+                    variant="subtitle1"
+                    color="textSecondary"
+                    sx={{ mb: 1 }}
+                  >
+                    Screening questions
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    color="textSecondary"
+                    sx={{ mb: 2 }}
+                  >
+                    We recommend adding 3 or more questions. Applicants must
+                    answer each question.
+                  </Typography>
+                  {screenerQuestions.map((field, index) => (
+                    <Grid container spacing={2} key={index}>
+                      <Grid item xs={12}>
+                        <Box>
+                          <Typography sx={{ fontWeight: "600" }}>
+                            Write a custom screening question
+                          </Typography>
+                          <TextValidator
+                            placeholder=""
+                            multiline
+                            fullWidth
+                            rows={3}
+                            value={field.question}
+                            onChange={(event) =>
+                              handleInputChange(index, event)
+                            }
+                            type="text"
+                            name="question"
+                          />
+                        </Box>
+                      </Grid>
+                      <Grid item xs={12} md={6}>
+                        <Box>
+                          <Typography>Desired Response Type</Typography>
+                          <Select
+                            fullWidth
+                            value={field.response_type}
+                            onChange={(event) =>
+                              handleInputChange(index, event)
+                            }
+                            name="response_type"
                           >
-                            {/* <legend>
-                              <Typography
-                                sx={{ fontWeight: "600", color: "#295FAB" }}
-                              >
-                                Contact Detail
-                              </Typography>
-                            </legend> */}
-
-                            <Grid xs={12} md={12}>
-                              <Box>
-                                {" "}
-                                <Typography>Type Question</Typography>
-                                <TextValidator
-                                  placeholder=""
-                                  fullWidth
-                                  value={field.question}
-                                  onChange={(event) =>
-                                    handleInputChange(index, event)
-                                  }
-                                  type="text"
-                                  name="question"
-                                  // validators={["required"]}
-                                  // errorMessages={["This Field is Required"]}
-                                />
-                              </Box>{" "}
-                            </Grid>
-                            <Grid xs={12} md={6}>
-                              <Box>
-                                <Typography>Desired Respoonse</Typography>
-                                <Select
-                                  fullWidth
-                                  placeholder="1"
-                                  value={field.contact_type}
-                                  onChange={(event) =>
-                                    handleInputChange(index, event)
-                                  }
-                                  type="number"
-                                  name="contact_type"
-                                >
-                                  <MenuItem value="1">One</MenuItem>
-                                  <MenuItem value="2">Two</MenuItem>
-                                  <MenuItem value="3">Three</MenuItem>
-                                  <MenuItem value="4">Four</MenuItem>
-                                </Select>
-                              </Box>
-                              <Box sx={{ mt: 4 }}>
-                                <Button
-                                  sx={{
-                                    color: "error.main",
-                                    borderColor: "error.main",
-                                  }}
-                                  variant="outlined"
-                                  onClick={() =>
-                                    handleRemoveScreenerQuestions(index)
-                                  }
-                                >
-                                  Remove Question
-                                </Button>
-                              </Box>
-                            </Grid>
-                          </Grid>
-                        </Grid>
-                      </>
-                    );
-                  })}
-              </CardContent>
-              <CardContent>
-                <StyledCheckbox
-                  checked={qualificationSetting}
-                  onChange={handleCheckboxChange}
-                />
-              </CardContent>
+                            <MenuItem value="numeric">Numeric</MenuItem>
+                            <MenuItem value="boolean">Yes/No</MenuItem>
+                          </Select>
+                        </Box>
+                      </Grid>
+                      <Grid item xs={12} md={6}>
+                        <Box>
+                          <Typography>Desired Response</Typography>
+                          {field.response_type === "numeric" ? (
+                            <TextValidator
+                              fullWidth
+                              type="number"
+                              onChange={(event) =>
+                                handleInputChange(index, event)
+                              }
+                              name="response"
+                              value={field.response}
+                              validators={["required"]}
+                              errorMessages={["This Field is Required"]}
+                            />
+                          ) : (
+                            <Select
+                              fullWidth
+                              onChange={(event) =>
+                                handleInputChange(index, event)
+                              }
+                              name="response"
+                              value={field.response}
+                            >
+                              <MenuItem value="true">Yes</MenuItem>
+                              <MenuItem value="false">No</MenuItem>
+                            </Select>
+                          )}
+                        </Box>
+                      </Grid>
+                      <Grid item xs={12}>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "flex-end",
+                          }}
+                        >
+                          <Button
+                            variant="outlined"
+                            onClick={() => handleRemoveScreenerQuestions(index)}
+                          >
+                            X
+                          </Button>
+                        </Box>
+                      </Grid>
+                    </Grid>
+                  ))}
+                  <Button variant="outlined" onClick={handleAddCustomQuestion}>
+                    Add Custom Question
+                  </Button>
+                </CardContent>
+              )}
               <CardActions>
-                <Box sx={{ mt: 2 }}>
+                <Box sx={{ display: "flex", alignItems: "center" }}>
+                  <Typography sx={{ fontWeight: "500", mr: 1 }}>
+                    Filter out and send rejections to applicants who don’t meet
+                    any must-have qualifications
+                  </Typography>
+                  <StyledCheckbox
+                    sx={{ mt: 1 }}
+                    checked={qualificationSetting}
+                    onChange={handleCheckboxChange}
+                  />
+                </Box>
+              </CardActions>
+              <CardActions>
+                <Box sx={{ ml: "auto", mt: 2 }}>
                   <Button
                     sx={{
                       color: "white",
