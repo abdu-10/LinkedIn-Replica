@@ -15,18 +15,32 @@ import {
   Select,
 } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
-import { useSelector } from "react-redux";
-import { selectCurrentEmployerDetail } from "../../../features/employers/employerSlice";
+import { connect, useSelector } from "react-redux";
+import {
+  selectCurrentEmployerDetail,
+  setCurrentEmployerDetail,
+} from "../../../features/employers/employerSlice";
 import { addJobDesc } from "../../../api/employer/employerApis";
+import {
+  selectCurrentJobDetail,
+  setCurrentJobDetail,
+} from "../../../features/jobs/jobSlice";
+// import { Connect } from "react-redux";
+import { withRouter } from "../../common/utils/withRouter";
 
 class SkillDescription extends React.Component {
-  state = {
-    editorState: EditorState.createEmpty(),
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      skills: [],
+      editorState: EditorState.createEmpty(),
+    };
+  }
 
   handleEditorStateChange = (editorState) => {
     this.setState({ editorState });
   };
+
   render() {
     const { editorState } = this.state;
     const contentLength = editorState
@@ -53,6 +67,27 @@ class SkillDescription extends React.Component {
       position: "absolute",
       bottom: "5px",
       right: "5px",
+    };
+    let skills = [];
+
+    const readSkills = (skillsArrays) => {
+      skills = skillsArrays;
+    };
+
+    const jobDetails = this.props.currentJobDetail;
+
+    const handleSubmit = (event) => {
+      event.preventDefault();
+      
+      const description = editorState.getCurrentContent().getPlainText();
+      addJobDesc(description, skills, jobDetails.id).then((res) => {
+        if (res.status === 200) {
+          // dispatch
+          this.props.setCurrentJobDetail(res.data);
+          // navigate
+          this.props.navigate("/employer/job-post/cont&filters");
+        }
+      });
     };
 
     return (
@@ -99,7 +134,7 @@ class SkillDescription extends React.Component {
                 </Typography>
               </CardContent>
               <CardContent>
-                <SkillSelector />
+                <SkillSelector func={readSkills} />
               </CardContent>
               <CardActions>
                 <Box sx={{ mt: 1 }}>
@@ -111,7 +146,7 @@ class SkillDescription extends React.Component {
                     }}
                     type="submit"
                     variant="contained"
-                    // onClick={handleSubmit}
+                    onClick={handleSubmit}
                     disableElevation
                   >
                     Submit details
@@ -127,4 +162,19 @@ class SkillDescription extends React.Component {
   }
 }
 
-export default SkillDescription;
+const mapStateToProps = (state) => {
+  return {
+    currentJobDetail: selectCurrentJobDetail(state),
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setCurrentJobDetail: (detail) => dispatch(setCurrentJobDetail({currentJobDetail: detail})),
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withRouter(SkillDescription));
