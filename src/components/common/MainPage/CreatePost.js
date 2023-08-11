@@ -1,12 +1,15 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import "./Maincontent.css";
 import CloseIcon from "@mui/icons-material/Close";
 import Picker from "emoji-picker-react";
 import CustomSnackbar from "../utils/CustomSnackbar";
-import { selectLoggedInUserRef } from "../../../features/users/userSlice";
+import { selectLoggedInUserRef,selectCurrentUserRole } from "../../../features/users/userSlice";
 import { useSelector } from "react-redux";
 // apis
 import { apis } from "../../../api/axios";
+import { selectCurrentEmployerDetail } from "../../../features/employers/employerSlice";
+import { selectCurrentSeekerDetail } from "../../../features/seekers/seekerSlice";
+
 
 function CreatePost({ formx, setForm }) {
   const [text, setText] = useState("");
@@ -15,8 +18,26 @@ function CreatePost({ formx, setForm }) {
   const [imagePost, setImagePost] = useState("");
   const [imageName, setImageName] = useState("");
   const user_id = useSelector(selectLoggedInUserRef);
+  const profile1 = useSelector(selectCurrentEmployerDetail);
+  const profile2 = useSelector(selectCurrentSeekerDetail);
+const user_role = useSelector(selectCurrentUserRole);
 
   const [media, setMedia] = useState(null);
+  // Define a state variable to hold the current profile data
+  const [profile, setProfile] = useState({});
+
+  // Function to display the appropriate profile based on user role
+  const displayProfile = () => {
+    if (user_role === "SEEKER") {
+      setProfile(profile2);
+    } else {
+      setProfile(profile1);
+    }
+  };
+
+  useEffect(() => {
+    displayProfile();
+  }, []);
 
   const handleMediaChange = (event) => {
     setMedia(event.target.files[0]);
@@ -127,12 +148,12 @@ function CreatePost({ formx, setForm }) {
               <div>
                 <img
                   className="rounded-full w-16"
-                  src="https://png.pngtree.com/png-vector/20190710/ourmid/pngtree-user-vector-avatar-png-image_1541962.jpg"
+                  src={profile.avatar_url}
                   alt="profile_image"
                 />
               </div>
               <div className="ml-4">
-                <p className="text-lg font-bold">Abdu</p>
+                <p className="text-lg font-bold">{profile.company_name || profile.full_name}</p>
               </div>
             </div>
             <div>
