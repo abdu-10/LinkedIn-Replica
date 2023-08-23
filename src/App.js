@@ -1,37 +1,41 @@
 import React from "react";
 import "./App.css";
 import { Route, Routes } from "react-router-dom";
-import Maincontent from "./components/common/Main Page/Maincontent";
-import Login from "../src/components/common/forms/Login";
+import MainContent from "./components/common/MainPage/MainContent";
 import SignIn from "./components/common/forms/SignIn";
 import Register from "./components/common/forms/Register";
 import Profile from "./components/seeker/Profile";
-import Landing from "../src/components/common/Main Page/Landing";
+import Landing from "../src/components/common/MainPage/Landing";
 import JobsPage from "./components/seeker/JobsPage";
 import AdminDashboard from "./components/admin/AdminDashboard";
 import AllEmployers from "./components/admin/views/AllEmployers";
 import AllSeekers from "./components/admin/views/AllSeekers";
-import JobPosting from "./components/employer/JobPosting";
 import JobApplication from "./components/seeker/JobApplication";
-import MyNetwork from "./components/seeker/MyNetwork";
-import Messages from "./components/common/Main Page/Messages";
-import Notification from "./components/common/Main Page/Notification";
 import AdminNav from "./components/admin/Navs/AdminNav";
 import EmployerNav from "./components/employer/EmployerNav";
-import UsersNav from "./components/admin/Navs/UsersNav";
 import UsersTable from "./components/admin/tables/UsersTable";
 import EmployerSpecific from "./components/employer/EmployerSpecific";
 import Navbar from "./components/seeker/Navbar";
 import MySeekers from "./components/employer/MySeekers";
-import SignUp from "./components/common/forms/SignUp";
 import EmployerProfile from "./components/employer/EmployerProfile";
 import SeekerDetails from "./components/seeker/SeekerDetails";
 import EmployerDetails from "./components/employer/EmployerDetails";
 import CreateAdmin from "./components/admin/CreateAdmin";
 import UnAuthorized from "./components/common/views/UnAuthorized";
-import RequireAuth from "./components/common/forms/RequireAuth";
 import EditSeekerDetails from "./components/seeker/EditSeekerDetails";
-
+import JobPost from "./components/employer/jobs/JobPost";
+// import EditorComponent from "./components/employer/jobs/FiltersNotifier";
+import SkillDescription from "./components/employer/jobs/SkillDescription";
+// import FiltersNotifier from "./components/employer/jobs/FiltersNotifier";
+import ConfigJobs from "./components/admin/ConfigJobTags";
+import CreateJobs from "./components/admin/CreateJobTag";
+import EditAdminProfile from "./components/admin/EditAdminProfile"
+import AllPosts from "./components/admin/AllPosts";
+import FiltersNotifier from "./components/employer/jobs/FiltersNotifier";
+import EmailConfirmation from "./components/employer/jobs/EmailConfirmation";
+import CodeConfirmation from "./components/employer/jobs/CodeConfirmation";
+import JobOutlet from "./components/employer/jobs/JobOutlet";
+import EmployerJobs from "./components/employer/jobs/EmployerJobs";
 function App() {
   return (
     <div className="App">
@@ -42,49 +46,62 @@ function App() {
         <Route path="/login" element={<SignIn />}></Route>
         <Route path="/signup" element={<Register />}></Route>
         <Route path="/unauth" element={<UnAuthorized />}></Route>
-
-        {/* <Route path='messages'element={<Messages />}/> */}
-        {/* <Route path='notification'element={<Notification />}/> */}
+        
         {/* ADMIN SPECIFIC ROUTES */}
+        
         {/* <Route element={<RequireAuth requiredRouteRole={"ADMIN"} />}> */}
         <Route path="/admin" element={<AdminNav />}>
           <Route index element={<AdminDashboard />} />
-          <Route path="employers" element={<AllEmployers />} />
-          <Route path="seekers" element={<AllSeekers />} />
-          <Route path="createadmin" element={<CreateAdmin />} />
+          <Route path="employers">
+            <Route index element={<AllEmployers/>} />
+            <Route path="details" element={<EmployerDetails />} />
+          </Route>
+          <Route path="seekers">
+          <Route index element={<AllSeekers />} />
+          <Route path="details" element={<SeekerDetails />} />
+          </Route>
+          <Route path="create-admin" element={<CreateAdmin />} />
+          <Route path="job-tags" element={<ConfigJobs />} />
+          <Route path="create-tags" element={<CreateJobs />} />
+          <Route path="all-posts" element={<AllPosts />} />
           {/* TO VERIFY USER: Open pop up */}
           {/* <Route path="verify" element={<Verify />} /> */}
           {/* element={<UsersNav />} */}
           <Route path="users" element={<UsersTable />}>
-            {/* <Route index={<UserPage />} /> */}
-            {/* <Route index element={<UsersTable />} /> */}
-            {/* <Route path="add-user" element={<AddAdminForm />} /> */}
           </Route>
+          <Route path="profile" element={<EditAdminProfile />} />
         </Route>
 
-        {/* </Route> */}
-
         {/* EMPLOYER ROUTES */}
+
         {/* <Route element={<RequireAuth requiredRouteRole={"EMPLOYER"} />}> */}
           <Route path="/employer" element={<EmployerNav />}>
-            <Route index element={<Maincontent />} />
-            <Route path="dashboard" element={<Maincontent />} />
-            <Route path="job-post" element={<JobPosting />} />
+            <Route index element={<MainContent />} />
+            <Route path="dashboard" element={<MainContent />} />
+            <Route path="myjobs" element={<EmployerJobs />} />
+            <Route path="job-post" element={<JobOutlet />}>
+              <Route index element={<JobPost />}/>
+              <Route path="desc&skill" element={< SkillDescription/>}/>
+              <Route path="cont&filters" element={< FiltersNotifier/>}/>
+              <Route path="job_verification" element={< EmailConfirmation/>}/>
+              <Route path="complete_posting" element={< CodeConfirmation/>}/>
+            </Route>
+            {/* <Route path="job-post" element={<FiltersNotifier />} /> */}
             {/* PENDING: FIND LOGIC TO FIND SEEKERS WHILE DISPLAYING AN INITIAL CURATED LIST */}
             <Route path="seekers" element={<EmployerSpecific />} />
             <Route path="myseekers" element={<MySeekers />} />
             <Route path="profile" element={<EmployerProfile />} />
             <Route path="details" element={<EmployerDetails />} />
+            
           </Route>
         {/* </Route> */}
         {/* SEEKER ROUTES */}
         {/* <Route element={<RequireAuth requiredRouteRole={"SEEKER"} />}> */}
           <Route path="/seeker" element={<Navbar />}>
-            <Route index={true} element={<Maincontent />} />
+            <Route index={true} element={<MainContent />} />
             <Route path="jobs" element={<JobsPage />}>
               <Route path="apply" exact element={<JobApplication />} />
             </Route>
-            <Route path="network" element={<MyNetwork />} />
             <Route path="profile" element={<Profile />} />
             <Route path="details" element={<SeekerDetails />} />
           </Route>
@@ -94,7 +111,4 @@ function App() {
     </div>
   );
 }
-
 export default App;
-// npm install @mui/material @emotion/react @emotion/styled
-//npm install @mui/icons-material

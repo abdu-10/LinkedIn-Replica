@@ -1,38 +1,62 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Typography,
   Stack,
   IconButton,
-  Avatar,
   Box,
   Menu,
   MenuItem,
   LinearProgress,
 } from "@mui/material";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import CustomTable from "../tables/CustomTable";
+import { getAllSeekers } from "../../../api/admin/adminApis";
+import { setCurrentSeekerDetail } from "../../../features/seekers/seekerSlice";
+import { useDispatch } from "react-redux";
+
 function AllSeekers() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [rowParams, setRowParams] = useState({});
   const [loading, setLoading] = useState(false);
+  const [seekersPayload, setSeekersPayload] = useState([]);
 
   const handleCloseMenu = () => {
     setAnchorElNav(null);
   };
 
+  const fetchSeekers = () => {
+    getAllSeekers().then((res) => {
+      if (res.status === 200) {
+        setSeekersPayload(res.data);
+        console.log(seekersPayload);
+      }
+    });
+  };
+
+  useEffect(() => {
+    fetchSeekers();
+  }, []);
+
   const handleMenuItemClick = (prop) => {
     if (prop === "view") {
-      navigate("/seeker/details");
+      navigate("details");
+      dispatch(
+        setCurrentSeekerDetail({
+          currentSeekerDetail: rowParams,
+        })
+      );
       handleCloseMenu();
     } else if (prop === "verify") {
-      navigate("/seeker/details");
+      navigate("details");
     } else if (prop === "delete") {
       navigate();
     } else handleCloseMenu();
   };
+
   const handleEmployerActionsClick = (params) => (event) => {
     setRowParams(params.row);
     setAnchorElNav(event.currentTarget);
@@ -41,16 +65,6 @@ function AllSeekers() {
   const SeekerActions = () => {
     return (
       <>
-        {" "}
-        {/* <EmployerDetails
-        />{" "} */}
-        {/* <DeleteAccount
-          openDeleteAccount={openDeleteAccount}
-          closeDeleteModal={closeDeleteModal}
-          rider_code={rowParams.code}
-          // deactivationStatus={deactivationStatus}
-          // fetchStays={fetchRiders}
-        /> */}
         <Menu
           id="menu-appbar"
           anchorEl={anchorElNav}
@@ -70,7 +84,7 @@ function AllSeekers() {
             <Box display="flex" alignItems="center" textAlign="center">
               <VisibilityOutlinedIcon
                 sx={{
-                  color: `primary.main`,
+                  color: "primary.main",
                   mr: 1,
                   fontSize: "medium",
                 }}
@@ -78,11 +92,23 @@ function AllSeekers() {
               View
             </Box>
           </MenuItem>
+          <MenuItem onClick={() => handleMenuItemClick("edit")}>
+            <Box display="flex" alignItems="center" textAlign="center">
+              <VisibilityOutlinedIcon
+                sx={{
+                  color: "primary.main",
+                  mr: 1,
+                  fontSize: "medium",
+                }}
+              />
+              Edit
+            </Box>
+          </MenuItem>
           <MenuItem onClick={() => handleMenuItemClick("verify")}>
             <Box display="flex" alignItems="center" textAlign="center">
               <VisibilityOutlinedIcon
                 sx={{
-                  color: `primary.main`,
+                  color: "primary.main",
                   mr: 1,
                   fontSize: "medium",
                 }}
@@ -90,39 +116,16 @@ function AllSeekers() {
               Verify
             </Box>
           </MenuItem>
-        </Menu>{" "}
+        </Menu>
       </>
     );
   };
-
-  const rows = [
-    {
-      code: "eueueomfierfji",
-      full_name: "Moses",
-      email: "mose@gmail.com",
-      location: "Kiambu Road",
-      gender: "Male",
-      date_of_birth: "2000-01-01",
-      phone_number: "254722332233",
-      verified: "false",
-    },
-    {
-      code: "u9ie9idi3",
-      full_name: "Swaleh",
-      email: "swa@gmail.com",
-      location: "Buruburu Road",
-      gender: "Male",
-      date_of_birth: "2000-01-01",
-      phone_number: "254722332233",
-      verified: "false",
-    },
-  ];
 
   const columns = [
     {
       field: "full_name",
       headerName: "Full Name",
-      width: 250,
+      width: 200,
     },
     {
       field: "email",
@@ -137,28 +140,28 @@ function AllSeekers() {
     {
       field: "gender",
       headerName: "Gender",
+      width: 120,
+    },
+    {
+      field: "date_of_birth",
+      headerName: "D.O.B",
       width: 150,
     },
-      {
-        field: "date_of_birth",
-        headerName: "D.O.B",
-        width: 150,
-      },
-      {
-        field: "phone_number",
-        headerName: "Phone Number",
-        width: 150,
-      },
-      {
-        field: "verified",
-        headerName: "Verified",
-        width: 150,
-      },
+    {
+      field: "phone_number",
+      headerName: "Phone Number",
+      width: 150,
+    },
+    {
+      field: "verified",
+      headerName: "Verified",
+      width: 120,
+    },
     {
       field: "actions",
       type: "actions",
       headerName: "Actions",
-      width: 80,
+      width: 100,
       renderCell: (params) => {
         return (
           <IconButton onClick={handleEmployerActionsClick(params)}>
@@ -167,38 +170,15 @@ function AllSeekers() {
         );
       },
     },
-
-    // {
-    //   field: "actions",
-    //   type: "actions",
-    //   headerName: "Actions",
-    //   width: 80,
-    //   renderCell: (params) => {
-    //     return (
-    //       // on click on the viw, user is able to see the rider deatils in depth
-    //       <div onClick={handleRiderActionClick(params)}>
-    //       <Box display="flex" alignItems="center" textAlign="center" >
-    //           <VisibilityOutlinedIcon
-    //             sx={{
-    //               color: `primary.main`,
-    //               mr: 1,
-    //               fontSize: "medium",
-    //             }}
-    //           />
-    //         </Box>
-    //       </div>
-    //     );
-    //   },
-    // },
   ];
+
   return (
     <>
-      <div class="flex-grow sm:text-left text-center mt-10 mb-10"></div>
       <Stack
         direction="row"
-        justifyContent="flex-start"
+        justifyContent="center"
         alignItems="flex-start"
-        sx={{ p: 7 }}
+        sx={{ p: 12 }}
       >
         <Typography variant="h6" sx={{ fontWeight: "800" }}>
           These are All the Seekers on the platform
@@ -206,16 +186,25 @@ function AllSeekers() {
       </Stack>
       <Box
         sx={{
-          mt: 5,
-          "& .MuiDataGrid-columnHeaders": {
-            backgroundColor: "primary.lightest_gray",
-            fontSize: 16,
-          },
+          mb: 20,
+          mx: 9,
+          boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+          borderRadius: "8px",
+          overflow: "hidden",
         }}
       >
         <SeekerActions />
         {loading && <LinearProgress />}
-        {!loading && <CustomTable columns={columns} rows={rows} />}
+        {!loading && (
+          <CustomTable
+            columns={columns}
+            rows={seekersPayload}
+            disableColumnMenu
+            disableColumnSelector
+            pageSize={10}
+            density="comfortable"
+          />
+        )}
       </Box>
     </>
   );

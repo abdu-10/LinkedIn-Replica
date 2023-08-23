@@ -3,6 +3,7 @@ import userSlice from "../features/users/userSlice";
 import seekerSlice from "../features/seekers/seekerSlice";
 import employerSlice from "../features/employers/employerSlice";
 import adminSlice from "../features/admins/adminSlice";
+import jobSlice from "../features/jobs/jobSlice";
 import storage from "redux-persist/lib/storage";
 import { persistReducer, persistStore } from "redux-persist";
 import thunk from "redux-thunk";
@@ -18,6 +19,7 @@ const appReducer = combineReducers({
     seeker: seekerSlice,
     employer: employerSlice,
     admin: adminSlice,
+    job: jobSlice,
 })
 
 // enable user session end on store clearing

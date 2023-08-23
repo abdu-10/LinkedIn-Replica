@@ -1,38 +1,63 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Typography,
   Stack,
   IconButton,
-  Avatar,
   Box,
   Menu,
   MenuItem,
   LinearProgress,
 } from "@mui/material";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate, Outlet } from "react-router-dom";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import CustomTable from "../tables/CustomTable";
+import { getAllEmployers } from "../../../api/admin/adminApis";
+import { setCurrentEmployerDetail } from "../../../features/employers/employerSlice";
+import { useDispatch } from "react-redux";
+
 function AllEmployers() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [rowParams, setRowParams] = useState({});
   const [loading, setLoading] = useState(false);
+  const [employersPayload, setEmployersPayload] = useState([]);
 
   const handleCloseMenu = () => {
     setAnchorElNav(null);
   };
 
+  const fetchEmployers = () => {
+    getAllEmployers().then((res) => {
+      if (res.status === 200) {
+        setEmployersPayload(res.data);
+      }
+    });
+  };
+
+  useEffect(() => {
+    fetchEmployers();
+  }, []);
+
   const handleMenuItemClick = (prop) => {
     if (prop === "view") {
-      navigate("/employer/details");
+      navigate("details");
+      dispatch(
+        setCurrentEmployerDetail({
+          currentEmployerDetail: rowParams,
+        })
+      );
       handleCloseMenu();
     } else if (prop === "verify") {
-      navigate("/employer/details");
+      navigate("details");
     } else if (prop === "delete") {
       navigate();
-    } else handleCloseMenu();
+    } else {
+      handleCloseMenu();
+    }
   };
+
   const handleEmployerActionsClick = (params) => (event) => {
     setRowParams(params.row);
     setAnchorElNav(event.currentTarget);
@@ -41,16 +66,6 @@ function AllEmployers() {
   const EmployerActions = () => {
     return (
       <>
-        {" "}
-        {/* <EmployerDetails
-        />{" "} */}
-        {/* <DeleteAccount
-          openDeleteAccount={openDeleteAccount}
-          closeDeleteModal={closeDeleteModal}
-          rider_code={rowParams.code}
-          // deactivationStatus={deactivationStatus}
-          // fetchStays={fetchRiders}
-        /> */}
         <Menu
           id="menu-appbar"
           anchorEl={anchorElNav}
@@ -69,50 +84,24 @@ function AllEmployers() {
           <MenuItem onClick={() => handleMenuItemClick("view")}>
             <Box display="flex" alignItems="center" textAlign="center">
               <VisibilityOutlinedIcon
-                sx={{
-                  color: `primary.main`,
-                  mr: 1,
-                  fontSize: "medium",
-                }}
+                sx={{ color: "primary.main", mr: 1, fontSize: "medium" }}
               />
               View
             </Box>
           </MenuItem>
+         
           <MenuItem onClick={() => handleMenuItemClick("verify")}>
             <Box display="flex" alignItems="center" textAlign="center">
               <VisibilityOutlinedIcon
-                sx={{
-                  color: `primary.main`,
-                  mr: 1,
-                  fontSize: "medium",
-                }}
+                sx={{ color: "primary.main", mr: 1, fontSize: "medium" }}
               />
               Verify
             </Box>
           </MenuItem>
-        </Menu>{" "}
+        </Menu>
       </>
     );
   };
-
-  const rows = [
-    {
-      code: "eueueuehfufeuf",
-      company_name: "Auger",
-      email: "auger@gmail.com",
-      phone_number: "+254712345678",
-      location: "Lusaka Road",
-      verified: "false",
-    },
-    {
-      code: "eueueueh",
-      company_name: "Motos Ltd",
-      email: "motos@gmail.com",
-      phone_number: "+254712345678",
-      location: "Pembe Road",
-      verified: "false",
-    },
-  ];
 
   const columns = [
     {
@@ -123,7 +112,7 @@ function AllEmployers() {
     {
       field: "email",
       headerName: "Email",
-      width: 150,
+      width: 200,
     },
     {
       field: "location",
@@ -133,13 +122,13 @@ function AllEmployers() {
     {
       field: "verified",
       headerName: "Verified",
-      width: 150,
+      width: 120,
     },
     {
       field: "actions",
       type: "actions",
       headerName: "Actions",
-      width: 80,
+      width: 100,
       renderCell: (params) => {
         return (
           <IconButton onClick={handleEmployerActionsClick(params)}>
@@ -148,56 +137,43 @@ function AllEmployers() {
         );
       },
     },
-
-    // {
-    //   field: "actions",
-    //   type: "actions",
-    //   headerName: "Actions",
-    //   width: 80,
-    //   renderCell: (params) => {
-    //     return (
-    //       // on click on the viw, user is able to see the rider deatils in depth
-    //       <div onClick={handleRiderActionClick(params)}>
-    //       <Box display="flex" alignItems="center" textAlign="center" >
-    //           <VisibilityOutlinedIcon
-    //             sx={{
-    //               color: `primary.main`,
-    //               mr: 1,
-    //               fontSize: "medium",
-    //             }}
-    //           />
-    //         </Box>
-    //       </div>
-    //     );
-    //   },
-    // },
   ];
+
   return (
     <>
-      <div class="flex-grow sm:text-left text-center mt-10 mb-10"></div>
       <Stack
         direction="row"
-        justifyContent="flex-start"
-        alignItems="flex-start"
-        sx={{ p: 7 }}
+        justifyContent="center"
+        alignItems="center"
+        sx={{ p: 12 }}
       >
         <Typography variant="h6" sx={{ fontWeight: "800" }}>
-          These are All the Employers on the platform
+          These are all the Employers on the platform
         </Typography>
       </Stack>
       <Box
         sx={{
-          mt: 5,
-          "& .MuiDataGrid-columnHeaders": {
-            backgroundColor: "primary.lightest_gray",
-            fontSize: 16,
-          },
+          mb: 20,
+          mx: 9,
+          boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+          borderRadius: "8px",
+          overflow: "hidden",
         }}
       >
         <EmployerActions />
         {loading && <LinearProgress />}
-        {!loading && <CustomTable columns={columns} rows={rows} />}
+        {!loading && (
+          <CustomTable
+            columns={columns}
+            rows={employersPayload}
+            disableColumnMenu
+            disableColumnSelector
+            pageSize={10}
+            density="comfortable"
+          />
+        )}
       </Box>
+      <Outlet />
     </>
   );
 }

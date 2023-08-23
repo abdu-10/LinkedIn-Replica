@@ -1,24 +1,25 @@
 import React from "react";
 import "./welcome.css";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-
+import { useNavigate } from "react-router-dom";
 function Welcome() {
+   const navigate = useNavigate();
   return (
     <div className="Welcome bg-white">
       <div className="text_welcome">
         <p>Welcome to your professional community</p>
-        <div className="questions">
+        <div onClick={() => navigate("/signup")} className="questions">
           <p>
             search jobs <ArrowForwardIosIcon />
           </p>
         </div>
-        <div className="questions">
+        <div onClick={() => navigate("/signup")} className="questions">
           <p>
             Find a person you know
             <ArrowForwardIosIcon />
           </p>
         </div>
-        <div className="questions">
+        <div onClick={() => navigate("/signup")} className="questions">
           <p>
             Learn a new skill
             <ArrowForwardIosIcon />

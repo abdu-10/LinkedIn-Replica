@@ -1,35 +1,57 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Typography,
   Stack,
   IconButton,
-  Avatar,
   Box,
   Menu,
   MenuItem,
   LinearProgress,
 } from "@mui/material";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import CustomTable from "../tables/CustomTable";
+import { getAllAdmins } from "../../../api/admin/adminApis";
+import { setCurrentAdminDetail } from "../../../features/admins/adminSlice";
 import UsersNav from "../Navs/UsersNav";
 function UsersTable() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [rowParams, setRowParams] = useState({});
   const [loading, setLoading] = useState(false);
+  const [adminsPayload, setAdminsPayload] = useState([]);
 
   const handleCloseMenu = () => {
     setAnchorElNav(null);
   };
 
+  const fetchAdmins = () => {
+    getAllAdmins().then((res) => {
+      if (res.status === 200) {
+        setAdminsPayload(res.data);
+        console.log(adminsPayload);
+      }
+    });
+  };
+
+  useEffect(() => {
+    fetchAdmins();
+  }, []);
+
   const handleMenuItemClick = (prop) => {
     if (prop === "view") {
-      navigate("/employer/details");
+      navigate("profile");
+      dispatch(
+        setCurrentAdminDetail({
+          currentAdminDetail: rowParams,
+        })
+      );
       handleCloseMenu();
-    } else if (prop === "verify") {
-      navigate("/employer/details");
+    } else if (prop === "edit") {
+      navigate("profile");
     } else if (prop === "delete") {
       navigate();
     } else handleCloseMenu();
@@ -42,16 +64,6 @@ function UsersTable() {
   const AdminActions = () => {
     return (
       <>
-        {" "}
-        {/* <EmployerDetails
-        />{" "} */}
-        {/* <DeleteAccount
-          openDeleteAccount={openDeleteAccount}
-          closeDeleteModal={closeDeleteModal}
-          rider_code={rowParams.code}
-          // deactivationStatus={deactivationStatus}
-          // fetchStays={fetchRiders}
-        /> */}
         <Menu
           id="menu-appbar"
           anchorEl={anchorElNav}
@@ -79,7 +91,7 @@ function UsersTable() {
               View
             </Box>
           </MenuItem>
-          <MenuItem onClick={() => handleMenuItemClick("verify")}>
+          <MenuItem onClick={() => handleMenuItemClick("edit")}>
             <Box display="flex" alignItems="center" textAlign="center">
               <VisibilityOutlinedIcon
                 sx={{
@@ -88,29 +100,13 @@ function UsersTable() {
                   fontSize: "medium",
                 }}
               />
-              Verify
+              Edit
             </Box>
           </MenuItem>
         </Menu>{" "}
       </>
     );
   };
-
-  const rows = [
-    {
-      code: "eueueuehklll",
-      full_name: "Steve",
-      email: "steve@gmail.com",
-      user_name: "stevo10"
-    },
-    {
-      code: "eueueuehnkii",
-      full_name: "Abdu",
-      email: "abdu@gmail.com",
-      user_name: "abdu10"
-      
-    },
-  ];
 
   const columns = [
     {
@@ -141,39 +137,16 @@ function UsersTable() {
         );
       },
     },
-
-    // {
-    //   field: "actions",
-    //   type: "actions",
-    //   headerName: "Actions",
-    //   width: 80,
-    //   renderCell: (params) => {
-    //     return (
-    //       // on click on the viw, user is able to see the rider deatils in depth
-    //       <div onClick={handleRiderActionClick(params)}>
-    //       <Box display="flex" alignItems="center" textAlign="center" >
-    //           <VisibilityOutlinedIcon
-    //             sx={{
-    //               color: `primary.main`,
-    //               mr: 1,
-    //               fontSize: "medium",
-    //             }}
-    //           />
-    //         </Box>
-    //       </div>
-    //     );
-    //   },
-    // },
   ];
   return (
     <>
-    <UsersNav/>
-      <div class="flex-grow sm:text-left text-center mt-10 mb-10"></div>
+      <UsersNav />
+
       <Stack
         direction="row"
-        justifyContent="flex-start"
+        justifyContent="center"
         alignItems="flex-start"
-        sx={{ p: 7 }}
+        sx={{ p: 4 }}
       >
         <Typography variant="h6" sx={{ fontWeight: "800" }}>
           These are All the Admins on the platform
@@ -181,16 +154,16 @@ function UsersTable() {
       </Stack>
       <Box
         sx={{
-          mt: 5,
-          "& .MuiDataGrid-columnHeaders": {
-            backgroundColor: "primary.lightest_gray",
-            fontSize: 16,
-          },
+          mb: 50,
+          mx: 9,
+          boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+          borderRadius: "8px",
+          overflow: "hidden",
         }}
       >
         <AdminActions />
         {loading && <LinearProgress />}
-        {!loading && <CustomTable columns={columns} rows={rows} />}
+        {!loading && <CustomTable columns={columns} rows={adminsPayload} />}
       </Box>
     </>
   );

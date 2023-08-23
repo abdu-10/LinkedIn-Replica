@@ -13,7 +13,7 @@ const CustomSnackbar = ({
   snackbarSeverity,
 }) => {
   const vertical = "top";
-  const horizontal="center"
+  const horizontal = "center";
 
   return (
     <Snackbar
@@ -27,7 +27,7 @@ const CustomSnackbar = ({
       <Alert
         onClose={handleClose}
         severity={snackbarSeverity}
-        sx={{ width: "100%"}}
+        sx={{ width: "100%" }}
       >
         {snackbarMessage}
       </Alert>
